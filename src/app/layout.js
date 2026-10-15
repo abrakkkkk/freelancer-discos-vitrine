@@ -1,0 +1,33 @@
+import { Outfit, Figtree } from 'next/font/google';
+import './globals.css';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const figtree = Figtree({
+  subsets: ['latin'],
+  variable: '--font-figtree',
+  display: 'swap',
+});
+
+export const metadata = {
+  title: 'Freelancer Discos — Vitrine do Catálogo',
+  description: 'Catálogo de discos de vinil, CDs, DVDs e fitas VHS da Freelancer Discos',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#09090b',
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="pt-BR" className={`${outfit.variable} ${figtree.variable}`}>
+      <body>{children}</body>
+    </html>
+  );
+}
