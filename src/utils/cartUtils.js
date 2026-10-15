@@ -2,6 +2,15 @@ import { formatCaixa } from './stringUtils';
 
 export const WHATSAPP_PHONE = '5585987879214';
 
+export function formatPrice(valor) {
+  return Number(valor || 0)
+    .toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    })
+    .replace(/\u00a0/g, ' ');
+}
+
 export function formatWhatsAppMessage(itens = [], nome = '', bairro = '') {
   const linhasItens = itens.map((item) => {
     const rotuloCaixa = formatCaixa(item.caixa, item.loja);
@@ -9,11 +18,7 @@ export function formatWhatsAppMessage(itens = [], nome = '', bairro = '') {
       .filter(Boolean)
       .join(' · ');
 
-    const precoFmt = Number(item.preco || 0).toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    });
-
+    const precoFmt = formatPrice(item.preco);
     const artistaPrefix = item.artista ? `${item.artista} - ` : '';
     const localStr = localizacao ? ` (${localizacao})` : '';
 
@@ -21,10 +26,7 @@ export function formatWhatsAppMessage(itens = [], nome = '', bairro = '') {
   });
 
   const total = itens.reduce((acc, item) => acc + (Number(item.preco) || 0), 0);
-  const totalFmt = total.toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
+  const totalFmt = formatPrice(total);
 
   const partes = [
     'Olá, Freelancer Discos! Tenho interesse nestes itens:',
