@@ -103,24 +103,22 @@ select:focus-visible,
   padding-bottom: calc(var(--bottom-nav-height) + 32px);
 }
 
-/* Cabeçalho: sem caixa própria, apenas uma linha divisória */
+/* Cabeçalho: alinhado no topo e na base entre logo e texto */
 .storeHeader {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-  padding-bottom: 14px;
+  padding: 6px 2px 14px;
   border-bottom: 1px solid var(--border);
 }
 
 .headerLogo {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  height: 38px;
+  width: auto;
   flex-shrink: 0;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .headerBackBtn {
@@ -143,16 +141,17 @@ select:focus-visible,
 }
 
 .headerTitle {
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
   color: #ffffff;
-  line-height: 1.2;
+  line-height: 1.05;
 }
 
 .headerSubtitle {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--text-muted);
-  margin-top: 2px;
+  line-height: 1.15;
+  margin-top: 4px;
 }
 
 /* Abas de Categoria: botões soltos, sem moldura envolvendo */
