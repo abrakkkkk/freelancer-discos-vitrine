@@ -1,9 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
-import { FiX, FiShoppingBag, FiCheck } from 'react-icons/fi';
+import { FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
+
+const FORMAT_NAMES = {
+  discos: 'Vinil (LP)',
+  cds: 'CD',
+  dvds: 'DVD',
+  vhs: 'VHS',
+};
 
 export default function ProductDetailSheet({
   item,
@@ -31,6 +39,17 @@ export default function ProductDetailSheet({
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
   const recordLabel = extractRecordLabel(item.observacao);
+  const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
+  const showAno = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
+  const observacaoLimpa = item.observacao
+    ? String(item.observacao).replace(/\[[^\]]+\]/g, '').trim()
+    : '';
+
+  const lojaSlug = item.loja === 'Loja 1' ? 'loja-1' : item.loja === 'Loja 2' ? 'loja-2' : null;
+  const caixaHref =
+    lojaSlug && item.caixa
+      ? `/lojas/${lojaSlug}/${encodeURIComponent(String(item.caixa).trim())}`
+      : null;
 
   return (
     <div
@@ -46,24 +65,20 @@ export default function ProductDetailSheet({
       {/* Overlay 100% Sólido e Opaco (#050506) */}
       <div
         onClick={onClose}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: '#050506',
-          zIndex: 1,
-        }}
+        style={{ position: 'fixed', inset: 0, backgroundColor: '#050506', zIndex: 1 }}
       />
 
       {/* Folha Inferior Sólida */}
       <div
         role="dialog"
         aria-modal="true"
+        aria-label={`Detalhes de ${item.titulo}`}
         style={{
           position: 'relative',
           zIndex: 2,
           width: '100%',
-          maxWidth: '560px',
-          maxHeight: 'calc(100vh - 32px)',
+          maxWidth: '520px',
+          maxHeight: 'calc(100vh - 24px)',
           backgroundColor: '#18181c',
           borderTop: '1px solid #2d2d35',
           borderLeft: '1px solid #2d2d35',
@@ -73,69 +88,50 @@ export default function ProductDetailSheet({
           display: 'flex',
           flexDirection: 'column',
           overflowY: 'auto',
-          boxShadow: '0 -4px 24px rgba(0, 0, 0, 0.8)',
-          padding: '20px 16px',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 20px)',
+          padding: '16px',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)',
         }}
       >
-        {/* Barra Superior com Botão Fechar */}
-        <div
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fechar detalhes"
           style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '8px',
+            backgroundColor: '#27272a',
+            border: 'none',
+            color: '#ffffff',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '16px',
+            justifyContent: 'center',
+            cursor: 'pointer',
           }}
         >
-          <span style={{ fontSize: '13px', fontWeight: 600, color: '#a1a1aa' }}>
-            Detalhes do Item
-          </span>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Fechar detalhes"
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '8px',
-              backgroundColor: '#232328',
-              border: 'none',
-              color: '#e4e4e7',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-            }}
-          >
-            <FiX size={20} />
-          </button>
-        </div>
+          <FiX size={19} />
+        </button>
 
-        {/* Capa Ampliada e Títulos */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: '12px',
-          }}
-        >
+        {/* Capa + Títulos + Preço */}
+        <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', paddingRight: '44px' }}>
           <AlbumCover
             id={item.id}
             artista={item.artista}
             titulo={item.titulo}
             ano={item.ano}
             capaUrl={item.capa_url}
-            size={180}
+            size={112}
             tipo={tipo}
           />
 
-          <div>
+          <div style={{ minWidth: 0, paddingTop: '2px' }}>
             {item.artista && (
               <p
                 style={{
-                  fontSize: '14px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   color: '#a1a1aa',
                   textTransform: 'uppercase',
@@ -147,128 +143,102 @@ export default function ProductDetailSheet({
             )}
             <h2
               style={{
-                fontSize: '20px',
+                fontSize: '18px',
                 fontWeight: 700,
                 color: '#ffffff',
-                marginTop: '4px',
+                lineHeight: 1.25,
+                marginTop: '2px',
               }}
             >
               {item.titulo}
             </h2>
-          </div>
-
-          <div
-            style={{
-              fontSize: '22px',
-              fontWeight: 700,
-              color: '#ffffff',
-              backgroundColor: '#121215',
-              padding: '6px 16px',
-              borderRadius: '8px',
-              border: '1px solid #232328',
-            }}
-          >
-            {precoFormatado}
-          </div>
-        </div>
-
-        {/* Metadados: Loja, Caixa, Selo/Label, Ano, Observações */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-            marginTop: '20px',
-            backgroundColor: '#121215',
-            padding: '14px',
-            borderRadius: '10px',
-            border: '1px solid #232328',
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-            <span style={{ color: '#71717a' }}>Localização:</span>
-            <strong style={{ color: '#e4e4e7' }}>
-              {item.loja || 'Loja Física'} — {rotuloCaixa}
-            </strong>
-          </div>
-
-          {recordLabel && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-              <span style={{ color: '#71717a' }}>Selo / Gravadora (Label):</span>
-              <strong style={{ color: '#d8b4fe' }}>{recordLabel}</strong>
-            </div>
-          )}
-
-          {item.ano && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-              <span style={{ color: '#71717a' }}>Ano de Lançamento:</span>
-              <strong style={{ color: '#e4e4e7' }}>{item.ano}</strong>
-            </div>
-          )}
-
-          {item.observacao && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px',
-                paddingTop: '8px',
-                borderTop: '1px solid #1c1c21',
-              }}
+            <p
+              className="tabularNums"
+              style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', marginTop: '8px' }}
             >
-              <span style={{ color: '#71717a', fontSize: '13px' }}>
-                Observações / Prensagem / Estado:
-              </span>
-              <p
-                style={{
-                  fontSize: '14px',
-                  color: '#d4d4d8',
-                  lineHeight: 1.4,
-                  whiteSpace: 'pre-line',
-                }}
-              >
-                {item.observacao}
-              </p>
-            </div>
-          )}
+              {precoFormatado}
+            </p>
+          </div>
         </div>
 
-        {/* Ação: Botão da Sacola */}
-        <div style={{ marginTop: '20px' }}>
-          <button
-            type="button"
-            onClick={() => {
-              if (onAddToCart) onAddToCart(item);
-            }}
+        {/* Ficha técnica: linhas com divisória, sem caixas aninhadas */}
+        <dl className="specList tabularNums" style={{ marginTop: '16px', borderTop: '1px solid #232328' }}>
+          <div className="specRow">
+            <dt>Formato</dt>
+            <dd>{FORMAT_NAMES[tipo] || 'Disco'}</dd>
+          </div>
+          <div className="specRow">
+            <dt>Onde está</dt>
+            <dd>
+              {item.loja || 'Loja física'} · {rotuloCaixa}
+            </dd>
+          </div>
+          {recordLabel && (
+            <div className="specRow">
+              <dt>Selo</dt>
+              <dd>{recordLabel}</dd>
+            </div>
+          )}
+          {showAno && (
+            <div className="specRow">
+              <dt>Ano</dt>
+              <dd>{cleanAno}</dd>
+            </div>
+          )}
+          {observacaoLimpa && (
+            <div className="specRow">
+              <dt>Obs.</dt>
+              <dd style={{ fontWeight: 500, whiteSpace: 'pre-line' }}>{observacaoLimpa}</dd>
+            </div>
+          )}
+        </dl>
+
+        {caixaHref && (
+          <Link
+            href={caixaHref}
+            onClick={onClose}
             style={{
-              width: '100%',
-              minHeight: '48px',
-              borderRadius: '10px',
-              backgroundColor: isInCart ? '#1c1c21' : '#8b1e1e',
-              border: isInCart ? '1px solid #3f3f46' : '1px solid #731717',
-              color: '#ffffff',
-              fontSize: '15px',
-              fontWeight: 700,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              cursor: 'pointer',
+              justifyContent: 'space-between',
+              padding: '12px 0',
+              borderTop: '1px solid #232328',
+              color: '#e4e4e7',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'none',
             }}
           >
-            {isInCart ? (
-              <>
-                <FiCheck size={18} color="#4ade80" />
-                <span style={{ color: '#4ade80' }}>Item já está na sua sacola</span>
-              </>
-            ) : (
-              <>
-                <FiShoppingBag size={18} />
-                <span>Adicionar à Sacola</span>
-              </>
-            )}
-          </button>
-        </div>
+            <span>Ver tudo da {rotuloCaixa}</span>
+            <FiChevronRight size={18} color="#a1a1aa" />
+          </Link>
+        )}
+
+        <button
+          type="button"
+          onClick={() => {
+            if (onAddToCart) onAddToCart(item);
+          }}
+          style={{
+            marginTop: '12px',
+            width: '100%',
+            minHeight: '48px',
+            borderRadius: '10px',
+            backgroundColor: isInCart ? '#1f5f3a' : '#8b1e1e',
+            border: 'none',
+            color: '#ffffff',
+            fontSize: '15px',
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            cursor: 'pointer',
+          }}
+        >
+          {isInCart ? <FiCheck size={18} /> : <FiShoppingBag size={18} />}
+          <span>{isInCart ? 'Na sacola — abrir sacola' : 'Adicionar à sacola'}</span>
+        </button>
       </div>
     </div>
   );

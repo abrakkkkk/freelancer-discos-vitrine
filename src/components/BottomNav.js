@@ -78,9 +78,8 @@ export default function BottomNav({ cartCount, onOpenCart }) {
           style={{
             maxWidth: '600px',
             margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-around',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
             height: 'var(--bottom-nav-height, 64px)',
           }}
         >
@@ -92,15 +91,27 @@ export default function BottomNav({ cartCount, onOpenCart }) {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '3px',
-              minWidth: '64px',
               minHeight: '44px',
               color: isCatalogo ? '#ffffff' : '#71717a',
               textDecoration: 'none',
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 700,
+              position: 'relative',
             }}
           >
-            <PiVinylRecord size={22} color={isCatalogo ? '#8b1e1e' : '#71717a'} />
+            {isCatalogo && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  width: '36px',
+                  height: '2px',
+                  backgroundColor: '#8b1e1e',
+                  borderRadius: '0 0 2px 2px',
+                }}
+              />
+            )}
+            <PiVinylRecord size={22} color={isCatalogo ? '#e4e4e7' : '#71717a'} />
             <span>Catálogo</span>
           </Link>
 
@@ -112,53 +123,65 @@ export default function BottomNav({ cartCount, onOpenCart }) {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '3px',
-              minWidth: '64px',
               minHeight: '44px',
               color: isLojas ? '#ffffff' : '#71717a',
               textDecoration: 'none',
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 700,
+              position: 'relative',
             }}
           >
-            <MdStorefront size={22} color={isLojas ? '#8b1e1e' : '#71717a'} />
-            <span>Lojas</span>
+            {isLojas && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  width: '36px',
+                  height: '2px',
+                  backgroundColor: '#8b1e1e',
+                  borderRadius: '0 0 2px 2px',
+                }}
+              />
+            )}
+            <MdStorefront size={22} color={isLojas ? '#e4e4e7' : '#71717a'} />
+            <span>Caixas & Lojas</span>
           </Link>
 
           <button
             type="button"
             onClick={handleCartClick}
+            className="tabularNums"
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '3px',
-              minWidth: '64px',
               minHeight: '44px',
               color: effectiveCartCount > 0 ? '#ffffff' : '#71717a',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 700,
               position: 'relative',
             }}
           >
             <div style={{ position: 'relative' }}>
-              <FiShoppingBag size={21} color={effectiveCartCount > 0 ? '#8b1e1e' : '#71717a'} />
+              <FiShoppingBag size={21} color={effectiveCartCount > 0 ? '#ffffff' : '#71717a'} />
               {effectiveCartCount > 0 && (
                 <span
                   style={{
                     position: 'absolute',
-                    top: '-4px',
-                    right: '-8px',
+                    top: '-5px',
+                    right: '-10px',
                     backgroundColor: '#8b1e1e',
                     color: '#ffffff',
                     fontSize: '10px',
-                    fontWeight: 700,
+                    fontWeight: 800,
                     borderRadius: '10px',
                     padding: '1px 5px',
-                    minWidth: '16px',
+                    minWidth: '17px',
                     textAlign: 'center',
                   }}
                 >

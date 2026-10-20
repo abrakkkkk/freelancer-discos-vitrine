@@ -5,6 +5,13 @@ import { PiVinylRecord, PiDisc, PiFilmStrip, PiCassetteTape } from 'react-icons/
 
 const memoryCoverCache = new Map();
 
+const FORMAT_TAG = {
+  discos: 'LP',
+  cds: 'CD',
+  dvds: 'DVD',
+  vhs: 'VHS',
+};
+
 export default function AlbumCover({
   id = null,
   artista = '',
@@ -12,13 +19,19 @@ export default function AlbumCover({
   ano = '',
   capaUrl = null,
   size = 80,
+  fluid = false,
   tipo = 'discos',
 }) {
-  const [resolvedUrl, setResolvedUrl] = useState(capaUrl || null);
+  const disableCovers = tipo === 'dvds' || tipo === 'vhs';
+  const [resolvedUrl, setResolvedUrl] = useState(disableCovers ? null : capaUrl || null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     setError(false);
+    if (disableCovers) {
+      setResolvedUrl(null);
+      return;
+    }
     if (capaUrl) {
       setResolvedUrl(capaUrl);
       return;
@@ -91,23 +104,35 @@ export default function AlbumCover({
     };
   }, [id, artista, titulo, ano, capaUrl, tipo]);
 
-  const containerStyle = {
-    width: `${size}px`,
-    height: `${size}px`,
-    minWidth: `${size}px`,
-    minHeight: `${size}px`,
-    aspectRatio: '1 / 1',
-    borderRadius: '8px',
-    overflow: 'hidden',
-    backgroundColor: '#121215',
-    border: '1px solid #232328',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.4)',
-    position: 'relative',
-    flexShrink: 0,
-  };
+  const containerStyle = fluid
+    ? {
+        width: '100%',
+        aspectRatio: '1 / 1',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        backgroundColor: '#1c1c21',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        flexShrink: 0,
+      }
+    : {
+        width: `${size}px`,
+        height: `${size}px`,
+        minWidth: `${size}px`,
+        minHeight: `${size}px`,
+        aspectRatio: '1 / 1',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        backgroundColor: '#111114',
+        border: '1px solid #26262e',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        flexShrink: 0,
+      };
 
   if (resolvedUrl && !error) {
     return (
@@ -128,8 +153,9 @@ export default function AlbumCover({
     );
   }
 
-  const iconSize = Math.round(size * 0.48);
+  const iconSize = fluid ? 52 : Math.round(size * 0.46);
   const iconColor = '#52525b';
+  const formatLabel = FORMAT_TAG[tipo] || 'LP';
 
   const renderIcon = () => {
     switch (tipo) {
@@ -144,5 +170,27 @@ export default function AlbumCover({
     }
   };
 
-  return <div style={containerStyle}>{renderIcon()}</div>;
+  return (
+    <div style={containerStyle}>
+      {renderIcon()}
+      {(fluid || size >= 120) && (
+        <span
+          style={{
+            position: 'absolute',
+            bottom: '6px',
+            right: '6px',
+            padding: '1px 5px',
+            borderRadius: '4px',
+            backgroundColor: '#3f3f46',
+            fontSize: '10px',
+            fontWeight: 700,
+            color: '#ffffff',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {formatLabel}
+        </span>
+      )}
+    </div>
+  );
 }

@@ -11,25 +11,84 @@ import CartDrawer from '@/components/CartDrawer';
 import { getCartItemKey } from '@/utils/cartUtils';
 
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
+const CLIENT_CACHE_TTL_MS = 60 * 1000;
+
+const clientCatalogCache = new Map();
+const clientCaixasCache = new Map();
+let savedViewState = {
+  categoria: 'discos',
+  busca: '',
+  loja: '',
+  caixa: '',
+  ordenacao: 'padrao',
+  pagina: 1,
+};
+
+function buildCatalogCacheKey({ categoria, pagina, loja, caixa, busca, ordenacao }) {
+  return `${categoria}|${pagina}|${loja}|${caixa}|${busca}|${ordenacao}`;
+}
 
 export default function CatalogoPage() {
-  const [categoria, setCategoria] = useState('discos');
-  const [busca, setBusca] = useState('');
-  const [loja, setLoja] = useState('');
-  const [caixa, setCaixa] = useState('');
-  const [caixas, setCaixas] = useState([]);
-  const [ordenacao, setOrdenacao] = useState('padrao');
-  const [pagina, setPagina] = useState(1);
+  const [categoria, setCategoria] = useState(savedViewState.categoria);
+  const [busca, setBusca] = useState(savedViewState.busca);
+  const [debouncedBusca, setDebouncedBusca] = useState(savedViewState.busca);
+  const [loja, setLoja] = useState(savedViewState.loja);
+  const [caixa, setCaixa] = useState(savedViewState.caixa);
+  const [caixas, setCaixas] = useState(() => clientCaixasCache.get(savedViewState.loja) || []);
+  const [ordenacao, setOrdenacao] = useState(savedViewState.ordenacao);
+  const [pagina, setPagina] = useState(savedViewState.pagina);
 
-  const [itens, setItens] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalPaginas, setTotalPaginas] = useState(1);
-  const [loading, setLoading] = useState(true);
+  const initialCacheEntry = clientCatalogCache.get(
+    buildCatalogCacheKey({
+      categoria: savedViewState.categoria,
+      pagina: savedViewState.pagina,
+      loja: savedViewState.loja,
+      caixa: savedViewState.caixa,
+      busca: savedViewState.busca,
+      ordenacao: savedViewState.ordenacao,
+    })
+  );
+  const hasValidInitialCache =
+    Boolean(initialCacheEntry) && initialCacheEntry.expiresAt > Date.now();
+
+  const [itens, setItens] = useState(() =>
+    hasValidInitialCache ? initialCacheEntry.itens : []
+  );
+  const [total, setTotal] = useState(() =>
+    hasValidInitialCache ? initialCacheEntry.total : 0
+  );
+  const [totalPaginas, setTotalPaginas] = useState(() =>
+    hasValidInitialCache ? initialCacheEntry.totalPaginas : 1
+  );
+  const [loading, setLoading] = useState(() => !hasValidInitialCache);
   const [erro, setErro] = useState(null);
 
   const [detailItem, setDetailItem] = useState(null);
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Persiste estado da visão para retorno instantâneo ao clicar em Catálogo
+  useEffect(() => {
+    savedViewState = {
+      categoria,
+      busca: debouncedBusca,
+      loja,
+      caixa,
+      ordenacao,
+      pagina,
+    };
+  }, [categoria, debouncedBusca, loja, caixa, ordenacao, pagina]);
+
+  useEffect(() => {
+    if (!busca) {
+      setDebouncedBusca('');
+      return;
+    }
+    const timer = setTimeout(() => {
+      setDebouncedBusca(busca);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [busca]);
 
   // Inicializa sacola do localStorage
   useEffect(() => {
@@ -53,7 +112,6 @@ export default function CatalogoPage() {
     const chaveAlvo = getCartItemKey(itemComCategoria);
     const jaExiste = cart.some((i) => getCartItemKey(i) === chaveAlvo);
     if (jaExiste) {
-      // Se já existe, abre a sacola
       setIsCartOpen(true);
       return;
     }
@@ -72,8 +130,14 @@ export default function CatalogoPage() {
     saveCart([]);
   };
 
-  // Carrega caixas disponíveis de acordo com a loja
+  // Carrega caixas disponíveis de acordo com a loja (com cache em memória)
   useEffect(() => {
+    const cachedCaixas = clientCaixasCache.get(loja);
+    if (cachedCaixas) {
+      setCaixas(cachedCaixas);
+      return;
+    }
+
     let ativo = true;
     async function loadCaixas() {
       try {
@@ -81,6 +145,7 @@ export default function CatalogoPage() {
         if (res.ok) {
           const data = await res.json();
           if (ativo && data.caixas) {
+            clientCaixasCache.set(loja, data.caixas);
             setCaixas(data.caixas);
           }
         }
@@ -94,57 +159,92 @@ export default function CatalogoPage() {
     };
   }, [loja]);
 
-  // Carrega dados do catálogo
-  const loadCatalogo = useCallback(async () => {
-    setLoading(true);
-    setErro(null);
-
-    let ordenarColuna = null;
-    let ordenarDirecao = null;
-
-    if (ordenacao === 'preco_asc') {
-      ordenarColuna = 'preco';
-      ordenarDirecao = 'asc';
-    } else if (ordenacao === 'preco_desc') {
-      ordenarColuna = 'preco';
-      ordenarDirecao = 'desc';
-    } else if (ordenacao === 'artista_asc') {
-      ordenarColuna = 'artista';
-      ordenarDirecao = 'asc';
-    } else if (ordenacao === 'titulo_asc') {
-      ordenarColuna = 'titulo';
-      ordenarDirecao = 'asc';
-    }
-
-    try {
-      const params = new URLSearchParams({
+  // Carrega dados do catálogo (instantâneo se já estiver em cache)
+  const loadCatalogo = useCallback(
+    async (forceRefresh = false) => {
+      const cacheKey = buildCatalogCacheKey({
         categoria,
-        pagina: String(pagina),
+        pagina,
         loja,
         caixa,
-        busca,
+        busca: debouncedBusca,
+        ordenacao,
       });
 
-      if (ordenarColuna) params.set('ordenarColuna', ordenarColuna);
-      if (ordenarDirecao) params.set('ordenarDirecao', ordenarDirecao);
+      if (!forceRefresh) {
+        const cached = clientCatalogCache.get(cacheKey);
+        if (cached && cached.expiresAt > Date.now()) {
+          setItens(cached.itens);
+          setTotal(cached.total);
+          setTotalPaginas(cached.totalPaginas);
+          setLoading(false);
+          setErro(null);
+          return;
+        }
+      }
 
-      const res = await fetch(`/api/catalogo?${params.toString()}`);
-      if (!res.ok) throw new Error('Falha ao consultar produtos');
+      setLoading(true);
+      setErro(null);
 
-      const data = await res.json();
-      setItens(data.itens || []);
-      setTotal(data.total || 0);
-      setTotalPaginas(data.totalPaginas || 1);
-    } catch (err) {
-      console.error(err);
-      setErro('Catálogo indisponível no momento. Tente recarregar.');
-    } finally {
-      setLoading(false);
-    }
-  }, [categoria, pagina, loja, caixa, busca, ordenacao]);
+      let ordenarColuna = null;
+      let ordenarDirecao = null;
+
+      if (ordenacao === 'preco_asc') {
+        ordenarColuna = 'preco';
+        ordenarDirecao = 'asc';
+      } else if (ordenacao === 'preco_desc') {
+        ordenarColuna = 'preco';
+        ordenarDirecao = 'desc';
+      } else if (ordenacao === 'artista_asc') {
+        ordenarColuna = 'artista';
+        ordenarDirecao = 'asc';
+      } else if (ordenacao === 'titulo_asc') {
+        ordenarColuna = 'titulo';
+        ordenarDirecao = 'asc';
+      }
+
+      try {
+        const params = new URLSearchParams({
+          categoria,
+          pagina: String(pagina),
+          loja,
+          caixa,
+          busca: debouncedBusca,
+        });
+
+        if (ordenarColuna) params.set('ordenarColuna', ordenarColuna);
+        if (ordenarDirecao) params.set('ordenarDirecao', ordenarDirecao);
+
+        const res = await fetch(`/api/catalogo?${params.toString()}`);
+        if (!res.ok) throw new Error('Falha ao consultar produtos');
+
+        const data = await res.json();
+        const nextItens = data.itens || [];
+        const nextTotal = data.total || 0;
+        const nextTotalPaginas = data.totalPaginas || 1;
+
+        clientCatalogCache.set(cacheKey, {
+          itens: nextItens,
+          total: nextTotal,
+          totalPaginas: nextTotalPaginas,
+          expiresAt: Date.now() + CLIENT_CACHE_TTL_MS,
+        });
+
+        setItens(nextItens);
+        setTotal(nextTotal);
+        setTotalPaginas(nextTotalPaginas);
+      } catch (err) {
+        console.error(err);
+        setErro('Catálogo indisponível no momento. Tente recarregar.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [categoria, pagina, loja, caixa, debouncedBusca, ordenacao]
+  );
 
   useEffect(() => {
-    loadCatalogo();
+    loadCatalogo(false);
   }, [loadCatalogo]);
 
   const handleTabChange = (novaCategoria) => {
@@ -177,61 +277,22 @@ export default function CatalogoPage() {
 
   return (
     <div className="pageContainer">
-      {/* Top Header */}
-      <header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '16px',
-          paddingBottom: '12px',
-          borderBottom: '1px solid #232328',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div
-            style={{
-              width: '42px',
-              height: '42px',
-              borderRadius: '10px',
-              backgroundColor: '#18181c',
-              border: '1px solid #2d2d35',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              overflow: 'hidden',
-              flexShrink: 0,
-            }}
-          >
-            <img
-              src="/logo.jpg"
-              alt="Freelancer Discos"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
-          </div>
-          <div>
-            <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', lineHeight: 1.2 }}>
-              Freelancer Discos
-            </h1>
-            <span style={{ fontSize: '12px', color: '#a1a1aa' }}>
-              Vitrine Oficial · Consulta de Estoque
-            </span>
-          </div>
+      {/* Cabeçalho */}
+      <header className="storeHeader">
+        <img src="/logo.jpg" alt="" className="headerLogo" />
+        <div style={{ minWidth: 0 }}>
+          <h1 className="headerTitle">Freelancer Discos</h1>
+          <p className="headerSubtitle">Vitrine do estoque</p>
         </div>
       </header>
 
       {/* Abas de Categoria */}
-      <div style={{ marginBottom: '14px' }}>
+      <div style={{ marginBottom: '12px' }}>
         <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
       </div>
 
       {/* Filtros e Busca */}
-      <div style={{ marginBottom: '18px' }}>
+      <div style={{ marginBottom: '14px' }}>
         <CatalogFilters
           busca={busca}
           onBuscaChange={handleBuscaChange}
@@ -246,30 +307,34 @@ export default function CatalogoPage() {
         />
       </div>
 
-      {/* Contador de Resultados */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '12px',
-          padding: '0 4px',
-        }}
+      {/* Contagem de resultados (linha de texto simples) */}
+      <p
+        className="tabularNums"
+        aria-live="polite"
+        style={{ fontSize: '13px', color: '#a1a1aa', marginBottom: '10px', padding: '0 2px' }}
       >
-        <span style={{ fontSize: '13px', fontWeight: 500, color: '#a1a1aa' }}>
-          {loading ? 'Carregando...' : `${total} ${total === 1 ? 'item encontrado' : 'itens encontrados'}`}
-        </span>
-      </div>
+        {loading ? (
+          'Carregando…'
+        ) : (
+          <>
+            <strong style={{ color: '#ffffff', fontWeight: 600 }}>
+              {total.toLocaleString('pt-BR')}
+            </strong>{' '}
+            {total === 1 ? 'item' : 'itens'}
+            {totalPaginas > 1 && ` · página ${pagina} de ${totalPaginas.toLocaleString('pt-BR')}`}
+          </>
+        )}
+      </p>
 
       {/* Erro */}
       {erro && (
         <div
           style={{
             padding: '16px',
-            backgroundColor: '#2e1212',
-            border: '1px solid #6b2121',
-            borderRadius: '10px',
-            color: '#fca5a5',
+            backgroundColor: '#151518',
+            border: '1px solid #232328',
+            borderRadius: '12px',
+            color: '#ffffff',
             textAlign: 'center',
             marginBottom: '16px',
           }}
@@ -277,7 +342,7 @@ export default function CatalogoPage() {
           <p style={{ marginBottom: '8px', fontSize: '14px' }}>{erro}</p>
           <button
             type="button"
-            onClick={loadCatalogo}
+            onClick={() => loadCatalogo(true)}
             style={{
               padding: '8px 16px',
               backgroundColor: '#8b1e1e',
@@ -296,23 +361,14 @@ export default function CatalogoPage() {
 
       {/* Grade de Produtos */}
       {loading ? (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))',
-            gap: '12px',
-          }}
-        >
+        <div className="catalogGrid" aria-busy="true" aria-label="Carregando produtos">
           {Array.from({ length: 8 }).map((_, idx) => (
-            <div
-              key={idx}
-              style={{
-                height: '280px',
-                backgroundColor: '#151518',
-                border: '1px solid #232328',
-                borderRadius: '12px',
-              }}
-            />
+            <div key={idx} className="skeletonCard">
+              <div className="skeletonBlock" style={{ width: '100%', aspectRatio: '1 / 1' }} />
+              <div className="skeletonBlock" style={{ width: '60%', height: '12px' }} />
+              <div className="skeletonBlock" style={{ width: '90%', height: '16px' }} />
+              <div className="skeletonBlock" style={{ width: '45%', height: '24px', marginTop: '4px' }} />
+            </div>
           ))}
         </div>
       ) : itens.length === 0 ? (
@@ -333,13 +389,7 @@ export default function CatalogoPage() {
           </p>
         </div>
       ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(170px, 1fr))',
-            gap: '12px',
-          }}
-        >
+        <div className="catalogGrid">
           {itens.map((item) => {
             const itemKey = getCartItemKey({ ...item, categoria });
             return (

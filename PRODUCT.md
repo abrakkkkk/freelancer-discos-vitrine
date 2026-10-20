@@ -4,7 +4,7 @@
 
 ## Platform
 
-web (mobile-first)
+web
 
 ## Stack
 
@@ -21,3 +21,4 @@ Disponibilizar uma vitrine pública, ágil e sem atrito para consulta de mais de
 ## Positioning
 
 Vitrine real conectada diretamente ao sistema de estoque físico da loja, com transparência total de localização (Loja 1 / Loja 2 e Caixas físicas), sem exigência de login, senhas ou cartões para consulta e pedido.
+

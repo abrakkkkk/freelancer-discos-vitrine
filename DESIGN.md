@@ -29,3 +29,4 @@ A vitrine adota uma identidade visual sóbria, sólida e autêntica de loja fís
 2. **Sem Texto em Gradiente:** Ênfase é dada por peso (`fontWeight: 700`) e tamanho, nunca por degradê.
 3. **Sem Halos Neon:** Sombras são sutis e direcionais com offset (`0 2px 8px rgba(0, 0, 0, 0.4)`), nunca brilhos coloridos fluorescentes.
 4. **Sem Cards Aninhados:** Cada produto possui apenas um container card limpo.
+

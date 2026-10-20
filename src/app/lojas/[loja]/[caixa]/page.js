@@ -58,40 +58,15 @@ export default async function CaixaDetalhePage({ params }) {
 
   return (
     <div className="pageContainer">
-      <header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          marginBottom: '20px',
-          paddingBottom: '12px',
-          borderBottom: '1px solid #232328',
-        }}
-      >
-        <Link
-          href={`/lojas/${lojaSlug}`}
-          aria-label="Voltar para grade de caixas"
-          style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '8px',
-            backgroundColor: '#151518',
-            border: '1px solid #232328',
-            color: '#e4e4e7',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textDecoration: 'none',
-          }}
-        >
-          <FiArrowLeft size={20} />
+      <header className="storeHeader">
+        <Link href={`/lojas/${lojaSlug}`} aria-label={`Voltar para ${nomeLoja}`} className="headerBackBtn">
+          <FiArrowLeft size={19} />
         </Link>
-        <div>
-          <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff' }}>
-            {nomeLoja} — {rotuloCaixa}
-          </h1>
-          <p style={{ fontSize: '12.5px', color: '#a1a1aa' }}>
-            {todosItens.length} {todosItens.length === 1 ? 'item disponível' : 'itens disponíveis'}
+        <div style={{ minWidth: 0 }}>
+          <h1 className="headerTitle">{rotuloCaixa}</h1>
+          <p className="headerSubtitle tabularNums">
+            {nomeLoja} · {todosItens.length.toLocaleString('pt-BR')}{' '}
+            {todosItens.length === 1 ? 'item' : 'itens'}
           </p>
         </div>
       </header>

@@ -2,7 +2,7 @@
 
 import AlbumCover from './AlbumCover';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
-import { FiCheck, FiShoppingBag } from 'react-icons/fi';
+import { FiCheck, FiPlus } from 'react-icons/fi';
 
 export default function ProductCard({
   item,
@@ -22,43 +22,42 @@ export default function ProductCard({
     .join(' · ');
 
   const recordLabel = extractRecordLabel(item.observacao);
-  const isImportado = item.observacao && /importado/i.test(item.observacao);
+  const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
+  const showAnoBadge = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
+  const isImportado = Boolean(item.observacao && /importado/i.test(item.observacao));
+
+  const handleCardKeyDown = (e) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (onOpenDetail) onOpenDetail(item);
+    }
+  };
 
   return (
-    <div
+    <article
+      role="button"
+      tabIndex={0}
+      aria-label={`Ver detalhes de ${item.artista ? `${item.artista} - ` : ''}${item.titulo}`}
       onClick={() => onOpenDetail && onOpenDetail(item)}
-      style={{
-        backgroundColor: '#151518',
-        border: '1px solid #232328',
-        borderRadius: '12px',
-        padding: '12px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-        cursor: 'pointer',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
-        transition: 'transform 0.15s ease, border-color 0.15s ease',
-        position: 'relative',
-        userSelect: 'none',
-      }}
+      onKeyDown={handleCardKeyDown}
+      className="productCard"
     >
-      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <AlbumCover
-          id={item.id}
-          artista={item.artista}
-          titulo={item.titulo}
-          ano={item.ano}
-          capaUrl={item.capa_url}
-          size={160}
-          tipo={tipo}
-        />
-      </div>
+      <AlbumCover
+        id={item.id}
+        artista={item.artista}
+        titulo={item.titulo}
+        ano={item.ano}
+        capaUrl={item.capa_url}
+        fluid
+        tipo={tipo}
+      />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', flex: 1, minWidth: 0 }}>
         {item.artista && (
           <span
             style={{
-              fontSize: '12px',
+              fontSize: '11.5px',
               fontWeight: 600,
               color: '#a1a1aa',
               textTransform: 'uppercase',
@@ -74,98 +73,28 @@ export default function ProductCard({
 
         <h3
           style={{
-            fontSize: '15px',
+            fontSize: '14.5px',
             fontWeight: 600,
-            color: '#e4e4e7',
+            color: '#ffffff',
             lineHeight: 1.3,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            minHeight: '38px',
           }}
         >
           {item.titulo}
         </h3>
 
-        {/* Linha de Badges / Rótulos / Labels (Sólidos, anti-vibecoded) */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px' }}>
-          {localizacao && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px 7px',
-                borderRadius: '5px',
-                backgroundColor: '#1c1c21',
-                border: '1px solid #2d2d35',
-                fontSize: '11px',
-                fontWeight: 500,
-                color: '#d4d4d8',
-              }}
-            >
-              {localizacao}
-            </div>
-          )}
-
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
+          {localizacao && <span className="badge tabularNums">{localizacao}</span>}
           {recordLabel && (
-            <div
-              title={`Selo / Gravadora: ${recordLabel}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px 7px',
-                borderRadius: '5px',
-                backgroundColor: '#1f1b24',
-                border: '1px solid #3c3247',
-                fontSize: '11px',
-                fontWeight: 600,
-                color: '#d8b4fe',
-                maxWidth: '100%',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
-            >
+            <span className="badge badgeLabel tabularNums" title={`Selo: ${recordLabel}`}>
               {recordLabel}
-            </div>
+            </span>
           )}
-
-          {item.ano && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px 7px',
-                borderRadius: '5px',
-                backgroundColor: '#18181c',
-                border: '1px solid #27272a',
-                fontSize: '11px',
-                fontWeight: 600,
-                color: '#a1a1aa',
-              }}
-            >
-              {item.ano}
-            </div>
-          )}
-
-          {isImportado && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px 7px',
-                borderRadius: '5px',
-                backgroundColor: '#162219',
-                border: '1px solid #23462b',
-                fontSize: '10.5px',
-                fontWeight: 600,
-                color: '#86efac',
-              }}
-            >
-              Importado
-            </div>
-          )}
+          {showAnoBadge && <span className="badge tabularNums">{cleanAno}</span>}
+          {isImportado && <span className="badge badgeSuccess">Importado</span>}
         </div>
       </div>
 
@@ -177,24 +106,21 @@ export default function ProductCard({
           marginTop: 'auto',
           paddingTop: '8px',
           borderTop: '1px solid #232328',
-          gap: '8px',
+          gap: '6px',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '10.5px', color: '#71717a', textTransform: 'uppercase' }}>
-            Preço
-          </span>
-          <span
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: '#ffffff',
-              letterSpacing: '-0.02em',
-            }}
-          >
-            {precoFormatado}
-          </span>
-        </div>
+        <span
+          className="tabularNums"
+          style={{
+            fontSize: '15.5px',
+            fontWeight: 700,
+            color: '#ffffff',
+            letterSpacing: '-0.01em',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {precoFormatado}
+        </span>
 
         <button
           type="button"
@@ -202,38 +128,13 @@ export default function ProductCard({
             e.stopPropagation();
             if (onAddToCart) onAddToCart(item);
           }}
-          aria-label={isInCart ? 'Item na sacola' : 'Adicionar à sacola'}
-          style={{
-            minWidth: '44px',
-            minHeight: '44px',
-            padding: '8px 12px',
-            borderRadius: '8px',
-            backgroundColor: isInCart ? '#1c1c21' : '#8b1e1e',
-            border: isInCart ? '1px solid #3f3f46' : '1px solid #731717',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 600,
-            transition: 'background-color 0.15s ease',
-          }}
+          aria-label={isInCart ? 'Item já na sacola — abrir sacola' : 'Adicionar à sacola'}
+          className={`productCardActionBtn ${isInCart ? 'productCardActionBtnInCart' : ''}`}
         >
-          {isInCart ? (
-            <>
-              <FiCheck size={16} color="#4ade80" />
-              <span style={{ color: '#4ade80' }}>Na sacola</span>
-            </>
-          ) : (
-            <>
-              <FiShoppingBag size={16} />
-              <span>Adicionar</span>
-            </>
-          )}
+          {isInCart ? <FiCheck size={14} strokeWidth={2.5} /> : <FiPlus size={14} strokeWidth={2.5} />}
+          <span>{isInCart ? 'Na sacola' : 'Sacola'}</span>
         </button>
       </div>
-    </div>
+    </article>
   );
 }

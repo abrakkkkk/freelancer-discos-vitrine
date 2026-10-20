@@ -24,3 +24,4 @@ Para todas as tarefas de frontend, UI, UX, componentes e design neste projeto, a
 - **Chaves de Sacola:** Itens da sacola devem utilizar a chave composta `categoria:id` via `getCartItemKey()`.
 - **Labels de Gravadoras:** Sempre preservar o parser de gravadoras `extractRecordLabel()` em itens do catálogo.
 - **Aprovação do Usuário:** Nunca realizar alterações substanciais no código ou no design sem comunicação prévia.
+
