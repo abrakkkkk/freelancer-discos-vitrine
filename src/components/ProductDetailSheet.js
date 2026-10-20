@@ -121,8 +121,10 @@ export default function ProductDetailSheet({
           }}
         >
           <AlbumCover
+            id={item.id}
             artista={item.artista}
             titulo={item.titulo}
+            ano={item.ano}
             capaUrl={item.capa_url}
             size={180}
             tipo={tipo}

@@ -41,8 +41,10 @@ export default function ProductCard({
     >
       <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <AlbumCover
+          id={item.id}
           artista={item.artista}
           titulo={item.titulo}
+          ano={item.ano}
           capaUrl={item.capa_url}
           size={160}
           tipo={tipo}

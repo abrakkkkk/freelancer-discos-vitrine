@@ -248,8 +248,10 @@ export default function CartDrawer({
                   }}
                 >
                   <AlbumCover
+                    id={item.id}
                     artista={item.artista}
                     titulo={item.titulo}
+                    ano={item.ano}
                     capaUrl={item.capa_url}
                     size={52}
                     tipo={item.categoria || 'discos'}
