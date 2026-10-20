@@ -9,7 +9,6 @@ import CatalogPagination from '@/components/CatalogPagination';
 import BottomNav from '@/components/BottomNav';
 import CartDrawer from '@/components/CartDrawer';
 import { getCartItemKey } from '@/utils/cartUtils';
-import { PiVinylRecord } from 'react-icons/pi';
 
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
 
@@ -192,17 +191,28 @@ export default function CatalogoPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div
             style={{
-              width: '40px',
-              height: '40px',
+              width: '42px',
+              height: '42px',
               borderRadius: '10px',
               backgroundColor: '#18181c',
               border: '1px solid #2d2d35',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              overflow: 'hidden',
+              flexShrink: 0,
             }}
           >
-            <PiVinylRecord size={24} color="#8b1e1e" />
+            <img
+              src="/logo.jpg"
+              alt="Freelancer Discos"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
           </div>
           <div>
             <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', lineHeight: 1.2 }}>

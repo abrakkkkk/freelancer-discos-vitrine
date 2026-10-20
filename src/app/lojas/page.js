@@ -27,17 +27,47 @@ export default async function LojasPage() {
     <div className="pageContainer">
       <header
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
           marginBottom: '20px',
           paddingBottom: '12px',
           borderBottom: '1px solid #232328',
         }}
       >
-        <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#ffffff' }}>
-          Lojas Físicas
-        </h1>
-        <p style={{ fontSize: '13px', color: '#a1a1aa', marginTop: '4px' }}>
-          Selecione a loja para explorar o acervo caixa por caixa
-        </p>
+        <div
+          style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '10px',
+            backgroundColor: '#18181c',
+            border: '1px solid #2d2d35',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          <img
+            src="/logo.jpg"
+            alt="Freelancer Discos"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
+            }}
+          />
+        </div>
+        <div>
+          <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', lineHeight: 1.2 }}>
+            Lojas Físicas
+          </h1>
+          <p style={{ fontSize: '12px', color: '#a1a1aa', marginTop: '2px' }}>
+            Selecione a loja para explorar o acervo caixa por caixa
+          </p>
+        </div>
       </header>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
