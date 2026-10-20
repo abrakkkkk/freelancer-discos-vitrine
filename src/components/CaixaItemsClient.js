@@ -5,6 +5,7 @@ import ProductCard from '@/components/ProductCard';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CartDrawer from '@/components/CartDrawer';
 import BottomNav from '@/components/BottomNav';
+import { getCartItemKey } from '@/utils/cartUtils';
 
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
 
@@ -28,19 +29,25 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
   };
 
   const handleAddToCart = (item) => {
-    const jaExiste = cart.some((i) => i.id === item.id);
+    const itemComCategoria = { ...item, categoria: item.categoria || 'discos' };
+    const chaveAlvo = getCartItemKey(itemComCategoria);
+    const jaExiste = cart.some((i) => getCartItemKey(i) === chaveAlvo);
     if (jaExiste) {
       setIsCartOpen(true);
       return;
     }
-    saveCart([...cart, item]);
+    saveCart([...cart, itemComCategoria]);
   };
 
-  const handleRemoveFromCart = (id) => {
-    saveCart(cart.filter((i) => i.id !== id));
+  const handleRemoveFromCart = (idOuChave) => {
+    saveCart(
+      cart.filter(
+        (i) => getCartItemKey(i) !== idOuChave && i.id !== idOuChave
+      )
+    );
   };
 
-  const cartIds = new Set(cart.map((i) => i.id));
+  const cartKeys = new Set(cart.map((i) => getCartItemKey(i)));
 
   return (
     <>
@@ -69,16 +76,19 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
             gap: '12px',
           }}
         >
-          {itens.map((item) => (
-            <ProductCard
-              key={item.id}
-              item={item}
-              tipo={item.categoria || 'discos'}
-              isInCart={cartIds.has(item.id)}
-              onAddToCart={handleAddToCart}
-              onOpenDetail={(i) => setDetailItem(i)}
-            />
-          ))}
+          {itens.map((item) => {
+            const itemKey = getCartItemKey(item);
+            return (
+              <ProductCard
+                key={itemKey}
+                item={item}
+                tipo={item.categoria || 'discos'}
+                isInCart={cartKeys.has(itemKey)}
+                onAddToCart={handleAddToCart}
+                onOpenDetail={(i) => setDetailItem(i)}
+              />
+            );
+          })}
         </div>
       )}
 
@@ -87,7 +97,7 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
         item={detailItem}
         isOpen={Boolean(detailItem)}
         onClose={() => setDetailItem(null)}
-        isInCart={detailItem ? cartIds.has(detailItem.id) : false}
+        isInCart={detailItem ? cartKeys.has(getCartItemKey(detailItem)) : false}
         onAddToCart={handleAddToCart}
         tipo={detailItem?.categoria || 'discos'}
       />

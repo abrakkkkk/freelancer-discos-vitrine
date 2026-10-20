@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { catalogService } from '@/services/catalogService';
+import { catalogService, isValidCategory } from '@/services/catalogService';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,10 +7,18 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const categoria = searchParams.get('categoria') || 'discos';
+
+    if (!isValidCategory(categoria)) {
+      return NextResponse.json(
+        { error: 'Categoria de catálogo inválida' },
+        { status: 400 }
+      );
+    }
+
     const loja = searchParams.get('loja') || '';
     const caixa = searchParams.get('caixa') || '';
     const busca = searchParams.get('busca') || '';
-    const pagina = parseInt(searchParams.get('pagina') || '1', 10);
+    const pagina = Math.max(1, parseInt(searchParams.get('pagina') || '1', 10) || 1);
     const ordenarColuna = searchParams.get('ordenarColuna') || null;
     const ordenarDirecao = searchParams.get('ordenarDirecao') || null;
 

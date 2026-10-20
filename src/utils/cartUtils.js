@@ -2,6 +2,12 @@ import { formatCaixa } from './stringUtils';
 
 export const WHATSAPP_PHONE = '5585987879214';
 
+export function getCartItemKey(item) {
+  if (!item) return '';
+  const categoria = item.categoria || 'discos';
+  return `${categoria}:${item.id}`;
+}
+
 export function formatPrice(valor) {
   return Number(valor || 0)
     .toLocaleString('pt-BR', {

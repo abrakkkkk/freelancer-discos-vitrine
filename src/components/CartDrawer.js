@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
-import { generateWhatsAppUrl } from '@/utils/cartUtils';
+import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
 import { FiX, FiTrash2 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -45,15 +45,25 @@ export default function CartDrawer({
 
       if (res.ok) {
         const data = await res.json();
+        const indisponiveisKeys = new Set(data.indisponiveisKeys || []);
         const indisponiveisIds = new Set(data.indisponiveis || []);
 
-        if (indisponiveisIds.size > 0) {
-          const restantes = itens.filter((i) => !indisponiveisIds.has(i.id));
+        const qtdIndisponiveis =
+          indisponiveisKeys.size > 0 ? indisponiveisKeys.size : indisponiveisIds.size;
+
+        if (qtdIndisponiveis > 0) {
+          const restantes = itens.filter((i) => {
+            const key = getCartItemKey(i);
+            if (indisponiveisKeys.size > 0) {
+              return !indisponiveisKeys.has(key);
+            }
+            return !indisponiveisIds.has(i.id);
+          });
           if (onReplaceCart) onReplaceCart(restantes);
 
           setFeedback({
             tipo: 'aviso',
-            texto: `${indisponiveisIds.size} ${indisponiveisIds.size === 1 ? 'item indisponível foi removido' : 'itens indisponíveis foram removidos'} da sua sacola.`,
+            texto: `${qtdIndisponiveis} ${qtdIndisponiveis === 1 ? 'item indisponível foi removido' : 'itens indisponíveis foram removidos'} da sua sacola.`,
           });
           setValidando(false);
 
@@ -222,10 +232,11 @@ export default function CartDrawer({
                 currency: 'BRL',
               });
               const rotuloCaixa = formatCaixa(item.caixa, item.loja);
+              const itemKey = getCartItemKey(item);
 
               return (
                 <div
-                  key={item.id}
+                  key={itemKey}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -290,7 +301,7 @@ export default function CartDrawer({
 
                     <button
                       type="button"
-                      onClick={() => onRemoveItem && onRemoveItem(item.id)}
+                      onClick={() => onRemoveItem && onRemoveItem(itemKey)}
                       aria-label={`Remover ${item.titulo} da sacola`}
                       style={{
                         width: '44px',

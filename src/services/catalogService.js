@@ -1,7 +1,13 @@
 import { supabaseServer } from '@/lib/supabaseServer';
 import { removeAcentos, extractSearchTokens, calculateItemRelevance } from '@/utils/stringUtils';
 
-function aplicarFiltroCaixaNaQuery(query, filtroCaixa) {
+export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
+
+export function isValidCategory(category) {
+  return VALID_CATEGORIES.includes(category);
+}
+
+export function aplicarFiltroCaixaNaQuery(query, filtroCaixa) {
   if (!filtroCaixa) return query;
 
   const matchSufixoB = filtroCaixa.match(/^(?:caixa|c)?\s*(\d+)\s*b$/i);
@@ -30,6 +36,10 @@ export const catalogService = {
     ordenarColuna = null,
     ordenarDirecao = null,
   } = {}) {
+    if (!isValidCategory(category)) {
+      throw new Error(`Categoria inválida: ${category}`);
+    }
+
     if (!supabaseServer) {
       return { data: [], count: 0 };
     }

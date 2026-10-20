@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FiArrowLeft } from 'react-icons/fi';
 import { supabaseServer } from '@/lib/supabaseServer';
+import { aplicarFiltroCaixaNaQuery } from '@/services/catalogService';
 import CaixaItemsClient from '@/components/CaixaItemsClient';
 import { formatCaixa } from '@/utils/stringUtils';
 
@@ -33,14 +34,15 @@ export default async function CaixaDetalhePage({ params }) {
         let cols = 'id, titulo, preco, loja, caixa, ano, capa_url, observacao';
         if (tab.temArtista) cols += ', artista';
 
-        const { data, error } = await supabaseServer
+        let query = supabaseServer
           .from(tab.id)
           .select(cols)
           .eq('deletado', false)
           .eq('ativo', true)
-          .eq('loja', nomeLoja)
-          .eq('caixa', caixaDecodificada)
-          .order('titulo');
+          .eq('loja', nomeLoja);
+
+        query = aplicarFiltroCaixaNaQuery(query, caixaDecodificada);
+        const { data, error } = await query.order('titulo');
 
         if (!error && Array.isArray(data)) {
           const comCategoria = data.map((d) => ({ ...d, categoria: tab.id }));

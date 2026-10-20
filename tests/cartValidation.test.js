@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatWhatsAppMessage, generateWhatsAppUrl } from '../src/utils/cartUtils';
+import { formatWhatsAppMessage, generateWhatsAppUrl, getCartItemKey } from '../src/utils/cartUtils';
 
 describe('cartUtils', () => {
   it('gera texto formatado com loja e caixa para o WhatsApp', () => {
@@ -32,5 +32,11 @@ describe('cartUtils', () => {
     const msg = formatWhatsAppMessage(itens, '', '');
     expect(msg).not.toContain('Nome:');
     expect(msg).not.toContain('Bairro:');
+  });
+
+  it('gera chave composta categoria:id para evitar colisão entre tabelas', () => {
+    expect(getCartItemKey({ id: 10, categoria: 'discos' })).toBe('discos:10');
+    expect(getCartItemKey({ id: 10, categoria: 'cds' })).toBe('cds:10');
+    expect(getCartItemKey({ id: 10 })).toBe('discos:10');
   });
 });

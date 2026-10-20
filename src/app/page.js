@@ -8,6 +8,7 @@ import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CatalogPagination from '@/components/CatalogPagination';
 import BottomNav from '@/components/BottomNav';
 import CartDrawer from '@/components/CartDrawer';
+import { getCartItemKey } from '@/utils/cartUtils';
 import { PiVinylRecord } from 'react-icons/pi';
 
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
@@ -49,18 +50,23 @@ export default function CatalogoPage() {
   };
 
   const handleAddToCart = (item) => {
-    const jaExiste = cart.some((i) => i.id === item.id);
+    const itemComCategoria = { ...item, categoria: item.categoria || categoria };
+    const chaveAlvo = getCartItemKey(itemComCategoria);
+    const jaExiste = cart.some((i) => getCartItemKey(i) === chaveAlvo);
     if (jaExiste) {
       // Se já existe, abre a sacola
       setIsCartOpen(true);
       return;
     }
-    const itemComCategoria = { ...item, categoria };
     saveCart([...cart, itemComCategoria]);
   };
 
-  const handleRemoveFromCart = (id) => {
-    saveCart(cart.filter((i) => i.id !== id));
+  const handleRemoveFromCart = (idOuChave) => {
+    saveCart(
+      cart.filter(
+        (i) => getCartItemKey(i) !== idOuChave && i.id !== idOuChave
+      )
+    );
   };
 
   const handleClearCart = () => {
@@ -168,7 +174,7 @@ export default function CatalogoPage() {
     setPagina(1);
   };
 
-  const cartIds = new Set(cart.map((i) => i.id));
+  const cartKeys = new Set(cart.map((i) => getCartItemKey(i)));
 
   return (
     <div className="pageContainer">
@@ -324,16 +330,19 @@ export default function CatalogoPage() {
             gap: '12px',
           }}
         >
-          {itens.map((item) => (
-            <ProductCard
-              key={item.id}
-              item={item}
-              tipo={categoria}
-              isInCart={cartIds.has(item.id)}
-              onAddToCart={handleAddToCart}
-              onOpenDetail={(i) => setDetailItem(i)}
-            />
-          ))}
+          {itens.map((item) => {
+            const itemKey = getCartItemKey({ ...item, categoria });
+            return (
+              <ProductCard
+                key={itemKey}
+                item={item}
+                tipo={categoria}
+                isInCart={cartKeys.has(itemKey)}
+                onAddToCart={handleAddToCart}
+                onOpenDetail={(i) => setDetailItem({ ...i, categoria })}
+              />
+            );
+          })}
         </div>
       )}
 
@@ -351,9 +360,18 @@ export default function CatalogoPage() {
         item={detailItem}
         isOpen={Boolean(detailItem)}
         onClose={() => setDetailItem(null)}
-        isInCart={detailItem ? cartIds.has(detailItem.id) : false}
+        isInCart={
+          detailItem
+            ? cartKeys.has(
+                getCartItemKey({
+                  ...detailItem,
+                  categoria: detailItem.categoria || categoria,
+                })
+              )
+            : false
+        }
         onAddToCart={handleAddToCart}
-        tipo={categoria}
+        tipo={detailItem?.categoria || categoria}
       />
 
       {/* Drawer da Sacola */}

@@ -2,6 +2,7 @@ import { supabaseServer } from '@/lib/supabaseServer';
 
 const TOTAL_PADRAO_CAIXAS_LOJA_1 = 55;
 const TOTAL_PADRAO_CAIXAS_LOJA_2 = 20;
+const SUPABASE_PAGE_SIZE = 1000;
 
 export const caixaService = {
   getDefaultCaixas(loja = '') {
@@ -39,18 +40,8 @@ export const caixaService = {
 
     const mapaCaixas = new Map();
 
-    // Inicializa Caixas obrigatórias
-    if (loja === 'Loja 2') {
-      for (let i = 1; i <= TOTAL_PADRAO_CAIXAS_LOJA_2; i++) {
-        const idCaixa = `Caixa ${i}B`;
-        mapaCaixas.set(idCaixa, {
-          caixa: idCaixa,
-          loja: 'Loja 2',
-          label: idCaixa,
-          total: 0,
-        });
-      }
-    } else if (loja === 'Loja 1') {
+    // Inicializa Caixas obrigatórias (suporta Loja 1, Loja 2 ou Todas as Lojas quando loja === '')
+    if (!loja || loja === 'Loja 1') {
       for (let i = 1; i <= TOTAL_PADRAO_CAIXAS_LOJA_1; i++) {
         const idCaixa = String(i);
         mapaCaixas.set(idCaixa, {
@@ -62,46 +53,81 @@ export const caixaService = {
       }
     }
 
+    if (!loja || loja === 'Loja 2') {
+      for (let i = 1; i <= TOTAL_PADRAO_CAIXAS_LOJA_2; i++) {
+        const idCaixa = `Caixa ${i}B`;
+        mapaCaixas.set(idCaixa, {
+          caixa: idCaixa,
+          loja: 'Loja 2',
+          label: idCaixa,
+          total: 0,
+        });
+      }
+    }
+
     const tabelas = ['discos', 'cds', 'dvds', 'vhs'];
     for (const tabela of tabelas) {
       try {
-        const { data, error } = await supabaseServer
-          .from(tabela)
-          .select('caixa')
-          .eq('deletado', false)
-          .eq('ativo', true)
-          .eq('loja', loja)
-          .not('caixa', 'is', null);
+        let offset = 0;
+        while (true) {
+          let query = supabaseServer
+            .from(tabela)
+            .select('caixa, loja')
+            .eq('deletado', false)
+            .eq('ativo', true)
+            .not('caixa', 'is', null)
+            .range(offset, offset + SUPABASE_PAGE_SIZE - 1);
 
-        if (!error && Array.isArray(data)) {
+          if (loja) {
+            query = query.eq('loja', loja);
+          }
+
+          const { data, error } = await query;
+
+          if (error || !Array.isArray(data) || data.length === 0) {
+            break;
+          }
+
           for (const item of data) {
             const raw = String(item.caixa || '').trim();
             if (!raw) continue;
+
+            const itemLoja = item.loja || loja || 'Loja 1';
 
             // Normaliza para chave do mapa
             let chave = raw;
             const matchB = raw.match(/^(?:caixa|c)?\s*(\d+)\s*b$/i);
             const matchNum = raw.match(/^(?:caixa|c)?\s*(\d+)$/i);
 
-            if (loja === 'Loja 2') {
+            if (itemLoja === 'Loja 2') {
               if (matchB) chave = `Caixa ${matchB[1]}B`;
               else if (matchNum) chave = `Caixa ${matchNum[1]}B`;
-            } else if (loja === 'Loja 1' && matchNum) {
+            } else if (itemLoja === 'Loja 1' && matchNum) {
               chave = matchNum[1];
             }
 
             if (mapaCaixas.has(chave)) {
               mapaCaixas.get(chave).total += 1;
             } else {
-              const label = (loja === 'Loja 1' && !isNaN(Number(raw))) ? `Caixa ${raw}` : raw;
+              const label =
+                itemLoja === 'Loja 1' && !isNaN(Number(raw))
+                  ? `Caixa ${raw}`
+                  : matchB
+                    ? `Caixa ${matchB[1]}B`
+                    : raw;
               mapaCaixas.set(chave, {
-                caixa: raw,
-                loja,
+                caixa: chave,
+                loja: itemLoja,
                 label,
                 total: 1,
               });
             }
           }
+
+          if (data.length < SUPABASE_PAGE_SIZE) {
+            break;
+          }
+          offset += SUPABASE_PAGE_SIZE;
         }
       } catch (err) {
         console.warn(`Erro ao contar caixas em ${tabela}:`, err);
@@ -109,6 +135,9 @@ export const caixaService = {
     }
 
     return Array.from(mapaCaixas.values()).sort((a, b) => {
+      if (a.loja !== b.loja) {
+        return a.loja.localeCompare(b.loja);
+      }
       const numA = parseInt(a.caixa.replace(/\D/g, ''), 10) || 0;
       const numB = parseInt(b.caixa.replace(/\D/g, ''), 10) || 0;
       return numA - numB;
