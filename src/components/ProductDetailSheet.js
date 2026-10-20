@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import AlbumCover from './AlbumCover';
-import { formatCaixa } from '@/utils/stringUtils';
+import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { FiX, FiShoppingBag, FiCheck } from 'react-icons/fi';
 
 export default function ProductDetailSheet({
@@ -30,6 +30,7 @@ export default function ProductDetailSheet({
   });
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
+  const recordLabel = extractRecordLabel(item.observacao);
 
   return (
     <div
@@ -171,7 +172,7 @@ export default function ProductDetailSheet({
           </div>
         </div>
 
-        {/* Metadados: Loja, Caixa, Ano, Observações */}
+        {/* Metadados: Loja, Caixa, Selo/Label, Ano, Observações */}
         <div
           style={{
             display: 'flex',
@@ -190,6 +191,13 @@ export default function ProductDetailSheet({
               {item.loja || 'Loja Física'} — {rotuloCaixa}
             </strong>
           </div>
+
+          {recordLabel && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
+              <span style={{ color: '#71717a' }}>Selo / Gravadora (Label):</span>
+              <strong style={{ color: '#d8b4fe' }}>{recordLabel}</strong>
+            </div>
+          )}
 
           {item.ano && (
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>

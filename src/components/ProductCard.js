@@ -1,7 +1,7 @@
 'use client';
 
 import AlbumCover from './AlbumCover';
-import { formatCaixa } from '@/utils/stringUtils';
+import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { FiCheck, FiShoppingBag } from 'react-icons/fi';
 
 export default function ProductCard({
@@ -20,6 +20,9 @@ export default function ProductCard({
   const localizacao = [item.loja, rotuloCaixa !== '—' ? rotuloCaixa : null]
     .filter(Boolean)
     .join(' · ');
+
+  const recordLabel = extractRecordLabel(item.observacao);
+  const isImportado = item.observacao && /importado/i.test(item.observacao);
 
   return (
     <div
@@ -85,24 +88,85 @@ export default function ProductCard({
           {item.titulo}
         </h3>
 
-        {localizacao && (
-          <div
-            style={{
-              display: 'inline-block',
-              alignSelf: 'flex-start',
-              padding: '2px 8px',
-              borderRadius: '6px',
-              backgroundColor: '#1c1c21',
-              border: '1px solid #2d2d35',
-              fontSize: '11px',
-              fontWeight: 500,
-              color: '#d4d4d8',
-              marginTop: '2px',
-            }}
-          >
-            {localizacao}
-          </div>
-        )}
+        {/* Linha de Badges / Rótulos / Labels (Sólidos, anti-vibecoded) */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '4px' }}>
+          {localizacao && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 7px',
+                borderRadius: '5px',
+                backgroundColor: '#1c1c21',
+                border: '1px solid #2d2d35',
+                fontSize: '11px',
+                fontWeight: 500,
+                color: '#d4d4d8',
+              }}
+            >
+              {localizacao}
+            </div>
+          )}
+
+          {recordLabel && (
+            <div
+              title={`Selo / Gravadora: ${recordLabel}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 7px',
+                borderRadius: '5px',
+                backgroundColor: '#1f1b24',
+                border: '1px solid #3c3247',
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#d8b4fe',
+                maxWidth: '100%',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {recordLabel}
+            </div>
+          )}
+
+          {item.ano && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 7px',
+                borderRadius: '5px',
+                backgroundColor: '#18181c',
+                border: '1px solid #27272a',
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#a1a1aa',
+              }}
+            >
+              {item.ano}
+            </div>
+          )}
+
+          {isImportado && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 7px',
+                borderRadius: '5px',
+                backgroundColor: '#162219',
+                border: '1px solid #23462b',
+                fontSize: '10.5px',
+                fontWeight: 600,
+                color: '#86efac',
+              }}
+            >
+              Importado
+            </div>
+          )}
+        </div>
       </div>
 
       <div

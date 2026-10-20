@@ -32,6 +32,18 @@ export function formatCaixa(caixa, loja) {
   return str;
 }
 
+export function extractRecordLabel(observacao) {
+  if (!observacao) return null;
+  const match = String(observacao).match(/\[(.*?)\]/);
+  if (!match) return null;
+  const inside = match[1].trim();
+  const parts = inside.split('•').map((p) => p.trim());
+  if (parts[0] && !/^\d{4}$/.test(parts[0])) {
+    return parts[0];
+  }
+  return null;
+}
+
 export const MUSIC_STOP_WORDS = new Set([
   'the', 'a', 'an', 'and', 'of',
   'o', 'os', 'as', 'um', 'uma', 'uns', 'umas',
