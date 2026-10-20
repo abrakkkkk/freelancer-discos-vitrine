@@ -313,8 +313,8 @@ select:focus-visible,
 /* Grade de Produtos Responsiva (2 colunas reais no mobile) */
 .catalogGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
 }
 
 /* Card de Produto Sólido */
@@ -322,7 +322,7 @@ select:focus-visible,
   background-color: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 10px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 9px;
@@ -459,7 +459,7 @@ select:focus-visible,
   }
 
   .productCard {
-    padding: 8px;
+    padding: 11px;
     gap: 8px;
   }
 
