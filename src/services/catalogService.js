@@ -2,6 +2,8 @@ import { supabaseServer } from '@/lib/supabaseServer';
 import { removeAcentos, extractSearchTokens, calculateItemRelevance } from '@/utils/stringUtils';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
+const CATALOG_CACHE_TTL_MS = 60 * 1000;
+const catalogServerCache = new Map();
 
 export function isValidCategory(category) {
   return VALID_CATEGORIES.includes(category);
@@ -42,6 +44,12 @@ export const catalogService = {
 
     if (!supabaseServer) {
       return { data: [], count: 0 };
+    }
+
+    const cacheKey = `${category}|${pagina}|${itensPorPagina}|${filtroLoja}|${filtroCaixa}|${busca}|${ordenarColuna || ''}|${ordenarDirecao || ''}`;
+    const cached = catalogServerCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      return cached.result;
     }
 
     const isVideo = category === 'dvds' || category === 'vhs';
@@ -137,9 +145,19 @@ export const catalogService = {
 
       const inicio = (pagina - 1) * itensPorPagina;
       const paginados = itensFiltrados.slice(inicio, inicio + itensPorPagina);
-      return { data: paginados, count: itensFiltrados.length };
+      const searchResult = { data: paginados, count: itensFiltrados.length };
+      catalogServerCache.set(cacheKey, {
+        result: searchResult,
+        expiresAt: Date.now() + CATALOG_CACHE_TTL_MS,
+      });
+      return searchResult;
     }
 
-    return { data: itensFiltrados, count: count || 0 };
+    const finalResult = { data: itensFiltrados, count: count || 0 };
+    catalogServerCache.set(cacheKey, {
+      result: finalResult,
+      expiresAt: Date.now() + CATALOG_CACHE_TTL_MS,
+    });
+    return finalResult;
   },
 };

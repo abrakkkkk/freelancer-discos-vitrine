@@ -183,12 +183,16 @@ export async function GET(request) {
   const ano = searchParams.get('ano') || searchParams.get('year') || '';
   const refresh = searchParams.get('refresh') === 'true';
 
+  if (categoria === 'dvds' || categoria === 'vhs') {
+    return Response.json({ cover: null, thumb: null });
+  }
+
   const q = normalizeSearchQuery(rawQ);
   const cleanAno = ano && String(ano) !== 'null' ? String(ano).trim() : '';
   const qFull = `${q} ${cleanAno}`.trim();
   const qKey = qFull.toLowerCase();
   const qSimpleKey = q.toLowerCase();
-  const idKey = id ? String(id) : '';
+  const idKey = id && categoria === 'discos' ? String(id) : '';
 
   if (!refresh) {
     if (idKey) {
