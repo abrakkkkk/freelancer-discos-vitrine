@@ -5,5 +5,7 @@ dist
 coverage
 .DS_Store
 .cache
-.cache
-
+.agent
+.gemini
+.codex
+**/scripts/bin/
