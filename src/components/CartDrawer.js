@@ -94,16 +94,7 @@ export default function CartDrawer({
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 99999,
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-      }}
-    >
+    <div className="cartDrawerBackdrop">
       {/* Overlay Sólido e Opaco (#050506) */}
       <div
         onClick={onClose}
@@ -120,24 +111,7 @@ export default function CartDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Sua Sacola"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          width: '100%',
-          maxWidth: '540px',
-          maxHeight: 'calc(100vh - 20px)',
-          backgroundColor: '#18181c',
-          borderTop: '1px solid #2d2d35',
-          borderLeft: '1px solid #2d2d35',
-          borderRight: '1px solid #2d2d35',
-          borderTopLeftRadius: '16px',
-          borderTopRightRadius: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 -4px 24px rgba(0, 0, 0, 0.9)',
-          padding: '16px',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)',
-        }}
+        className="cartDrawerPanel"
       >
         {/* Cabeçalho */}
         <div

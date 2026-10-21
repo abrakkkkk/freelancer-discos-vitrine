@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { MdChevronRight } from 'react-icons/md';
 import { caixaService } from '@/services/caixaService';
 import BottomNav from '@/components/BottomNav';
+import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 
 export const revalidate = 60;
 
@@ -16,14 +17,18 @@ export default async function LojasPage() {
   return (
     <div className="pageContainer">
       <header className="storeHeader">
-        <img src="/logo.jpg" alt="" className="headerLogo" />
-        <div style={{ minWidth: 0 }}>
-          <h1 className="headerTitle">Lojas</h1>
-          <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <div style={{ minWidth: 0 }}>
+            <h1 className="headerTitle">Lojas</h1>
+            <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>
+          </div>
         </div>
+
+        <DesktopHeaderNav />
       </header>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div className="lojasGridContainer">
         {lojas.map((lj) => (
           <Link
             key={lj.id}
@@ -33,7 +38,7 @@ export default async function LojasPage() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '16px',
+              padding: '18px 20px',
               textDecoration: 'none',
             }}
           >

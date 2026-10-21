@@ -17,16 +17,27 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
   const [buscaInterna, setBuscaInterna] = useState('');
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      if (stored) setCart(JSON.parse(stored));
-    } catch (_) {}
+    const load = () => {
+      try {
+        const stored = localStorage.getItem(CART_STORAGE_KEY);
+        if (stored) setCart(JSON.parse(stored));
+        else setCart([]);
+      } catch (_) {}
+    };
+    load();
+    window.addEventListener('storage', load);
+    window.addEventListener('cartChange', load);
+    return () => {
+      window.removeEventListener('storage', load);
+      window.removeEventListener('cartChange', load);
+    };
   }, []);
 
   const saveCart = (newCart) => {
     setCart(newCart);
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+      window.dispatchEvent(new Event('cartChange'));
     } catch (_) {}
   };
 

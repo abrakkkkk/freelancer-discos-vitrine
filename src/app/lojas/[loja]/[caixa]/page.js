@@ -4,6 +4,7 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { supabaseServer } from '@/lib/supabaseServer';
 import { aplicarFiltroCaixaNaQuery } from '@/services/catalogService';
 import CaixaItemsClient from '@/components/CaixaItemsClient';
+import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { formatCaixa } from '@/utils/stringUtils';
 
 export const revalidate = 60;
@@ -59,16 +60,20 @@ export default async function CaixaDetalhePage({ params }) {
   return (
     <div className="pageContainer">
       <header className="storeHeader">
-        <Link href={`/lojas/${lojaSlug}`} aria-label={`Voltar para ${nomeLoja}`} className="headerBackBtn">
-          <FiArrowLeft size={19} />
-        </Link>
-        <div style={{ minWidth: 0 }}>
-          <h1 className="headerTitle">{rotuloCaixa}</h1>
-          <p className="headerSubtitle tabularNums">
-            {nomeLoja} · {todosItens.length.toLocaleString('pt-BR')}{' '}
-            {todosItens.length === 1 ? 'item' : 'itens'}
-          </p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+          <Link href={`/lojas/${lojaSlug}`} aria-label={`Voltar para ${nomeLoja}`} className="headerBackBtn">
+            <FiArrowLeft size={19} />
+          </Link>
+          <div style={{ minWidth: 0 }}>
+            <h1 className="headerTitle">{rotuloCaixa}</h1>
+            <p className="headerSubtitle tabularNums">
+              {nomeLoja} · {todosItens.length.toLocaleString('pt-BR')}{' '}
+              {todosItens.length === 1 ? 'item' : 'itens'}
+            </p>
+          </div>
         </div>
+
+        <DesktopHeaderNav />
       </header>
 
       <CaixaItemsClient
