@@ -8,6 +8,7 @@ import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CatalogPagination from '@/components/CatalogPagination';
 import BottomNav from '@/components/BottomNav';
 import CartDrawer from '@/components/CartDrawer';
+import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { getCartItemKey } from '@/utils/cartUtils';
 
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
@@ -92,18 +93,30 @@ export default function CatalogoPage() {
 
   // Inicializa sacola do localStorage
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      if (stored) {
-        setCart(JSON.parse(stored));
-      }
-    } catch (_) {}
+    const load = () => {
+      try {
+        const stored = localStorage.getItem(CART_STORAGE_KEY);
+        if (stored) {
+          setCart(JSON.parse(stored));
+        } else {
+          setCart([]);
+        }
+      } catch (_) {}
+    };
+    load();
+    window.addEventListener('storage', load);
+    window.addEventListener('cartChange', load);
+    return () => {
+      window.removeEventListener('storage', load);
+      window.removeEventListener('cartChange', load);
+    };
   }, []);
 
   const saveCart = (newCart) => {
     setCart(newCart);
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+      window.dispatchEvent(new Event('cartChange'));
     } catch (_) {}
   };
 
@@ -279,11 +292,18 @@ export default function CatalogoPage() {
     <div className="pageContainer">
       {/* Cabeçalho */}
       <header className="storeHeader">
-        <img src="/logo.jpg" alt="" className="headerLogo" />
-        <div style={{ minWidth: 0 }}>
-          <h1 className="headerTitle">Freelancer Discos</h1>
-          <p className="headerSubtitle">Vitrine do estoque</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <div style={{ minWidth: 0 }}>
+            <h1 className="headerTitle">Freelancer Discos</h1>
+            <p className="headerSubtitle">Vitrine do estoque</p>
+          </div>
         </div>
+
+        <DesktopHeaderNav
+          cartCount={cart.length}
+          onOpenCart={() => setIsCartOpen(true)}
+        />
       </header>
 
       {/* Abas de Categoria */}

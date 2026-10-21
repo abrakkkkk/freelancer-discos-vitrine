@@ -52,45 +52,19 @@ export default function ProductDetailSheet({
       : null;
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'center',
-      }}
-    >
+    <div className="productDetailBackdrop">
       {/* Overlay 100% Sólido e Opaco (#050506) */}
       <div
         onClick={onClose}
         style={{ position: 'fixed', inset: 0, backgroundColor: '#050506', zIndex: 1 }}
       />
 
-      {/* Folha Inferior Sólida */}
+      {/* Folha Inferior / Modal Centralizado Sólido */}
       <div
         role="dialog"
         aria-modal="true"
         aria-label={`Detalhes de ${item.titulo}`}
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          width: '100%',
-          maxWidth: '520px',
-          maxHeight: 'calc(100vh - 24px)',
-          backgroundColor: '#18181c',
-          borderTop: '1px solid #2d2d35',
-          borderLeft: '1px solid #2d2d35',
-          borderRight: '1px solid #2d2d35',
-          borderTopLeftRadius: '16px',
-          borderTopRightRadius: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          padding: '16px',
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)',
-        }}
+        className="productDetailDialog"
       >
         <button
           type="button"

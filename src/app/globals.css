@@ -487,3 +487,231 @@ select:focus-visible,
     gap: 5px;
   }
 }
+
+
+/* ==========================================================================
+   Modais e Drawer (Base Móvel)
+   ========================================================================== */
+.productDetailBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.productDetailDialog {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 24px);
+  background-color: #18181c;
+  border-top: 1px solid #2d2d35;
+  border-left: 1px solid #2d2d35;
+  border-right: 1px solid #2d2d35;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
+}
+
+.cartDrawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.cartDrawerPanel {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 540px;
+  max-height: calc(100vh - 20px);
+  background-color: #18181c;
+  border-top: 1px solid #2d2d35;
+  border-left: 1px solid #2d2d35;
+  border-right: 1px solid #2d2d35;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.9);
+  padding: 16px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
+}
+
+.lojasGridContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.desktopHeaderNav {
+  display: none;
+}
+
+/* ==========================================================================
+   Desktop Puro (min-width: 769px) — Mobile 100% Preservado
+   ========================================================================== */
+@media (min-width: 769px) {
+  .bottomNavMobile {
+    display: none !important;
+  }
+
+  .pageContainer {
+    padding: 20px 24px 48px;
+    padding-bottom: 48px;
+  }
+
+  .storeHeader {
+    display: flex;
+    align-items: center;
+    justifyContent: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+  }
+
+  /* Menu de Navegação Desktop */
+  .desktopHeaderNav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .desktopNavLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .desktopNavLink:hover {
+    background-color: #202026;
+    color: #ffffff;
+    border-color: #34343d;
+  }
+
+  .desktopNavLinkActive,
+  .desktopNavLinkActive:hover {
+    background-color: #222228;
+    border-color: #3f3f46;
+    color: #ffffff;
+  }
+
+  .desktopNavCartBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
+    background-color: var(--accent);
+    border: 1px solid var(--accent);
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .desktopNavCartBtn:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .desktopNavCartBtn:active {
+    transform: translateY(1px);
+  }
+
+  .desktopNavCartBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #8b1e1e;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+  }
+
+  /* Grade e Cards no Desktop */
+  .catalogGrid {
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 16px;
+  }
+
+  .productCard {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .categoryTabsBar {
+    max-width: 620px;
+    gap: 8px;
+  }
+
+  .categoryTabBtn {
+    min-height: 40px;
+    font-size: 13.5px;
+  }
+
+  .lojasGridContainer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  /* Modal de Detalhes Centralizado no Desktop */
+  .productDetailBackdrop {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .productDetailDialog {
+    max-width: 580px;
+    max-height: calc(100vh - 64px);
+    border: 1px solid #2d2d35;
+    border-radius: 16px;
+    padding: 24px;
+    padding-bottom: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Drawer da Sacola Lateral Direita no Desktop */
+  .cartDrawerBackdrop {
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+
+  .cartDrawerPanel {
+    max-width: 440px;
+    width: 440px;
+    max-height: 100vh;
+    height: 100vh;
+    margin-left: auto;
+    border: none;
+    border-left: 1px solid #2d2d35;
+    border-radius: 0;
+    padding: 22px 24px 24px;
+    box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85);
+  }
+}

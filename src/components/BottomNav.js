@@ -22,16 +22,26 @@ export default function BottomNav({ cartCount, onOpenCart }) {
 
   useEffect(() => {
     if (!isStandalone) return;
-    try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      if (stored) setLocalCart(JSON.parse(stored));
-    } catch (_) {}
+    const load = () => {
+      try {
+        const stored = localStorage.getItem(CART_STORAGE_KEY);
+        if (stored) setLocalCart(JSON.parse(stored));
+      } catch (_) {}
+    };
+    load();
+    window.addEventListener('storage', load);
+    window.addEventListener('cartChange', load);
+    return () => {
+      window.removeEventListener('storage', load);
+      window.removeEventListener('cartChange', load);
+    };
   }, [isStandalone, pathname]);
 
   const saveLocalCart = (newCart) => {
     setLocalCart(newCart);
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+      window.dispatchEvent(new Event('cartChange'));
     } catch (_) {}
   };
 
@@ -63,6 +73,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
 
       <nav
         aria-label="Navegação inferior"
+        className="bottomNavMobile"
         style={{
           position: 'fixed',
           bottom: 0,
