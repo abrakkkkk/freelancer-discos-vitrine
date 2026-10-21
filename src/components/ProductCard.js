@@ -20,6 +20,14 @@ export default function ProductCard({
   const localizacao = [item.loja, rotuloCaixa !== '—' ? rotuloCaixa : null]
     .filter(Boolean)
     .join(' · ');
+  const lojaBadgeClass =
+    item.loja === 'Anexo' || /anexo/i.test(localizacao)
+      ? 'badgeAnexo'
+      : item.loja === 'Loja 2'
+        ? 'badgeLoja2'
+        : item.loja === 'Loja 1'
+          ? 'badgeLoja1'
+          : '';
 
   const recordLabel = extractRecordLabel(item.observacao);
   const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
@@ -87,7 +95,9 @@ export default function ProductCard({
         </h3>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
-          {localizacao && <span className="badge tabularNums">{localizacao}</span>}
+          {localizacao && (
+            <span className={`badge ${lojaBadgeClass} tabularNums`}>{localizacao}</span>
+          )}
           {recordLabel && (
             <span className="badge badgeLabel tabularNums" title={`Selo: ${recordLabel}`}>
               {recordLabel}
