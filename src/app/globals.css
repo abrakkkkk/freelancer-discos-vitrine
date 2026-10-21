@@ -270,6 +270,18 @@ select:focus-visible,
   background-color: var(--accent);
 }
 
+.badgeLoja1 {
+  background-color: #8b1e1e;
+}
+
+.badgeLoja2 {
+  background-color: #1d4ed8;
+}
+
+.badgeAnexo {
+  background-color: #15803d;
+}
+
 /* Pílulas de filtro ativo */
 .filterChip {
   display: inline-flex;
