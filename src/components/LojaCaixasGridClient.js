@@ -78,10 +78,15 @@ export default function LojaCaixasGridClient({ caixas = [], lojaSlug, nomeLoja }
                   gap: '6px',
                   padding: '12px',
                   textDecoration: 'none',
-                  opacity: hasItems ? 1 : 0.55,
+                  // Caixa vazia: fundo e texto mais apagados, mas sólidos (sem opacidade)
+                  ...(hasItems
+                    ? {}
+                    : { backgroundColor: 'var(--bg)', borderStyle: 'dashed', borderColor: 'var(--border-light)' }),
                 }}
               >
-                <span style={{ fontSize: '15px', fontWeight: 700, color: '#ffffff' }}>{cx.label}</span>
+                <span style={{ fontSize: '15px', fontWeight: 700, color: hasItems ? '#ffffff' : '#a1a1aa' }}>
+                  {cx.label}
+                </span>
                 <span style={{ fontSize: '12.5px', color: '#a1a1aa' }}>
                   {cx.total.toLocaleString('pt-BR')} {cx.total === 1 ? 'item' : 'itens'}
                 </span>

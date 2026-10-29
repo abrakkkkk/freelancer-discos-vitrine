@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
 import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
+import { useModalDialog } from '@/hooks/useModalDialog';
 import { FiX, FiTrash2, FiInfo } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -26,6 +27,8 @@ export default function CartDrawer({
   const [bairro, setBairro] = useState('');
   const [validando, setValidando] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const panelRef = useRef(null);
+  useModalDialog(isOpen, onClose, panelRef);
 
   if (!isOpen) return null;
 
@@ -34,6 +37,18 @@ export default function CartDrawer({
     style: 'currency',
     currency: 'BRL',
   });
+
+  // Depois do await da validação, o Safari do iPhone pode bloquear a nova aba.
+  // Se for bloqueada, abre o WhatsApp na própria aba (a sacola continua salva).
+  const abrirWhatsApp = (urlWa) => {
+    const janela = window.open(urlWa, '_blank');
+    if (janela) {
+      janela.opener = null;
+      onClose();
+    } else {
+      window.location.href = urlWa;
+    }
+  };
 
   const handleFinalizarWhatsApp = async () => {
     if (itens.length === 0 || validando) return;
@@ -80,14 +95,10 @@ export default function CartDrawer({
         }
       }
 
-      const urlWa = generateWhatsAppUrl(itens, nome, bairro);
-      window.open(urlWa, '_blank', 'noopener,noreferrer');
-      onClose();
+      abrirWhatsApp(generateWhatsAppUrl(itens, nome, bairro));
     } catch (err) {
       console.error('Erro ao validar sacola:', err);
-      const urlWa = generateWhatsAppUrl(itens, nome, bairro);
-      window.open(urlWa, '_blank', 'noopener,noreferrer');
-      onClose();
+      abrirWhatsApp(generateWhatsAppUrl(itens, nome, bairro));
     } finally {
       setValidando(false);
     }
@@ -108,6 +119,8 @@ export default function CartDrawer({
 
       {/* Painel da Sacola */}
       <div
+        ref={panelRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label="Sua Sacola"
@@ -158,8 +171,8 @@ export default function CartDrawer({
               onClick={onClose}
               aria-label="Fechar sacola"
               style={{
-                width: '38px',
-                height: '38px',
+                width: '44px',
+                height: '44px',
                 borderRadius: '8px',
                 backgroundColor: '#27272a',
                 border: 'none',
@@ -196,8 +209,8 @@ export default function CartDrawer({
         <div
           style={{
             flex: 1,
+            minHeight: 0,
             overflowY: 'auto',
-            maxHeight: '340px',
             padding: '4px 0',
             display: 'flex',
             flexDirection: 'column',
@@ -295,8 +308,8 @@ export default function CartDrawer({
                       onClick={() => onRemoveItem && onRemoveItem(itemKey)}
                       aria-label={`Remover ${item.titulo} da sacola`}
                       style={{
-                        width: '38px',
-                        height: '38px',
+                        width: '44px',
+                        height: '44px',
                         borderRadius: '7px',
                         backgroundColor: '#27272a',
                         border: 'none',
@@ -390,12 +403,14 @@ export default function CartDrawer({
             <button
               type="button"
               disabled={validando}
+              aria-busy={validando}
               onClick={handleFinalizarWhatsApp}
               style={{
                 width: '100%',
                 minHeight: '48px',
                 borderRadius: '10px',
-                backgroundColor: '#25D366',
+                // Estado "verificando" com verde mais escuro e sólido (sem opacidade)
+                backgroundColor: validando ? '#1a9e4f' : '#25D366',
                 border: 'none',
                 color: '#050506',
                 fontSize: '15px',
@@ -405,7 +420,6 @@ export default function CartDrawer({
                 justifyContent: 'center',
                 gap: '8px',
                 cursor: validando ? 'wait' : 'pointer',
-                opacity: validando ? 0.7 : 1,
               }}
             >
               <FaWhatsapp size={20} />
