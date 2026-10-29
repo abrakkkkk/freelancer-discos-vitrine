@@ -5,12 +5,30 @@ import { getCartItemKey } from '@/utils/cartUtils';
 
 export const dynamic = 'force-dynamic';
 
+const MAX_ITENS = 100;
+
+// Falha na verificação: o cliente NÃO deve remover nada da sacola. A disponibilidade
+// é confirmada depois pelo WhatsApp (ver aviso na sacola).
+function falhaVerificacao(motivo) {
+  return NextResponse.json({ error: motivo }, { status: 503 });
+}
+
 export async function POST(request) {
+  let body;
   try {
-    const body = await request.json();
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
+  }
+
+  try {
     const itens = body?.itens || [];
 
-    if (!Array.isArray(itens) || itens.length === 0) {
+    if (!Array.isArray(itens) || itens.length > MAX_ITENS) {
+      return NextResponse.json({ error: 'Lista de itens inválida' }, { status: 400 });
+    }
+
+    if (itens.length === 0) {
       return NextResponse.json({
         disponiveis: [],
         indisponiveis: [],
@@ -20,41 +38,40 @@ export async function POST(request) {
     }
 
     if (!supabaseServer) {
-      // Sem conexão ao banco (ex: teste estático): considera todos disponíveis
-      return NextResponse.json({
-        disponiveis: itens.map((i) => i.id),
-        indisponiveis: [],
-        disponiveisKeys: itens.map((i) => getCartItemKey(i)),
-        indisponiveisKeys: [],
-      });
+      return falhaVerificacao('Banco de dados indisponível');
     }
 
-    // Agrupa por categoria válida (whitelist estrita)
+    // Agrupa por categoria válida (whitelist estrita). Ids não inteiros não existem
+    // no banco e ficam como indisponíveis, sem derrubar a consulta inteira.
     const porCategoria = new Map();
     itens.forEach((item) => {
-      const cat = item.categoria || 'discos';
-      if (!isValidCategory(cat)) return;
+      const cat = item?.categoria || 'discos';
+      const id = Number(item?.id);
+      if (!isValidCategory(cat) || !Number.isInteger(id) || id <= 0) return;
       if (!porCategoria.has(cat)) porCategoria.set(cat, []);
-      porCategoria.get(cat).push(item.id);
+      porCategoria.get(cat).push(id);
     });
 
     const disponiveisKeySet = new Set();
 
-    for (const [cat, ids] of porCategoria.entries()) {
-      try {
+    const resultados = await Promise.all(
+      [...porCategoria.entries()].map(async ([cat, ids]) => {
         const { data, error } = await supabaseServer
           .from(cat)
           .select('id')
           .in('id', ids)
           .eq('deletado', false)
           .eq('ativo', true);
+        return { cat, data, error };
+      })
+    );
 
-        if (!error && Array.isArray(data)) {
-          data.forEach((row) => disponiveisKeySet.add(`${cat}:${row.id}`));
-        }
-      } catch (err) {
-        console.error(`Erro ao validar itens de ${cat}:`, err);
+    for (const { cat, data, error } of resultados) {
+      if (error) {
+        console.error(`Erro ao validar itens de ${cat}:`, error.message);
+        return falhaVerificacao('Falha ao verificar o estoque');
       }
+      (data || []).forEach((row) => disponiveisKeySet.add(`${cat}:${row.id}`));
     }
 
     const disponiveis = [];

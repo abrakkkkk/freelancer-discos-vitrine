@@ -62,6 +62,9 @@ export default function CartDrawer({
         body: JSON.stringify({
           itens: itens.map((i) => ({ id: i.id, categoria: i.categoria || 'discos' })),
         }),
+        // Se o estoque não responder logo, segue para o WhatsApp sem remover nada
+        // (a disponibilidade é confirmada lá).
+        signal: typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(5000) : undefined,
       });
 
       if (res.ok) {

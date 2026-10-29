@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { FiArrowLeft } from 'react-icons/fi';
 import { supabaseServer } from '@/lib/supabaseServer';
 import { aplicarFiltroCaixaNaQuery } from '@/services/catalogService';
+import { caixaService } from '@/services/caixaService';
+import { chaveCaixa } from '@/utils/caixaUtils';
 import CaixaItemsClient from '@/components/CaixaItemsClient';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { formatCaixa } from '@/utils/stringUtils';
@@ -17,7 +19,12 @@ export default async function CaixaDetalhePage({ params }) {
   else if (lojaSlug === 'loja-2') nomeLoja = 'Loja 2';
   else notFound();
 
-  const caixaDecodificada = decodeURIComponent(caixaParam || '');
+  let caixaDecodificada = '';
+  try {
+    caixaDecodificada = decodeURIComponent(caixaParam || '').trim();
+  } catch {
+    notFound();
+  }
   if (!caixaDecodificada) notFound();
 
   let todosItens = [];
@@ -30,8 +37,8 @@ export default async function CaixaDetalhePage({ params }) {
       { id: 'vhs', temArtista: false },
     ];
 
-    for (const tab of tabelas) {
-      try {
+    const resultados = await Promise.all(
+      tabelas.map(async (tab) => {
         let cols = 'id, titulo, preco, loja, caixa, ano, capa_url, observacao';
         if (tab.temArtista) cols += ', artista';
 
@@ -42,17 +49,22 @@ export default async function CaixaDetalhePage({ params }) {
           .eq('ativo', true)
           .eq('loja', nomeLoja);
 
-        query = aplicarFiltroCaixaNaQuery(query, caixaDecodificada);
+        query = aplicarFiltroCaixaNaQuery(query, caixaDecodificada, nomeLoja);
         const { data, error } = await query.order('titulo');
 
-        if (!error && Array.isArray(data)) {
-          const comCategoria = data.map((d) => ({ ...d, categoria: tab.id }));
-          todosItens = todosItens.concat(comCategoria);
-        }
-      } catch (err) {
-        console.error(`Erro ao buscar itens de ${tab.id}:`, err);
-      }
-    }
+        // Erro do banco vai para lojas/error.js em vez de aparecer como "caixa vazia".
+        if (error) throw new Error(`Erro ao buscar itens de ${tab.id}: ${error.message}`);
+        return (data || []).map((d) => ({ ...d, categoria: tab.id }));
+      })
+    );
+    todosItens = resultados.flat();
+  }
+
+  // Caixa sem itens só existe se for uma das caixas padrão da loja; senão é 404.
+  if (todosItens.length === 0) {
+    const chave = chaveCaixa(caixaDecodificada, nomeLoja);
+    const existe = caixaService.getDefaultCaixas(nomeLoja).some((c) => c.caixa === chave);
+    if (!existe) notFound();
   }
 
   const rotuloCaixa = formatCaixa(caixaDecodificada, nomeLoja);
