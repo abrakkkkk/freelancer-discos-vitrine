@@ -1,5 +1,6 @@
 import { supabaseServer } from '@/lib/supabaseServer';
 import { removeAcentos, extractSearchTokens, calculateItemRelevance } from '@/utils/stringUtils';
+import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
 const CATALOG_CACHE_TTL_MS = 60 * 1000;
@@ -9,23 +10,22 @@ export function isValidCategory(category) {
   return VALID_CATEGORIES.includes(category);
 }
 
-export function aplicarFiltroCaixaNaQuery(query, filtroCaixa) {
+export function aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja = '') {
   if (!filtroCaixa) return query;
 
-  const matchSufixoB = filtroCaixa.match(/^(?:caixa|c)?\s*(\d+)\s*b$/i);
-  const matchNumeroPuro = filtroCaixa.match(/^(?:caixa|c)?\s*(\d+)$/i);
+  // Sem loja escolhida, o formato da caixa diz a loja ("5" é da Loja 1, "Caixa 5B" da Loja 2).
+  // Antes, "Caixa 5" sem loja trazia também os itens da Caixa 5B da Loja 2.
+  const loja = filtroLoja || lojaPelaCaixa(filtroCaixa);
+  const chave = chaveCaixa(filtroCaixa, loja);
+  let filtrada = query.in('caixa', variantesCaixa(chave, loja));
 
-  if (matchSufixoB) {
-    const numero = matchSufixoB[1];
-    return query.in('caixa', [`Caixa ${numero}B`, `Caixa ${numero}b`, `${numero}B`, `${numero}b`]);
+  if (!filtroLoja && loja === 'Loja 2') {
+    filtrada = filtrada.eq('loja', 'Loja 2');
+  } else if (!filtroLoja && loja === 'Loja 1') {
+    // Número puro na Loja 2 é contado como caixa B, então não pertence a esta caixa.
+    filtrada = filtrada.or('loja.is.null,loja.neq."Loja 2"');
   }
-
-  if (matchNumeroPuro) {
-    const numero = matchNumeroPuro[1];
-    return query.in('caixa', [numero, `Caixa ${numero}`, `Caixa ${numero}B`]);
-  }
-
-  return query.eq('caixa', filtroCaixa);
+  return filtrada;
 }
 
 export const catalogService = {
@@ -69,7 +69,7 @@ export const catalogService = {
       query = query.eq('loja', filtroLoja);
     }
 
-    query = aplicarFiltroCaixaNaQuery(query, filtroCaixa);
+    query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
 
     // Ordenação
     if (ordenarColuna && ordenarDirecao) {

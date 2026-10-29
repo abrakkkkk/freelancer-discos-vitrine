@@ -1,4 +1,5 @@
 import { supabaseServer } from '@/lib/supabaseServer';
+import { chaveCaixa } from '@/utils/caixaUtils';
 
 const TOTAL_PADRAO_CAIXAS_LOJA_1 = 55;
 const TOTAL_PADRAO_CAIXAS_LOJA_2 = 20;
@@ -22,7 +23,9 @@ async function fetchAllRowsFromTable(tabela, loja) {
   }
 
   const { data: firstBatch, count, error } = await firstQuery;
-  if (error || !Array.isArray(firstBatch) || firstBatch.length === 0) {
+  // Erro do banco não pode virar "0 itens": propaga para a página mostrar o erro.
+  if (error) throw new Error(`Erro ao contar caixas em ${tabela}: ${error.message}`);
+  if (!Array.isArray(firstBatch) || firstBatch.length === 0) {
     return [];
   }
 
@@ -50,9 +53,8 @@ async function fetchAllRowsFromTable(tabela, loja) {
   const remainingResults = await Promise.all(remainingPromises);
   let allRows = firstBatch;
   for (const res of remainingResults) {
-    if (!res.error && Array.isArray(res.data)) {
-      allRows = allRows.concat(res.data);
-    }
+    if (res.error) throw new Error(`Erro ao contar caixas em ${tabela}: ${res.error.message}`);
+    if (Array.isArray(res.data)) allRows = allRows.concat(res.data);
   }
   return allRows;
 }
@@ -125,49 +127,31 @@ export const caixaService = {
     }
 
     const tabelas = ['discos', 'cds', 'dvds', 'vhs'];
-    try {
-      const resultadosTabelas = await Promise.all(
-        tabelas.map((tabela) => fetchAllRowsFromTable(tabela, loja))
-      );
+    // Sem try/catch: se uma tabela falhar, nada é cacheado e o erro chega à página.
+    const resultadosTabelas = await Promise.all(
+      tabelas.map((tabela) => fetchAllRowsFromTable(tabela, loja))
+    );
 
-      for (const data of resultadosTabelas) {
-        for (const item of data) {
-          const raw = String(item.caixa || '').trim();
-          if (!raw) continue;
+    for (const data of resultadosTabelas) {
+      for (const item of data) {
+        const raw = String(item.caixa || '').trim();
+        if (!raw) continue;
 
-          const itemLoja = item.loja || loja || 'Loja 1';
+        const itemLoja = item.loja || loja || 'Loja 1';
+        const chave = chaveCaixa(raw, itemLoja);
 
-          let chave = raw;
-          const matchB = raw.match(/^(?:caixa|c)?\s*(\d+)\s*b$/i);
-          const matchNum = raw.match(/^(?:caixa|c)?\s*(\d+)$/i);
-
-          if (itemLoja === 'Loja 2') {
-            if (matchB) chave = `Caixa ${matchB[1]}B`;
-            else if (matchNum) chave = `Caixa ${matchNum[1]}B`;
-          } else if (itemLoja === 'Loja 1' && matchNum) {
-            chave = matchNum[1];
-          }
-
-          if (mapaCaixas.has(chave)) {
-            mapaCaixas.get(chave).total += 1;
-          } else {
-            const label =
-              itemLoja === 'Loja 1' && !isNaN(Number(raw))
-                ? `Caixa ${raw}`
-                : matchB
-                  ? `Caixa ${matchB[1]}B`
-                  : raw;
-            mapaCaixas.set(chave, {
-              caixa: chave,
-              loja: itemLoja,
-              label,
-              total: 1,
-            });
-          }
+        if (mapaCaixas.has(chave)) {
+          mapaCaixas.get(chave).total += 1;
+        } else {
+          const label = /^\d+$/.test(chave) ? `Caixa ${chave}` : chave;
+          mapaCaixas.set(chave, {
+            caixa: chave,
+            loja: itemLoja,
+            label,
+            total: 1,
+          });
         }
       }
-    } catch (err) {
-      console.warn('Erro ao contar caixas:', err);
     }
 
     const resultado = Array.from(mapaCaixas.values()).sort((a, b) => {
@@ -207,7 +191,12 @@ export const caixaService = {
             .eq('deletado', false)
             .eq('ativo', true)
             .eq('loja', loja)
-            .then(({ count, error }) => ({ loja, count: !error && count ? count : 0 }))
+            // Mesmo filtro da contagem por caixa, para o total de /lojas bater com o da loja.
+            .not('caixa', 'is', null)
+            .then(({ count, error }) => {
+              if (error) throw new Error(`Erro ao somar ${tabela} da ${loja}: ${error.message}`);
+              return { loja, count: count || 0 };
+            })
         );
       }
     }
