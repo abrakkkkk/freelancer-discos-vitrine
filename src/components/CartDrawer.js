@@ -224,7 +224,7 @@ export default function CartDrawer({
               style={{
                 textAlign: 'center',
                 padding: '40px 16px',
-                color: '#71717a',
+                color: 'var(--text-dim)',
                 fontSize: '14px',
               }}
             >
@@ -289,7 +289,7 @@ export default function CartDrawer({
                     >
                       {item.titulo}
                     </h4>
-                    <span className="tabularNums" style={{ fontSize: '11px', color: '#71717a' }}>
+                    <span className="tabularNums" style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
                       {fmtTag} · {item.loja} · {rotuloCaixa}
                     </span>
                   </div>

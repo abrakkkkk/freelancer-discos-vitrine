@@ -42,7 +42,7 @@ export default function CatalogFilters({
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <FiSearch
           size={18}
-          color="#71717a"
+          color="#8a8a93"
           style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }}
         />
         <input

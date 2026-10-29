@@ -375,7 +375,7 @@ export default function CatalogoPage() {
           <p style={{ fontSize: '15px', color: '#e4e4e7', fontWeight: 600 }}>
             Nenhum item encontrado
           </p>
-          <p style={{ fontSize: '13px', color: '#71717a', marginTop: '4px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-dim)', marginTop: '4px' }}>
             Tente buscar com outros termos ou limpar os filtros de loja e caixa.
           </p>
         </div>
