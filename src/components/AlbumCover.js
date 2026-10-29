@@ -42,7 +42,8 @@ export default function AlbumCover({
     const q = `${artista || ''} ${titulo || ''}`.trim();
     const qWithAno = `${q} ${cleanAno}`.trim();
     const qKey = qWithAno.toLowerCase();
-    const cacheKey = id ? `${tipo}_${id}_${qKey}` : `${tipo}_${qKey}`;
+    // v2: invalida capas guardadas na sessão pelo algoritmo antigo, que não conferia o disco.
+    const cacheKey = `v2_${tipo}_${qKey}`;
 
     if (!q) {
       setResolvedUrl(null);
@@ -69,10 +70,9 @@ export default function AlbumCover({
     async function fetchCover() {
       try {
         const params = new URLSearchParams({
-          id: String(id || ''),
           categoria: tipo,
-          q,
-          v: qKey,
+          artista: artista || '',
+          titulo: titulo || '',
         });
         if (cleanAno) params.set('ano', cleanAno);
 
