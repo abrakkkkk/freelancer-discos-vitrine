@@ -1,5 +1,6 @@
 import { Outfit, Figtree } from 'next/font/google';
 import './globals.css';
+import { CartProvider } from '@/components/CartProvider';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -29,7 +30,9 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR" className={`${outfit.variable} ${figtree.variable}`}>
-      <body>{children}</body>
+      <body>
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }

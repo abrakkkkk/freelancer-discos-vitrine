@@ -1,63 +1,20 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 import ProductCard from '@/components/ProductCard';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
-import CartDrawer from '@/components/CartDrawer';
 import BottomNav from '@/components/BottomNav';
+import { useCart } from '@/components/CartProvider';
 import { getCartItemKey } from '@/utils/cartUtils';
-
-const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
 
 export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) {
   const [detailItem, setDetailItem] = useState(null);
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [buscaInterna, setBuscaInterna] = useState('');
-
-  useEffect(() => {
-    const load = () => {
-      try {
-        const stored = localStorage.getItem(CART_STORAGE_KEY);
-        if (stored) setCart(JSON.parse(stored));
-        else setCart([]);
-      } catch (_) {}
-    };
-    load();
-    window.addEventListener('storage', load);
-    window.addEventListener('cartChange', load);
-    return () => {
-      window.removeEventListener('storage', load);
-      window.removeEventListener('cartChange', load);
-    };
-  }, []);
-
-  const saveCart = (newCart) => {
-    setCart(newCart);
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
-      window.dispatchEvent(new Event('cartChange'));
-    } catch (_) {}
-  };
+  const { estaNaSacola, adicionar } = useCart();
 
   const handleAddToCart = (item) => {
-    const itemComCategoria = { ...item, categoria: item.categoria || 'discos' };
-    const chaveAlvo = getCartItemKey(itemComCategoria);
-    const jaExiste = cart.some((i) => getCartItemKey(i) === chaveAlvo);
-    if (jaExiste) {
-      setIsCartOpen(true);
-      return;
-    }
-    saveCart([...cart, itemComCategoria]);
-  };
-
-  const handleRemoveFromCart = (idOuChave) => {
-    saveCart(
-      cart.filter(
-        (i) => getCartItemKey(i) !== idOuChave && i.id !== idOuChave
-      )
-    );
+    adicionar({ ...item, categoria: item.categoria || 'discos' });
   };
 
   const itensFiltrados = useMemo(() => {
@@ -68,8 +25,6 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
       return alvo.includes(termo);
     });
   }, [itens, buscaInterna]);
-
-  const cartKeys = new Set(cart.map((i) => getCartItemKey(i)));
 
   return (
     <>
@@ -130,7 +85,7 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
                 key={itemKey}
                 item={item}
                 tipo={item.categoria || 'discos'}
-                isInCart={cartKeys.has(itemKey)}
+                isInCart={estaNaSacola(item)}
                 onAddToCart={handleAddToCart}
                 onOpenDetail={(i) => setDetailItem(i)}
               />
@@ -144,25 +99,12 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
         item={detailItem}
         isOpen={Boolean(detailItem)}
         onClose={() => setDetailItem(null)}
-        isInCart={detailItem ? cartKeys.has(getCartItemKey(detailItem)) : false}
+        isInCart={detailItem ? estaNaSacola(detailItem) : false}
         onAddToCart={handleAddToCart}
         tipo={detailItem?.categoria || 'discos'}
       />
 
-      {/* Drawer da Sacola */}
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        itens={cart}
-        onRemoveItem={handleRemoveFromCart}
-        onClearCart={() => saveCart([])}
-        onReplaceCart={saveCart}
-      />
-
-      <BottomNav
-        cartCount={cart.length}
-        onOpenCart={() => setIsCartOpen(true)}
-      />
+      <BottomNav />
     </>
   );
 }

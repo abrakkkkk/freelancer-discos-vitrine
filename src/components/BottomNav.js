@@ -1,76 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PiVinylRecord } from 'react-icons/pi';
 import { MdStorefront } from 'react-icons/md';
 import { FiShoppingBag } from 'react-icons/fi';
-import CartDrawer from './CartDrawer';
-import { getCartItemKey } from '@/utils/cartUtils';
+import { useCart } from './CartProvider';
 
-const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
-
-export default function BottomNav({ cartCount, onOpenCart }) {
+export default function BottomNav() {
   const pathname = usePathname();
   const isCatalogo = pathname === '/' || pathname.startsWith('/catalogo');
   const isLojas = pathname.startsWith('/lojas');
-
-  const isStandalone = typeof onOpenCart !== 'function';
-  const [localCart, setLocalCart] = useState([]);
-  const [isLocalDrawerOpen, setIsLocalDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isStandalone) return;
-    const load = () => {
-      try {
-        const stored = localStorage.getItem(CART_STORAGE_KEY);
-        if (stored) setLocalCart(JSON.parse(stored));
-      } catch (_) {}
-    };
-    load();
-    window.addEventListener('storage', load);
-    window.addEventListener('cartChange', load);
-    return () => {
-      window.removeEventListener('storage', load);
-      window.removeEventListener('cartChange', load);
-    };
-  }, [isStandalone, pathname]);
-
-  const saveLocalCart = (newCart) => {
-    setLocalCart(newCart);
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
-      window.dispatchEvent(new Event('cartChange'));
-    } catch (_) {}
-  };
-
-  const handleRemoveLocalItem = (idOuChave) => {
-    saveLocalCart(
-      localCart.filter(
-        (i) => getCartItemKey(i) !== idOuChave && i.id !== idOuChave
-      )
-    );
-  };
-
-  const effectiveCartCount = isStandalone ? localCart.length : (cartCount || 0);
-  const handleCartClick = isStandalone
-    ? () => setIsLocalDrawerOpen(true)
-    : onOpenCart;
+  const { quantidade: effectiveCartCount, abrir: handleCartClick } = useCart();
 
   return (
     <>
-      {isStandalone && (
-        <CartDrawer
-          isOpen={isLocalDrawerOpen}
-          onClose={() => setIsLocalDrawerOpen(false)}
-          itens={localCart}
-          onRemoveItem={handleRemoveLocalItem}
-          onClearCart={() => saveLocalCart([])}
-          onReplaceCart={saveLocalCart}
-        />
-      )}
-
       <nav
         aria-label="Navegação inferior"
         className="bottomNavMobile"
