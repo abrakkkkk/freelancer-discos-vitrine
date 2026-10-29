@@ -3,6 +3,10 @@ import { removeAcentos, extractSearchTokens, calculateItemRelevance } from '@/ut
 import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
+// Colunas que o cliente pode usar para ordenar. Qualquer outra é ignorada (antes ia
+// direto para .order(), permitindo ordenar por colunas internas ou causar erro 500).
+const COLUNAS_ORDENAVEIS = ['preco', 'artista', 'titulo'];
+const DIRECOES_ORDENACAO = ['asc', 'desc'];
 const CATALOG_CACHE_TTL_MS = 60 * 1000;
 const catalogServerCache = new Map();
 
@@ -40,6 +44,11 @@ export const catalogService = {
   } = {}) {
     if (!isValidCategory(category)) {
       throw new Error(`Categoria inválida: ${category}`);
+    }
+
+    if (!COLUNAS_ORDENAVEIS.includes(ordenarColuna) || !DIRECOES_ORDENACAO.includes(ordenarDirecao)) {
+      ordenarColuna = null;
+      ordenarDirecao = null;
     }
 
     if (!supabaseServer) {

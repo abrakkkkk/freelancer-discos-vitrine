@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import CategoryTabs from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
 import ProductCard from '@/components/ProductCard';
@@ -80,14 +80,21 @@ export default function CatalogoPage() {
     };
   }, [categoria, debouncedBusca, loja, caixa, ordenacao, pagina]);
 
+  // A página volta para 1 só quando a busca efetiva muda (após o debounce). Antes, cada
+  // tecla zerava a página na hora e disparava uma consulta extra com o termo antigo.
+  const ultimaBuscaRef = useRef(savedViewState.busca);
   useEffect(() => {
+    const aplicar = () => {
+      if (busca === ultimaBuscaRef.current) return;
+      ultimaBuscaRef.current = busca;
+      setDebouncedBusca(busca);
+      setPagina(1);
+    };
     if (!busca) {
-      setDebouncedBusca('');
+      aplicar();
       return;
     }
-    const timer = setTimeout(() => {
-      setDebouncedBusca(busca);
-    }, 280);
+    const timer = setTimeout(aplicar, 280);
     return () => clearTimeout(timer);
   }, [busca]);
 
@@ -172,9 +179,17 @@ export default function CatalogoPage() {
     };
   }, [loja]);
 
+  // Consulta em andamento: uma nova consulta cancela a anterior, para que uma resposta
+  // atrasada (ex.: termo de busca antigo) não sobrescreva o resultado mais recente.
+  const consultaRef = useRef(null);
+  useEffect(() => () => consultaRef.current?.abort(), []);
+
   // Carrega dados do catálogo (instantâneo se já estiver em cache)
   const loadCatalogo = useCallback(
     async (forceRefresh = false) => {
+      consultaRef.current?.abort();
+      consultaRef.current = null;
+
       const cacheKey = buildCatalogCacheKey({
         categoria,
         pagina,
@@ -216,6 +231,9 @@ export default function CatalogoPage() {
         ordenarDirecao = 'asc';
       }
 
+      const controller = new AbortController();
+      consultaRef.current = controller;
+
       try {
         const params = new URLSearchParams({
           categoria,
@@ -228,10 +246,13 @@ export default function CatalogoPage() {
         if (ordenarColuna) params.set('ordenarColuna', ordenarColuna);
         if (ordenarDirecao) params.set('ordenarDirecao', ordenarDirecao);
 
-        const res = await fetch(`/api/catalogo?${params.toString()}`);
+        const res = await fetch(`/api/catalogo?${params.toString()}`, {
+          signal: controller.signal,
+        });
         if (!res.ok) throw new Error('Falha ao consultar produtos');
 
         const data = await res.json();
+        if (controller.signal.aborted) return;
         const nextItens = data.itens || [];
         const nextTotal = data.total || 0;
         const nextTotalPaginas = data.totalPaginas || 1;
@@ -247,10 +268,15 @@ export default function CatalogoPage() {
         setTotal(nextTotal);
         setTotalPaginas(nextTotalPaginas);
       } catch (err) {
+        // Cancelada por uma consulta mais nova: quem assume o estado é a nova.
+        if (controller.signal.aborted) return;
         console.error(err);
-        setErro('Catálogo indisponível no momento. Tente recarregar.');
+        setErro('Catálogo indisponível no momento. Tente de novo.');
       } finally {
-        setLoading(false);
+        if (consultaRef.current === controller) {
+          consultaRef.current = null;
+          setLoading(false);
+        }
       }
     },
     [categoria, pagina, loja, caixa, debouncedBusca, ordenacao]
@@ -268,7 +294,6 @@ export default function CatalogoPage() {
 
   const handleBuscaChange = (novaBusca) => {
     setBusca(novaBusca);
-    setPagina(1);
   };
 
   const handleLojaChange = (novaLoja) => {
@@ -335,7 +360,7 @@ export default function CatalogoPage() {
       >
         {loading ? (
           'Carregando…'
-        ) : (
+        ) : erro ? null : (
           <>
             <strong style={{ color: '#ffffff', fontWeight: 600 }}>
               {total.toLocaleString('pt-BR')}
@@ -364,23 +389,24 @@ export default function CatalogoPage() {
             type="button"
             onClick={() => loadCatalogo(true)}
             style={{
-              padding: '8px 16px',
+              minHeight: '44px',
+              padding: '0 18px',
               backgroundColor: '#8b1e1e',
               border: 'none',
-              borderRadius: '6px',
+              borderRadius: '8px',
               color: '#ffffff',
-              fontSize: '13px',
+              fontSize: '14px',
               fontWeight: 600,
               cursor: 'pointer',
             }}
           >
-            Tentar Novamente
+            Tentar de novo
           </button>
         </div>
       )}
 
-      {/* Grade de Produtos */}
-      {loading ? (
+      {/* Grade de Produtos (com erro, só o aviso acima: nada de "Nenhum item encontrado") */}
+      {erro && !loading ? null : loading ? (
         <div className="catalogGrid" aria-busy="true" aria-label="Carregando produtos">
           {Array.from({ length: 8 }).map((_, idx) => (
             <div key={idx} className="skeletonCard">
@@ -427,7 +453,7 @@ export default function CatalogoPage() {
       )}
 
       {/* Paginação */}
-      {!loading && (
+      {!loading && !erro && (
         <CatalogPagination
           pagina={pagina}
           totalPaginas={totalPaginas}

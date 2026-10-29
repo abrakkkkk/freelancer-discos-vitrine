@@ -17,7 +17,8 @@ export async function GET(request) {
 
     const loja = searchParams.get('loja') || '';
     const caixa = searchParams.get('caixa') || '';
-    const busca = searchParams.get('busca') || '';
+    // Limite de tamanho: cada palavra vira um filtro no banco.
+    const busca = (searchParams.get('busca') || '').slice(0, 100);
     const pagina = Math.max(1, parseInt(searchParams.get('pagina') || '1', 10) || 1);
     const ordenarColuna = searchParams.get('ordenarColuna') || null;
     const ordenarDirecao = searchParams.get('ordenarDirecao') || null;
