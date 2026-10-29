@@ -4,7 +4,7 @@ import { useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
 import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
-import { FiX, FiTrash2 } from 'react-icons/fi';
+import { FiX, FiTrash2, FiInfo } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const FORMAT_SHORT = {
@@ -346,6 +346,30 @@ export default function CartDrawer({
               />
             </div>
 
+            {/* Aviso de disponibilidade (estoque físico) */}
+            <div
+              role="note"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '8px',
+                padding: '10px 12px',
+                backgroundColor: '#121215',
+                border: '1px solid #2d2d35',
+                borderRadius: '8px',
+                color: '#a1a1aa',
+                fontSize: '12.5px',
+                lineHeight: 1.45,
+              }}
+            >
+              <FiInfo size={15} style={{ flexShrink: 0, marginTop: '2px', color: '#d4a373' }} />
+              <span>
+                Alguns discos podem ter sido vendidos na loja física. A disponibilidade será
+                confirmada pelo WhatsApp.
+              </span>
+            </div>
+
+            {/* Total e Botão WhatsApp */}
             <div
               className="tabularNums"
               style={{
