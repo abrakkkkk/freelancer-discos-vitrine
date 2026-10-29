@@ -21,6 +21,8 @@ export const metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
+  // Necessário para env(safe-area-inset-*) funcionar no iPhone (home indicator).
+  viewportFit: 'cover',
   themeColor: '#09090b',
 };
 

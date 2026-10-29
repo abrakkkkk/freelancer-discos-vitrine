@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
+import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
 
@@ -21,14 +22,8 @@ export default function ProductDetailSheet({
   isInCart = false,
   tipo = 'discos',
 }) {
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef(null);
+  const fecharENavegar = useModalDialog(isOpen && Boolean(item), onClose, dialogRef);
 
   if (!isOpen || !item) return null;
 
@@ -61,6 +56,8 @@ export default function ProductDetailSheet({
 
       {/* Folha Inferior / Modal Centralizado Sólido */}
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={`Detalhes de ${item.titulo}`}
@@ -72,10 +69,10 @@ export default function ProductDetailSheet({
           aria-label="Fechar detalhes"
           style={{
             position: 'absolute',
-            top: '12px',
-            right: '12px',
-            width: '40px',
-            height: '40px',
+            top: '10px',
+            right: '10px',
+            width: '44px',
+            height: '44px',
             borderRadius: '8px',
             backgroundColor: '#27272a',
             border: 'none',
@@ -170,7 +167,12 @@ export default function ProductDetailSheet({
         {caixaHref && (
           <Link
             href={caixaHref}
-            onClick={onClose}
+            onClick={(e) => {
+              // Ctrl/Cmd+clique (nova aba) segue o comportamento normal do link.
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+              e.preventDefault();
+              fecharENavegar(caixaHref);
+            }}
             style={{
               display: 'flex',
               alignItems: 'center',

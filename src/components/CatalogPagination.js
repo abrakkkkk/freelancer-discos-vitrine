@@ -18,8 +18,8 @@ export default function CatalogPagination({ pagina, totalPaginas, onPageChange }
     .sort((a, b) => a - b);
 
   const navBtnStyle = (disabled) => ({
-    width: '40px',
-    height: '40px',
+    width: '44px',
+    height: '44px',
     borderRadius: '8px',
     backgroundColor: '#151518',
     border: '1px solid #232328',
@@ -71,8 +71,8 @@ export default function CatalogPagination({ pagina, totalPaginas, onPageChange }
               aria-current={isCurrent ? 'page' : undefined}
               aria-label={`Página ${p}`}
               style={{
-                minWidth: '40px',
-                height: '40px',
+                minWidth: '44px',
+                height: '44px',
                 padding: '0 8px',
                 borderRadius: '8px',
                 backgroundColor: isCurrent ? '#8b1e1e' : '#151518',

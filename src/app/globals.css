@@ -122,8 +122,8 @@ select:focus-visible,
 }
 
 .headerBackBtn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-md);
   background-color: var(--bg-card);
   border: 1px solid var(--border);
@@ -241,6 +241,19 @@ select:focus-visible,
   cursor: pointer;
 }
 
+/* Área de toque de 44px sem aumentar o botão visível */
+.inputClearBtn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+/* Esconde o "x" nativo do Chrome/Safari: já existe o .inputClearBtn */
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
 /* Etiquetas sólidas: fundo opaco + texto branco */
 .badge {
   display: inline-flex;
@@ -287,8 +300,9 @@ select:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  min-height: 30px;
-  padding: 4px 9px;
+  position: relative;
+  min-height: 36px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
   background-color: var(--badge-neutral);
   border: none;
@@ -299,26 +313,38 @@ select:focus-visible,
   max-width: 100%;
 }
 
+.filterChip::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
 .filterChip span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Botão secundário sólido (sem fundo transparente) */
 .textBtn {
-  background: none;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--badge-neutral);
   border: none;
-  color: var(--text-muted);
-  font-size: 12.5px;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  padding: 4px 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
 }
 
 .textBtn:hover {
-  color: #ffffff;
+  background-color: #52525b;
 }
 
 /* Grade de Produtos Responsiva (2 colunas reais no mobile) */
@@ -356,7 +382,7 @@ select:focus-visible,
 }
 
 .productCardActionBtn {
-  min-height: 36px;
+  min-height: 44px;
   padding: 6px 11px;
   border-radius: var(--radius-md);
   background-color: var(--accent);
@@ -475,7 +501,7 @@ select:focus-visible,
   }
 
   .productCardActionBtn {
-    min-height: 36px;
+    min-height: 44px;
     padding: 5px 9px;
     font-size: 12px;
     gap: 4px;
@@ -507,6 +533,7 @@ select:focus-visible,
   width: 100%;
   max-width: 520px;
   max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
   background-color: #18181c;
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
@@ -535,6 +562,7 @@ select:focus-visible,
   width: 100%;
   max-width: 540px;
   max-height: calc(100vh - 20px);
+  max-height: calc(100dvh - 20px);
   background-color: #18181c;
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
@@ -546,6 +574,11 @@ select:focus-visible,
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.9);
   padding: 16px;
   padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
+}
+
+.productDetailDialog:focus,
+.cartDrawerPanel:focus {
+  outline: none;
 }
 
 .lojasGridContainer {
@@ -689,6 +722,7 @@ select:focus-visible,
   .productDetailDialog {
     max-width: 580px;
     max-height: calc(100vh - 64px);
+    max-height: calc(100dvh - 64px);
     border: 1px solid #2d2d35;
     border-radius: 16px;
     padding: 24px;
@@ -707,6 +741,8 @@ select:focus-visible,
     width: 440px;
     max-height: 100vh;
     height: 100vh;
+    max-height: 100dvh;
+    height: 100dvh;
     margin-left: auto;
     border: none;
     border-left: 1px solid #2d2d35;

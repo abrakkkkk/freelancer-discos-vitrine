@@ -96,6 +96,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
         >
           <Link
             href="/"
+            aria-current={isCatalogo ? 'page' : undefined}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -103,7 +104,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
               justifyContent: 'center',
               gap: '3px',
               minHeight: '44px',
-              color: isCatalogo ? '#ffffff' : '#71717a',
+              color: isCatalogo ? '#ffffff' : '#a1a1aa',
               textDecoration: 'none',
               fontSize: '11px',
               fontWeight: 700,
@@ -122,12 +123,13 @@ export default function BottomNav({ cartCount, onOpenCart }) {
                 }}
               />
             )}
-            <PiVinylRecord size={22} color={isCatalogo ? '#e4e4e7' : '#71717a'} />
+            <PiVinylRecord size={22} color={isCatalogo ? '#e4e4e7' : '#a1a1aa'} />
             <span>Catálogo</span>
           </Link>
 
           <Link
             href="/lojas"
+            aria-current={isLojas ? 'page' : undefined}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -135,7 +137,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
               justifyContent: 'center',
               gap: '3px',
               minHeight: '44px',
-              color: isLojas ? '#ffffff' : '#71717a',
+              color: isLojas ? '#ffffff' : '#a1a1aa',
               textDecoration: 'none',
               fontSize: '11px',
               fontWeight: 700,
@@ -154,7 +156,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
                 }}
               />
             )}
-            <MdStorefront size={22} color={isLojas ? '#e4e4e7' : '#71717a'} />
+            <MdStorefront size={22} color={isLojas ? '#e4e4e7' : '#a1a1aa'} />
             <span>Caixas & Lojas</span>
           </Link>
 
@@ -169,8 +171,8 @@ export default function BottomNav({ cartCount, onOpenCart }) {
               justifyContent: 'center',
               gap: '3px',
               minHeight: '44px',
-              color: effectiveCartCount > 0 ? '#ffffff' : '#71717a',
-              background: 'none',
+              color: effectiveCartCount > 0 ? '#ffffff' : '#a1a1aa',
+              backgroundColor: '#111114',
               border: 'none',
               cursor: 'pointer',
               fontSize: '11px',
@@ -179,7 +181,7 @@ export default function BottomNav({ cartCount, onOpenCart }) {
             }}
           >
             <div style={{ position: 'relative' }}>
-              <FiShoppingBag size={21} color={effectiveCartCount > 0 ? '#ffffff' : '#71717a'} />
+              <FiShoppingBag size={21} color={effectiveCartCount > 0 ? '#ffffff' : '#a1a1aa'} />
               {effectiveCartCount > 0 && (
                 <span
                   style={{
