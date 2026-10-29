@@ -6,12 +6,25 @@ import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 
 export const revalidate = 60;
 
+export const metadata = {
+  title: 'Lojas e caixas',
+};
+
 export default async function LojasPage() {
-  const totais = await caixaService.getTotaisLojas();
+  // Mesma fonte da página de cada loja: o número de caixas e de itens sempre bate.
+  // (Antes a faixa era fixa no código: "Caixas 1B a 20B", mas a Loja 2 já vai além.)
+  const [caixasLoja1, caixasLoja2] = await Promise.all([
+    caixaService.getCaixasComContagem('Loja 1'),
+    caixaService.getCaixasComContagem('Loja 2'),
+  ]);
+  const resumo = (caixas) => ({
+    caixas: caixas.length,
+    total: caixas.reduce((acc, c) => acc + (c.total || 0), 0),
+  });
 
   const lojas = [
-    { id: 'loja-1', nome: 'Loja 1', faixaCaixas: 'Caixas 1 a 55', total: totais['Loja 1'] || 0 },
-    { id: 'loja-2', nome: 'Loja 2', faixaCaixas: 'Caixas 1B a 20B', total: totais['Loja 2'] || 0 },
+    { id: 'loja-1', nome: 'Loja 1', ...resumo(caixasLoja1) },
+    { id: 'loja-2', nome: 'Loja 2', ...resumo(caixasLoja2) },
   ];
 
   return (
@@ -45,7 +58,7 @@ export default async function LojasPage() {
             <div style={{ minWidth: 0 }}>
               <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#ffffff' }}>{lj.nome}</h2>
               <p style={{ fontSize: '13px', color: '#a1a1aa', marginTop: '3px' }}>
-                {lj.faixaCaixas} ·{' '}
+                {lj.caixas} caixas ·{' '}
                 <strong style={{ color: '#ffffff', fontWeight: 600 }}>
                   {lj.total.toLocaleString('pt-BR')}
                 </strong>{' '}
