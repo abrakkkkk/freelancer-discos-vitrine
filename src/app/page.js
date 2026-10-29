@@ -7,11 +7,10 @@ import ProductCard from '@/components/ProductCard';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CatalogPagination from '@/components/CatalogPagination';
 import BottomNav from '@/components/BottomNav';
-import CartDrawer from '@/components/CartDrawer';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { useCart } from '@/components/CartProvider';
 import { getCartItemKey } from '@/utils/cartUtils';
 
-const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
 const CLIENT_CACHE_TTL_MS = 60 * 1000;
 
 const clientCatalogCache = new Map();
@@ -65,8 +64,7 @@ export default function CatalogoPage() {
   const [erro, setErro] = useState(null);
 
   const [detailItem, setDetailItem] = useState(null);
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { estaNaSacola, adicionar: adicionarNaSacola } = useCart();
 
   // Persiste estado da visão para retorno instantâneo ao clicar em Catálogo
   useEffect(() => {
@@ -98,56 +96,8 @@ export default function CatalogoPage() {
     return () => clearTimeout(timer);
   }, [busca]);
 
-  // Inicializa sacola do localStorage
-  useEffect(() => {
-    const load = () => {
-      try {
-        const stored = localStorage.getItem(CART_STORAGE_KEY);
-        if (stored) {
-          setCart(JSON.parse(stored));
-        } else {
-          setCart([]);
-        }
-      } catch (_) {}
-    };
-    load();
-    window.addEventListener('storage', load);
-    window.addEventListener('cartChange', load);
-    return () => {
-      window.removeEventListener('storage', load);
-      window.removeEventListener('cartChange', load);
-    };
-  }, []);
-
-  const saveCart = (newCart) => {
-    setCart(newCart);
-    try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
-      window.dispatchEvent(new Event('cartChange'));
-    } catch (_) {}
-  };
-
   const handleAddToCart = (item) => {
-    const itemComCategoria = { ...item, categoria: item.categoria || categoria };
-    const chaveAlvo = getCartItemKey(itemComCategoria);
-    const jaExiste = cart.some((i) => getCartItemKey(i) === chaveAlvo);
-    if (jaExiste) {
-      setIsCartOpen(true);
-      return;
-    }
-    saveCart([...cart, itemComCategoria]);
-  };
-
-  const handleRemoveFromCart = (idOuChave) => {
-    saveCart(
-      cart.filter(
-        (i) => getCartItemKey(i) !== idOuChave && i.id !== idOuChave
-      )
-    );
-  };
-
-  const handleClearCart = () => {
-    saveCart([]);
+    adicionarNaSacola({ ...item, categoria: item.categoria || categoria });
   };
 
   // Carrega caixas disponíveis de acordo com a loja (com cache em memória)
@@ -311,8 +261,6 @@ export default function CatalogoPage() {
     setPagina(1);
   };
 
-  const cartKeys = new Set(cart.map((i) => getCartItemKey(i)));
-
   return (
     <div className="pageContainer">
       {/* Cabeçalho */}
@@ -325,10 +273,7 @@ export default function CatalogoPage() {
           </div>
         </div>
 
-        <DesktopHeaderNav
-          cartCount={cart.length}
-          onOpenCart={() => setIsCartOpen(true)}
-        />
+        <DesktopHeaderNav />
       </header>
 
       {/* Abas de Categoria */}
@@ -443,7 +388,7 @@ export default function CatalogoPage() {
                 key={itemKey}
                 item={item}
                 tipo={categoria}
-                isInCart={cartKeys.has(itemKey)}
+                isInCart={estaNaSacola({ ...item, categoria })}
                 onAddToCart={handleAddToCart}
                 onOpenDetail={(i) => setDetailItem({ ...i, categoria })}
               />
@@ -468,33 +413,15 @@ export default function CatalogoPage() {
         onClose={() => setDetailItem(null)}
         isInCart={
           detailItem
-            ? cartKeys.has(
-                getCartItemKey({
-                  ...detailItem,
-                  categoria: detailItem.categoria || categoria,
-                })
-              )
+            ? estaNaSacola({ ...detailItem, categoria: detailItem.categoria || categoria })
             : false
         }
         onAddToCart={handleAddToCart}
         tipo={detailItem?.categoria || categoria}
       />
 
-      {/* Drawer da Sacola */}
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        itens={cart}
-        onRemoveItem={handleRemoveFromCart}
-        onClearCart={handleClearCart}
-        onReplaceCart={saveCart}
-      />
-
       {/* Barra de Navegação Móvel Inferior */}
-      <BottomNav
-        cartCount={cart.length}
-        onOpenCart={() => setIsCartOpen(true)}
-      />
+      <BottomNav />
     </div>
   );
 }
