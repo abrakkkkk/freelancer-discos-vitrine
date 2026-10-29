@@ -5,16 +5,21 @@ import { caixaService } from '@/services/caixaService';
 import LojaCaixasGridClient from '@/components/LojaCaixasGridClient';
 import BottomNav from '@/components/BottomNav';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { nomeLojaPorSlug } from '@/utils/lojas';
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }) {
+  const { loja: lojaSlug } = await params;
+  const nomeLoja = nomeLojaPorSlug(lojaSlug);
+  return nomeLoja ? { title: `${nomeLoja} · Caixas` } : {};
+}
 
 export default async function LojaCaixasPage({ params }) {
   const { loja: lojaSlug } = await params;
 
-  let nomeLoja = '';
-  if (lojaSlug === 'loja-1') nomeLoja = 'Loja 1';
-  else if (lojaSlug === 'loja-2') nomeLoja = 'Loja 2';
-  else notFound();
+  const nomeLoja = nomeLojaPorSlug(lojaSlug);
+  if (!nomeLoja) notFound();
 
   const caixas = await caixaService.getCaixasComContagem(nomeLoja);
   const totalItensLoja = caixas.reduce((acc, c) => acc + (c.total || 0), 0);

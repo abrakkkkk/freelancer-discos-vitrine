@@ -8,23 +8,33 @@ import { chaveCaixa } from '@/utils/caixaUtils';
 import CaixaItemsClient from '@/components/CaixaItemsClient';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { formatCaixa } from '@/utils/stringUtils';
+import { nomeLojaPorSlug } from '@/utils/lojas';
 
 export const revalidate = 60;
+
+function decodificarCaixa(caixaParam) {
+  try {
+    return decodeURIComponent(caixaParam || '').trim();
+  } catch {
+    return '';
+  }
+}
+
+export async function generateMetadata({ params }) {
+  const { loja: lojaSlug, caixa: caixaParam } = await params;
+  const nomeLoja = nomeLojaPorSlug(lojaSlug);
+  const caixa = decodificarCaixa(caixaParam);
+  if (!nomeLoja || !caixa) return {};
+  return { title: `${formatCaixa(caixa, nomeLoja)} · ${nomeLoja}` };
+}
 
 export default async function CaixaDetalhePage({ params }) {
   const { loja: lojaSlug, caixa: caixaParam } = await params;
 
-  let nomeLoja = '';
-  if (lojaSlug === 'loja-1') nomeLoja = 'Loja 1';
-  else if (lojaSlug === 'loja-2') nomeLoja = 'Loja 2';
-  else notFound();
+  const nomeLoja = nomeLojaPorSlug(lojaSlug);
+  if (!nomeLoja) notFound();
 
-  let caixaDecodificada = '';
-  try {
-    caixaDecodificada = decodeURIComponent(caixaParam || '').trim();
-  } catch {
-    notFound();
-  }
+  const caixaDecodificada = decodificarCaixa(caixaParam);
   if (!caixaDecodificada) notFound();
 
   let todosItens = [];
