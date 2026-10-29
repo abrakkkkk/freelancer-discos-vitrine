@@ -15,7 +15,11 @@ const figtree = Figtree({
 });
 
 export const metadata = {
-  title: 'Freelancer Discos — Vitrine do Catálogo',
+  title: {
+    default: 'Freelancer Discos — Vitrine do Catálogo',
+    // Páginas internas: "Caixa 5 · Loja 1 · Freelancer Discos"
+    template: '%s · Freelancer Discos',
+  },
   description: 'Catálogo de discos de vinil, CDs, DVDs e fitas VHS da Freelancer Discos',
 };
 
