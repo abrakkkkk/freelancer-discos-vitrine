@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import CategoryTabs from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
 import ProductCard from '@/components/ProductCard';
@@ -10,42 +11,77 @@ import BottomNav from '@/components/BottomNav';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { useCart } from '@/components/CartProvider';
 import { getCartItemKey } from '@/utils/cartUtils';
+import { ESTADO_PADRAO, lerEstadoDaUrl, montarQueryDoEstado } from '@/utils/catalogUrl';
 
 const CLIENT_CACHE_TTL_MS = 60 * 1000;
 
 const clientCatalogCache = new Map();
 const clientCaixasCache = new Map();
-let savedViewState = {
-  categoria: 'discos',
-  busca: '',
-  loja: '',
-  caixa: '',
-  ordenacao: 'padrao',
-  pagina: 1,
-};
+// Último estado da sessão: ao voltar para "/" sem filtros na URL, restaura a busca anterior.
+let savedViewState = { ...ESTADO_PADRAO };
 
 function buildCatalogCacheKey({ categoria, pagina, loja, caixa, busca, ordenacao }) {
   return `${categoria}|${pagina}|${loja}|${caixa}|${busca}|${ordenacao}`;
 }
 
+// useSearchParams exige um Suspense: no build a página é estática e a URL só existe no navegador.
 export default function CatalogoPage() {
-  const [categoria, setCategoria] = useState(savedViewState.categoria);
-  const [busca, setBusca] = useState(savedViewState.busca);
-  const [debouncedBusca, setDebouncedBusca] = useState(savedViewState.busca);
-  const [loja, setLoja] = useState(savedViewState.loja);
-  const [caixa, setCaixa] = useState(savedViewState.caixa);
-  const [caixas, setCaixas] = useState(() => clientCaixasCache.get(savedViewState.loja) || []);
-  const [ordenacao, setOrdenacao] = useState(savedViewState.ordenacao);
-  const [pagina, setPagina] = useState(savedViewState.pagina);
+  return (
+    <Suspense fallback={<CatalogoCarregando />}>
+      <Catalogo />
+    </Suspense>
+  );
+}
+
+function CatalogoCarregando() {
+  return (
+    <div className="pageContainer">
+      <header className="storeHeader">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
+          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <div style={{ minWidth: 0 }}>
+            <h1 className="headerTitle">Freelancer Discos</h1>
+            <p className="headerSubtitle">Vitrine do estoque</p>
+          </div>
+        </div>
+        <DesktopHeaderNav />
+      </header>
+      <div className="catalogGrid" aria-busy="true" aria-label="Carregando produtos">
+        {Array.from({ length: 8 }).map((_, idx) => (
+          <div key={idx} className="skeletonCard">
+            <div className="skeletonBlock" style={{ width: '100%', aspectRatio: '1 / 1' }} />
+            <div className="skeletonBlock" style={{ width: '60%', height: '12px' }} />
+            <div className="skeletonBlock" style={{ width: '90%', height: '16px' }} />
+          </div>
+        ))}
+      </div>
+      <BottomNav />
+    </div>
+  );
+}
+
+function Catalogo() {
+  const searchParams = useSearchParams();
+  // Filtros da URL têm prioridade (link compartilhado, F5); sem eles, volta ao último estado.
+  const [estadoInicial] = useState(() => lerEstadoDaUrl(searchParams) || savedViewState);
+
+  const [categoria, setCategoria] = useState(estadoInicial.categoria);
+  const [busca, setBusca] = useState(estadoInicial.busca);
+  const [debouncedBusca, setDebouncedBusca] = useState(estadoInicial.busca);
+  const [loja, setLoja] = useState(estadoInicial.loja);
+  const [caixa, setCaixa] = useState(estadoInicial.caixa);
+  const [caixas, setCaixas] = useState(() => clientCaixasCache.get(estadoInicial.loja) || []);
+  const [ordenacao, setOrdenacao] = useState(estadoInicial.ordenacao);
+  const [pagina, setPagina] = useState(estadoInicial.pagina);
 
   const initialCacheEntry = clientCatalogCache.get(
     buildCatalogCacheKey({
-      categoria: savedViewState.categoria,
-      pagina: savedViewState.pagina,
-      loja: savedViewState.loja,
-      caixa: savedViewState.caixa,
-      busca: savedViewState.busca,
-      ordenacao: savedViewState.ordenacao,
+      categoria: estadoInicial.categoria,
+      pagina: estadoInicial.pagina,
+      loja: estadoInicial.loja,
+      caixa: estadoInicial.caixa,
+      busca: estadoInicial.busca,
+      ordenacao: estadoInicial.ordenacao,
     })
   );
   const hasValidInitialCache =
@@ -66,7 +102,8 @@ export default function CatalogoPage() {
   const [detailItem, setDetailItem] = useState(null);
   const { estaNaSacola, adicionar: adicionarNaSacola } = useCart();
 
-  // Persiste estado da visão para retorno instantâneo ao clicar em Catálogo
+  // Persiste o estado (retorno instantâneo ao clicar em Catálogo) e o espelha na URL.
+  // replaceState: trocar filtro não cria uma entrada nova no "voltar" do navegador.
   useEffect(() => {
     savedViewState = {
       categoria,
@@ -76,11 +113,17 @@ export default function CatalogoPage() {
       ordenacao,
       pagina,
     };
+    const query = montarQueryDoEstado(savedViewState);
+    const atual = window.location.search.replace(/^\?/, '');
+    if (query !== atual) {
+      const url = query ? `?${query}` : window.location.pathname;
+      window.history.replaceState(window.history.state, '', url);
+    }
   }, [categoria, debouncedBusca, loja, caixa, ordenacao, pagina]);
 
   // A página volta para 1 só quando a busca efetiva muda (após o debounce). Antes, cada
   // tecla zerava a página na hora e disparava uma consulta extra com o termo antigo.
-  const ultimaBuscaRef = useRef(savedViewState.busca);
+  const ultimaBuscaRef = useRef(estadoInicial.busca);
   useEffect(() => {
     const aplicar = () => {
       if (busca === ultimaBuscaRef.current) return;
