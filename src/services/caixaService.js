@@ -7,7 +7,6 @@ const SUPABASE_PAGE_SIZE = 1000;
 const CACHE_TTL_MS = 60 * 1000;
 
 const caixasCache = new Map();
-let totaisLojasCache = { data: null, expiresAt: 0 };
 
 async function fetchAllRowsFromTable(tabela, loja) {
   let firstQuery = supabaseServer
@@ -165,48 +164,5 @@ export const caixaService = {
 
     caixasCache.set(cacheKey, { data: resultado, expiresAt: Date.now() + CACHE_TTL_MS });
     return resultado;
-  },
-
-  async getTotaisLojas() {
-    if (!supabaseServer) {
-      return { 'Loja 1': 0, 'Loja 2': 0 };
-    }
-
-    const now = Date.now();
-    if (totaisLojasCache.data && totaisLojasCache.expiresAt > now) {
-      return totaisLojasCache.data;
-    }
-
-    const totais = { 'Loja 1': 0, 'Loja 2': 0 };
-    const tabelas = ['discos', 'cds', 'dvds', 'vhs'];
-    const lojas = ['Loja 1', 'Loja 2'];
-
-    const queries = [];
-    for (const tabela of tabelas) {
-      for (const loja of lojas) {
-        queries.push(
-          supabaseServer
-            .from(tabela)
-            .select('id', { count: 'exact', head: true })
-            .eq('deletado', false)
-            .eq('ativo', true)
-            .eq('loja', loja)
-            // Mesmo filtro da contagem por caixa, para o total de /lojas bater com o da loja.
-            .not('caixa', 'is', null)
-            .then(({ count, error }) => {
-              if (error) throw new Error(`Erro ao somar ${tabela} da ${loja}: ${error.message}`);
-              return { loja, count: count || 0 };
-            })
-        );
-      }
-    }
-
-    const results = await Promise.all(queries);
-    for (const r of results) {
-      totais[r.loja] += r.count;
-    }
-
-    totaisLojasCache = { data: totais, expiresAt: Date.now() + CACHE_TTL_MS };
-    return totais;
   },
 };
