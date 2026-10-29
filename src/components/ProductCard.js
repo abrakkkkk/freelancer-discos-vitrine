@@ -34,23 +34,10 @@ export default function ProductCard({
   const showAnoBadge = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
   const isImportado = Boolean(item.observacao && /importado/i.test(item.observacao));
 
-  const handleCardKeyDown = (e) => {
-    if (e.target !== e.currentTarget) return;
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      if (onOpenDetail) onOpenDetail(item);
-    }
-  };
-
+  // O card não é um botão: o título é o botão que abre o detalhe e, via ::after,
+  // cobre o card inteiro. Assim o botão "Sacola" fica ao lado, não dentro de outro botão.
   return (
-    <article
-      role="button"
-      tabIndex={0}
-      aria-label={`Ver detalhes de ${item.artista ? `${item.artista} - ` : ''}${item.titulo}`}
-      onClick={() => onOpenDetail && onOpenDetail(item)}
-      onKeyDown={handleCardKeyDown}
-      className="productCard"
-    >
+    <article className="productCard">
       <AlbumCover
         id={item.id}
         artista={item.artista}
@@ -79,7 +66,7 @@ export default function ProductCard({
           </span>
         )}
 
-        <h3
+        <h2
           style={{
             fontSize: '14.5px',
             fontWeight: 600,
@@ -91,8 +78,15 @@ export default function ProductCard({
             overflow: 'hidden',
           }}
         >
-          {item.titulo}
-        </h3>
+          <button
+            type="button"
+            className="productCardOpen"
+            onClick={() => onOpenDetail && onOpenDetail(item)}
+            aria-label={`Ver detalhes de ${item.artista ? `${item.artista} - ` : ''}${item.titulo}`}
+          >
+            {item.titulo}
+          </button>
+        </h2>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
           {localizacao && (
@@ -134,10 +128,7 @@ export default function ProductCard({
 
         <button
           type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onAddToCart) onAddToCart(item);
-          }}
+          onClick={() => onAddToCart && onAddToCart(item)}
           aria-label={isInCart ? 'Item já na sacola — abrir sacola' : 'Adicionar à sacola'}
           className={`productCardActionBtn ${isInCart ? 'productCardActionBtnInCart' : ''}`}
         >
