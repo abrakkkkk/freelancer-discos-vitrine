@@ -33,7 +33,7 @@ export default async function LojasPage() {
           <Link
             key={lj.id}
             href={`/lojas/${lj.id}`}
-            className="productCard tabularNums"
+            className={`productCard tabularNums ${lj.id === 'loja-2' ? 'lojaCardLoja2' : 'lojaCardLoja1'}`}
             style={{
               flexDirection: 'row',
               alignItems: 'center',

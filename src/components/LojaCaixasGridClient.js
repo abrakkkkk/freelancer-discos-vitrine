@@ -6,6 +6,8 @@ import { FiSearch, FiX } from 'react-icons/fi';
 
 export default function LojaCaixasGridClient({ caixas = [], lojaSlug, nomeLoja }) {
   const [buscaCaixa, setBuscaCaixa] = useState('');
+  // Barra de ocupação na cor da loja (antes era sempre vermelha, inclusive na Loja 2)
+  const corLoja = nomeLoja === 'Loja 2' ? 'var(--loja-2)' : 'var(--loja-1)';
 
   const maxTotal = useMemo(
     () => caixas.reduce((max, c) => (c.total > max ? c.total : max), 1),
@@ -102,7 +104,7 @@ export default function LojaCaixasGridClient({ caixas = [], lojaSlug, nomeLoja }
                     marginTop: '2px',
                   }}
                 >
-                  <div style={{ width: `${fillPct}%`, height: '100%', backgroundColor: '#8b1e1e' }} />
+                  <div style={{ width: `${fillPct}%`, height: '100%', backgroundColor: corLoja }} />
                 </div>
               </Link>
             );
