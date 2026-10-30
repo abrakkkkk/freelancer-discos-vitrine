@@ -12,14 +12,21 @@ function isImagemValida(url) {
   return Boolean(url) && !/spacer\.gif/i.test(url);
 }
 
+let discogsRestante = null;
+
+// Buscas que o Discogs ainda permite no minuto, conforme a última resposta dele.
+export function getDiscogsRestante() {
+  return discogsRestante;
+}
+
+// Lança erro quando a busca não se completa (limite, timeout, fora do ar): isso é diferente
+// de "não tem capa" e não pode ser tratado nem guardado como tal.
 async function fetchJson(url, headers) {
-  try {
-    const res = await fetch(url, { headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (_) {
-    return null;
-  }
+  const res = await fetch(url, { headers, signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+  const restante = res.headers.get('x-discogs-ratelimit-remaining');
+  if (restante !== null) discogsRestante = Number(restante);
+  if (!res.ok) throw new Error(`Busca de capa falhou: HTTP ${res.status}`);
+  return res.json();
 }
 
 function escolherMelhor(item, candidatos) {
