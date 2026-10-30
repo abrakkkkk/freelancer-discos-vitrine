@@ -1,0 +1,68 @@
+name: Preencher capas
+
+# Roda só quando acionado manualmente. Não rode junto com outra execução do script:
+# todas usam a mesma chave do Discogs e dividem o limite de 60 buscas por minuto.
+on:
+  workflow_dispatch:
+    inputs:
+      ignorar_caixas:
+        description: Caixas que não devem receber capa, separadas por vírgula
+        required: false
+        default: 3,4,5,8
+
+concurrency:
+  group: preencher-capas
+
+permissions:
+  contents: read
+
+jobs:
+  preencher:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      DISCOGS_KEY: ${{ secrets.DISCOGS_KEY }}
+      DISCOGS_SECRET: ${{ secrets.DISCOGS_SECRET }}
+      COVER_BUSCA_UNICA: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Restaurar progresso
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/preencher-capas-gravar.json
+          key: preencher-capas-${{ github.run_id }}
+          restore-keys: preencher-capas-
+
+      - name: Iniciar servidor
+        run: |
+          npm start > servidor.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null "http://localhost:3000/api/cover?categoria=dvds" && exit 0
+            sleep 2
+          done
+          cat servidor.log
+          exit 1
+
+      - name: Gravar capas
+        env:
+          IGNORAR_CAIXAS: ${{ inputs.ignorar_caixas }}
+        run: node scripts/preencher-capas.mjs --gravar --ignorar-caixas "$IGNORAR_CAIXAS"
+
+      - name: Salvar progresso
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/preencher-capas-gravar.json
+          key: preencher-capas-${{ github.run_id }}

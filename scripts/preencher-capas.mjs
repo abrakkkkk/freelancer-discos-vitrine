@@ -19,6 +19,13 @@ const valorArg = (nome) => {
 };
 const GRAVAR = args.includes('--gravar');
 const LIMITE = Number(valorArg('--limite')) || Infinity;
+// --ignorar-caixas 3,4,5 pula as caixas 3, 4 e 5, sem pegar as de sufixo B (3B é outra caixa).
+const CAIXAS_IGNORADAS = new Set((valorArg('--ignorar-caixas') || '').split(',').filter(Boolean));
+const caixaIgnorada = (caixa) => {
+  const numero = String(caixa ?? '').trim().match(/^(?:caixa\s*)?(\d+)$/i)?.[1];
+  return numero !== undefined && CAIXAS_IGNORADAS.has(numero);
+};
+const PARALELO = Number(valorArg('--paralelo')) || 3;
 const ESPERA_APOS_FALHA_MS = 30000;
 const MAX_TENTATIVAS = 6;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -26,9 +33,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // perto do limite espera a janela liberar. Sem o valor (resposta do cache), não há busca a poupar.
 const pausaPeloLimite = (restante) => {
   if (restante === null) return 0;
-  if (restante > 20) return 300;
-  if (restante > 10) return 1500;
-  return 5000;
+  if (restante > 8) return 0;
+  if (restante > 3) return 1000;
+  return 3000;
 };
 const URL_BASE = valorArg('--url') || 'http://localhost:3000';
 const PASTA = path.resolve(process.cwd(), '.cache');
@@ -49,7 +56,10 @@ const campo = (v) => {
 };
 
 fs.mkdirSync(PASTA, { recursive: true });
-const feitos = new Set(fs.existsSync(PROGRESSO) ? JSON.parse(fs.readFileSync(PROGRESSO, 'utf8')) : []);
+// O arquivo inicial traz o que já foi processado em outra máquina (usado no GitHub Actions).
+const INICIAL = path.resolve(process.cwd(), 'scripts/preencher-capas-feitos.json');
+const lerLista = (arq) => (fs.existsSync(arq) ? JSON.parse(fs.readFileSync(arq, 'utf8')) : []);
+const feitos = new Set([...(GRAVAR ? lerLista(INICIAL) : []), ...lerLista(PROGRESSO)]);
 if (!fs.existsSync(CSV)) fs.writeFileSync(CSV, '﻿resultado,tabela,id,artista,titulo,ano,capa\r\n');
 
 async function listarSemCapa(tabela) {
@@ -57,7 +67,7 @@ async function listarSemCapa(tabela) {
   for (let de = 0; ; de += 1000) {
     const { data, error } = await supabase
       .from(tabela)
-      .select('id, artista, titulo, ano')
+      .select('id, artista, titulo, ano, caixa, loja')
       .eq('deletado', false)
       .eq('ativo', true)
       .is('capa_url', null)
@@ -75,11 +85,20 @@ let achados = 0;
 let pendentes = 0;
 const t0 = Date.now();
 
+const fila = [];
 for (const tabela of ['discos', 'cds']) {
   for (const item of await listarSemCapa(tabela)) {
-    if (processados >= LIMITE) break;
+    if (!feitos.has(`${tabela}:${item.id}`) && !caixaIgnorada(item.caixa)) fila.push({ tabela, item });
+  }
+}
+console.log(`${fila.length} itens na fila, ${PARALELO} buscas em paralelo`);
+
+// O limite do Discogs é por chave, não por conexão: o paralelo só aproveita o tempo em que
+// uma busca espera resposta. Quem controla o total por minuto é pausaPeloLimite.
+async function trabalhador() {
+  while (fila.length && processados < LIMITE) {
+    const { tabela, item } = fila.shift();
     const chave = `${tabela}:${item.id}`;
-    if (feitos.has(chave)) continue;
 
     const params = new URLSearchParams({
       categoria: tabela,
@@ -124,6 +143,8 @@ for (const tabela of ['discos', 'cds']) {
     }
   }
 }
+
+await Promise.all(Array.from({ length: PARALELO }, trabalhador));
 
 fs.writeFileSync(PROGRESSO, JSON.stringify([...feitos]));
 console.log(`Fim: ${processados} itens nesta execução, ${achados} com capa, ${pendentes} pendentes para a próxima execução (${GRAVAR ? 'gravado' : 'teste, nada gravado'}).`);
