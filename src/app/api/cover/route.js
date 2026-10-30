@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { supabaseServer } from '@/lib/supabaseServer';
 import { isValidCategory } from '@/services/catalogService';
-import { findCover } from '@/services/coverService';
+import { findCover, getDiscogsRestante } from '@/services/coverService';
 import { normalizeText } from '@/utils/coverMatch';
 
 // Capa confirmada (artista, título, volume e ano) é gravada em capa_url para não ser
@@ -151,11 +151,18 @@ export async function GET(request) {
   }
 
   const entrada = await emAndamento.get(key);
-  if (item && entrada?.cover) await gravarCapa(categoria, id, entrada.cover);
+  const restante = getDiscogsRestante();
+  const headerRestante = restante === null ? {} : { 'X-Discogs-Restante': String(restante) };
 
-  if (!entrada?.cover) {
+  if (!entrada) {
+    return Response.json(SEM_CAPA, { status: 503, headers: { 'Cache-Control': 'no-store', ...headerRestante } });
+  }
+
+  if (item && entrada.cover) await gravarCapa(categoria, id, entrada.cover);
+
+  if (!entrada.cover) {
     return Response.json(SEM_CAPA, {
-      headers: { 'Cache-Control': entrada ? 'public, max-age=600' : 'no-store', 'X-Cache': 'MISS' },
+      headers: { 'Cache-Control': 'public, max-age=600', 'X-Cache': 'MISS', ...headerRestante },
     });
   }
 
@@ -163,6 +170,7 @@ export async function GET(request) {
     headers: {
       'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400',
       'X-Cache': 'MISS',
+      ...headerRestante,
     },
   });
 }
