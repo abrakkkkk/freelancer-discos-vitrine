@@ -47,6 +47,17 @@ const CAPAS_CORRETAS = [
   [['Céu', 'Acústico', 2021], ['Céu', 'Acustico', 2021]],
   [['Jackson Browne', 'Late for the sky', ''], ['Jackson Browne', 'Late For the Sky (Remastered)', 1974]],
   [['Leon Russell', "Will O' The Wisp", ''], ['Leon Russell', "Will o' the Wisp", 1975]],
+  // Falsos positivos encontrados na auditoria completa
+  [['Y & T', 'Down For The Count', 1985], ['Y & T', 'Down For The Count', 1985]],
+  [['Lazy', '宇宙船地球号', 1980], ['Lazy', '宇宙船地球号', 1980]],
+  [['Elizeth Cardoso, Zimbo Trio, Jacob Do Bandolim', 'Vol. I', 1970], ['Elizeth Cardoso / Zimbo Trio / Jacob Do Bandolim', 'Vol. I', 1970]],
+  [['Woody Shaw', 'Woody Three', 1979], ['Woody Shaw', 'Woody III', 1978]],
+  [['Benedito Costa E Seu Cavaquinho', 'Que Delícia... De Lambada!', ''], ['Benedito Costa', 'Que Delícia... De Lambada!', '']],
+  [['Os Impossíveis e Os San-Papas', 'Os Sucessos do Momento', 1971], ['San-Papas', 'Os Impossiveis E Os Sucessos Do Momento', 1972]],
+  [['Do Sertão para a Cidade', 'Do Sertão para a Cidade', ''], ['Various', 'Do Sertão Para A Cidade', 1976]],
+  [['Chico Buarque De Hollanda', 'Ennio Morricone - Per Un Pugno Di Samba', 2010], ['Chico Buarque De Hollanda / Ennio Morricone', 'Per Un Pugno Di Samba', 2010]],
+  [['The Very Best of the Rolling Stones', 'Rolled Gold', ''], ['The Rolling Stones', 'Rolled Gold (The Very Best Of The Rolling Stones)', 1975]],
+  [['Creedence Clearwater', 'Gold', ''], ['Creedence Clearwater Revival', 'Creedence Gold', 1972]],
 ];
 
 const CAPAS_ERRADAS = [
@@ -74,6 +85,13 @@ const CAPAS_ERRADAS = [
   [['Roberto Carlos', 'Roberto Carlos', ''], ['Roberto Carlos', 'Roberto Carlos', 1972]],
   [['Gal Costa', 'Gal', 1969], ['Gal Costa', 'Gal Tropical', 1979]],
   [['Various', 'Gente Fina', 1989], ['Various', 'Gente Fina (Internacional)', 1990]],
+  [['Elizeth Cardoso', 'Vol. I', 1970], ['Elizeth Cardoso', 'Vol. II', 1971]],
+  [['Eric Clapton', 'Journey Man', ''], ['Eagles', 'Hotel California', 1976]],
+  [['Carly Simon', '(IMP)', ''], ['Carly Simon', 'The Best of Carly Simon', 1975]],
+  [['Various', "Love's In The Air 2", ''], ['Shawn Mendes', 'Illuminate (Deluxe)', 2016]],
+  [['The Beatles', 'The Beatles In Hamburg', 1968], ['The Beatles Revival Band', '40th Anniversary (Live at the FABRIK in Hamburg)', 2016]],
+  [['Various', 'Batucada Fantástica', 1958], ['Various', 'Batucada Fantástica Vol. 2', 1972]],
+  [['Various', 'Os Adolescentes (Trilha Sonora Original - Internacional)', 1981], ['Various', 'Os Adolescentes - Trilha Sonora Nacional Novela', 1981]],
 ];
 
 const asObj = ([artista, titulo, ano]) => ({ artista, titulo, ano });

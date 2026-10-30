@@ -24,6 +24,16 @@ const ROMANOS = {
   xviii: '18', xix: '19', xx: '20',
 };
 
+// Número por extenso equivale ao algarismo ("Woody Three" = "Woody III").
+const NUMEROS_POR_EXTENSO = {
+  two: '2', three: '3', four: '4', five: '5',
+  dois: '2', tres: '3', quatro: '4', cinco: '5',
+};
+
+// Artista com estas palavras é outro produto. "revival" fica de fora: Creedence Clearwater
+// Revival é o nome da banda, e cover como "Beatles Revival Band" cai na checagem do título.
+const ARTISTA_OUTRO_PRODUTO = new Set(['karaoke', 'tribute', 'tributo']);
+
 const RE_VARIOUS = /^(v[aá]rios(\s+artistas)?|various(\s+artists)?|trilha\s+sonora.*|colet[aâ]nea|diversos)$/i;
 
 const RE_TRILHA = /trilha\s+sonora(\s+original)?(\s+d[ao]\s+(novela|filme|minis+[eé]rie|s[eé]rie))?/gi;
@@ -41,7 +51,8 @@ export function normalizeText(texto) {
     .replace(/[º°ª]/g, '')
     .replace(/['’`´]/g, '')
     .replace(/\b([a-z])\.(?=[a-z]\b)/g, '$1') // U.S.A. -> usa.
-    .replace(/[^a-z0-9]+/g, ' ')
+    // Mantém letras de qualquer alfabeto e seus acentos combinantes (japonês, por exemplo).
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -62,10 +73,20 @@ export function tokenize(texto) {
     .split(' ')
     .map((t) => {
       if (ROMANOS[t]) return ROMANOS[t];
+      if (NUMEROS_POR_EXTENSO[t]) return NUMEROS_POR_EXTENSO[t];
       const ordinal = t.match(/^(\d+)(st|nd|rd|th|o|a)$/);
       return ordinal ? ordinal[1] : t;
     })
     .filter((t) => t && !STOP_WORDS.has(t) && (t.length > 1 || /^\d$/.test(t)));
+}
+
+// Nomes feitos só de palavras curtas ("Y & T", "Vol. I") sumiriam na tokenização:
+// nesse caso a comparação usa todas as palavras.
+function tokenizeComReserva(texto) {
+  const tokens = tokenize(texto);
+  if (tokens.length > 0) return tokens;
+  const todos = normalizeText(texto);
+  return todos ? todos.split(' ') : [];
 }
 
 function editDistanceAtMostOne(a, b) {
@@ -126,6 +147,27 @@ function anoNumero(ano) {
   return m ? Number(m[0]) : null;
 }
 
+// Artista e título trocados de campo ou juntos num só ("Os Impossíveis e Os San-Papas -
+// Os Sucessos do Momento" x "San-Papas - Os Impossiveis E Os Sucessos Do Momento"):
+// se o conjunto de palavras é o mesmo, é o mesmo disco.
+function mesmasPalavrasNoTotal(item, candidato, itemVarios, candVarios) {
+  const itemArtista = itemVarios ? [] : tokenizeComReserva(item.artista);
+  const candArtista = candVarios ? [] : tokenizeComReserva(candidato.artista);
+  const itemTitulo = tokenizeComReserva(cleanTitle(item.titulo));
+  const candTitulo = tokenizeComReserva(cleanTitle(candidato.titulo));
+  if (itemTitulo.length === 0 || candTitulo.length === 0) return false;
+
+  // Homônimo depende do ano: é tratado na regra normal.
+  if (itemArtista.length > 0 && itemTitulo.every((t) => itemArtista.includes(t)) && !candVarios) return false;
+
+  const itemTodos = [...itemArtista, ...itemTitulo];
+  const candTodos = [...candArtista, ...candTitulo];
+  if (new Set(itemTodos).size < 2 || new Set(candTodos).size < 2) return false;
+  if (!mesmosNumeros(itemTodos, candTodos)) return false;
+  if (candTodos.some((t) => PALAVRAS_OUTRO_PRODUTO.has(t) && !itemTodos.includes(t))) return false;
+  return cobertura(itemTodos, candTodos) >= 0.9 && cobertura(candTodos, itemTodos) >= 0.9;
+}
+
 /**
  * Compara um item do acervo com uma capa candidata.
  * @param {{artista?: string, titulo: string, ano?: string|number}} item
@@ -137,23 +179,30 @@ export function scoreCandidate(item, candidato) {
 
   const itemVarios = isVariousArtist(item.artista);
   const candVarios = isVariousArtist(candidato.artista);
+  if (mesmasPalavrasNoTotal(item, candidato, itemVarios, candVarios)) {
+    const anoItem = anoNumero(item.ano);
+    const mesmoAno = anoItem && anoItem === anoNumero(candidato.ano);
+    return { aceito: true, score: mesmoAno ? 1.1 : 1, motivo: 'ok' };
+  }
   if (itemVarios !== candVarios) return rejeita('artista_various_divergente');
 
-  const itemArtista = itemVarios ? [] : tokenize(item.artista);
-  const candArtista = candVarios ? [] : tokenize(candidato.artista);
+  const itemArtista = itemVarios ? [] : tokenizeComReserva(item.artista);
+  const candArtista = candVarios ? [] : tokenizeComReserva(candidato.artista);
 
   let scoreArtista = 1;
   if (!itemVarios) {
     if (itemArtista.length === 0 || candArtista.length === 0) return rejeita('artista_vazio');
     scoreArtista = cobertura(itemArtista, candArtista);
+    // Cadastro mais longo que o nome do artista ("Benedito Costa E Seu Cavaquinho" x "Benedito Costa").
+    if (candArtista.length >= 2) scoreArtista = Math.max(scoreArtista, cobertura(candArtista, itemArtista));
     if (scoreArtista < 0.8) return rejeita('artista_diferente');
-    if (candArtista.some((t) => PALAVRAS_OUTRO_PRODUTO.has(t) && !itemArtista.includes(t))) {
+    if (candArtista.some((t) => ARTISTA_OUTRO_PRODUTO.has(t) && !itemArtista.includes(t))) {
       return rejeita('artista_outro_produto');
     }
   }
 
-  const itemTituloBruto = tokenize(cleanTitle(item.titulo));
-  const candTituloBruto = tokenize(cleanTitle(candidato.titulo));
+  const itemTituloBruto = tokenizeComReserva(cleanTitle(item.titulo));
+  const candTituloBruto = tokenizeComReserva(cleanTitle(candidato.titulo));
   if (itemTituloBruto.length === 0 || candTituloBruto.length === 0) return rejeita('titulo_vazio');
 
   const itemTitulo = semTokensDoArtista(itemTituloBruto, itemArtista);
