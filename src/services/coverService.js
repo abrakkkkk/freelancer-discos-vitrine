@@ -2,6 +2,8 @@ import 'server-only';
 import { scoreCandidate, parseDiscogsTitle, isVariousArtist, cleanTitle } from '@/utils/coverMatch';
 
 const FETCH_TIMEOUT_MS = 5000;
+// Para preenchimento em lote: uma só busca por item, no Discogs. Mais rápido, acha menos capas.
+const BUSCA_UNICA = process.env.COVER_BUSCA_UNICA === '1';
 
 const FORMATO_DISCOGS = {
   discos: 'Vinyl',
@@ -77,7 +79,7 @@ async function buscarDiscogs(item, categoria) {
     new URLSearchParams({ type: 'release', per_page: '15', q: `${artista} ${titulo}` }),
   ];
 
-  for (const params of tentativas) {
+  for (const params of BUSCA_UNICA ? tentativas.slice(0, 1) : tentativas) {
     const data = await fetchJson(`https://api.discogs.com/database/search?${params}`, headers);
     const melhor = escolherMelhor(item, candidatosDiscogs(data?.results));
     if (melhor) return melhor;
@@ -116,7 +118,9 @@ async function buscarItunes(item) {
  */
 export async function findCover(item, categoria) {
   if (!item?.titulo) return null;
-  const encontrada = (await buscarDiscogs(item, categoria)) || (await buscarItunes(item));
+  const encontrada = BUSCA_UNICA
+    ? await buscarDiscogs(item, categoria)
+    : (await buscarDiscogs(item, categoria)) || (await buscarItunes(item));
   if (!encontrada) return null;
   const { cover, thumb, origem, ref, score, artista, titulo } = encontrada;
   return { cover, thumb, origem, ref, score: Math.round(score * 1000) / 1000, match: `${artista} - ${titulo}` };
