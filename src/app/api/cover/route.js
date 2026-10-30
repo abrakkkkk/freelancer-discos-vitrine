@@ -1,11 +1,13 @@
 import fs from 'fs';
 import path from 'path';
+import { supabaseServer } from '@/lib/supabaseServer';
 import { isValidCategory } from '@/services/catalogService';
 import { findCover } from '@/services/coverService';
 import { normalizeText } from '@/utils/coverMatch';
 
-// Esta rota só LÊ capas: não grava nada no banco. A capa_url de cada item só é
-// preenchida pelo script scripts/auditar-capas.mjs, depois de revisão manual.
+// Capa confirmada (artista, título, volume e ano) é gravada em capa_url para não ser
+// buscada de novo. Para gravar, a rota lê os dados do item no banco pelo id: o que vem na
+// URL nunca decide o que é gravado. Sem id, só busca e não grava.
 
 // v2: chaves geradas pelo algoritmo com conferência de artista/título. O cache antigo
 // (src/data/covers_cache.json) foi gerado sem conferência e não é mais lido.
@@ -63,6 +65,32 @@ function agendarGravacaoEmDisco() {
 
 const SEM_CAPA = { cover: null, thumb: null };
 
+async function lerItem(categoria, id) {
+  if (!supabaseServer || !/^[1-9]\d{0,14}$/.test(id)) return null;
+  const { data, error } = await supabaseServer
+    .from(categoria)
+    .select('artista, titulo, ano, capa_url')
+    .eq('id', Number(id))
+    .eq('deletado', false)
+    .eq('ativo', true)
+    .maybeSingle();
+  if (error) {
+    console.error('Erro ao ler item da capa:', error.message);
+    return null;
+  }
+  return data;
+}
+
+// Só preenche capa vazia: nunca substitui uma capa já gravada.
+async function gravarCapa(categoria, id, capa) {
+  const { error } = await supabaseServer
+    .from(categoria)
+    .update({ capa_url: capa })
+    .eq('id', Number(id))
+    .is('capa_url', null);
+  if (error) console.error('Erro ao gravar capa:', error.message);
+}
+
 function param(searchParams, nome) {
   return (searchParams.get(nome) || '').trim().slice(0, MAX_PARAM_LENGTH);
 }
@@ -70,19 +98,33 @@ function param(searchParams, nome) {
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const categoria = param(searchParams, 'categoria') || 'discos';
-  const artista = param(searchParams, 'artista');
-  const titulo = param(searchParams, 'titulo');
+  const id = param(searchParams, 'id');
+  let artista = param(searchParams, 'artista');
+  let titulo = param(searchParams, 'titulo');
   const anoBruto = param(searchParams, 'ano');
-  const ano = /^\d{4}$/.test(anoBruto) ? anoBruto : '';
+  let ano = /^\d{4}$/.test(anoBruto) ? anoBruto : '';
 
-  if (!isValidCategory(categoria) || categoria === 'dvds' || categoria === 'vhs' || !titulo) {
+  if (!isValidCategory(categoria) || categoria === 'dvds' || categoria === 'vhs') {
     return Response.json(SEM_CAPA);
   }
+
+  const item = id ? await lerItem(categoria, id) : null;
+  if (item?.capa_url) {
+    return Response.json({ cover: item.capa_url, thumb: item.capa_url });
+  }
+  if (item) {
+    artista = String(item.artista || '').trim();
+    titulo = String(item.titulo || '').trim();
+    const anoItem = String(item.ano ?? '').trim();
+    ano = /^\d{4}$/.test(anoItem) ? anoItem : '';
+  }
+  if (!titulo) return Response.json(SEM_CAPA);
 
   const key = ['v2', categoria, normalizeText(artista), normalizeText(titulo), ano].join('|');
 
   const emCache = lerCache(key);
   if (emCache) {
+    if (item && emCache.cover) await gravarCapa(categoria, id, emCache.cover);
     return Response.json(emCache.cover ? emCache : SEM_CAPA, {
       headers: {
         'Cache-Control': emCache.cover
@@ -109,6 +151,8 @@ export async function GET(request) {
   }
 
   const entrada = await emAndamento.get(key);
+  if (item && entrada?.cover) await gravarCapa(categoria, id, entrada.cover);
+
   if (!entrada?.cover) {
     return Response.json(SEM_CAPA, {
       headers: { 'Cache-Control': entrada ? 'public, max-age=600' : 'no-store', 'X-Cache': 'MISS' },

@@ -70,6 +70,7 @@ export default function AlbumCover({
     async function fetchCover() {
       try {
         const params = new URLSearchParams({
+          id: String(id || ''),
           categoria: tipo,
           artista: artista || '',
           titulo: titulo || '',
