@@ -123,6 +123,13 @@ export default function CompartilharClient() {
       <p role="status" style={{ minHeight: '20px', marginTop: '10px', fontSize: '13px', color: '#a1a1aa', textAlign: 'center' }}>
         {aviso}
       </p>
+
+      <p style={{ marginTop: '16px', fontSize: '12px', color: '#a1a1aa', textAlign: 'center' }}>
+        Disco do fundo: vinyl record, de pool party, do{' '}
+        <a href="https://thenounproject.com/icon/vinyl-record-2198121/" style={{ color: '#a1a1aa' }}>
+          Noun Project
+        </a>
+      </p>
     </div>
   );
 }
