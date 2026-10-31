@@ -21,6 +21,10 @@ export const metadata = {
     template: '%s · Freelancer Discos',
   },
   description: 'Catálogo de discos de vinil, CDs, DVDs e fitas VHS da Freelancer Discos',
+  appleWebApp: {
+    title: 'Freelancer Discos',
+    statusBarStyle: 'black-translucent',
+  },
 };
 
 export const viewport = {
