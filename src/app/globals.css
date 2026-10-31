@@ -76,11 +76,26 @@
 
 html, body {
   min-height: 100%;
-  background-color: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--bg);
+}
+
+/* Fundo de discos: só esta camada é translúcida. Fica fixa porque background-attachment: fixed falha no iOS. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url('/fundo-discos.svg');
+  background-size: 390px 680px;
+  opacity: 0.06;
+  pointer-events: none;
 }
 
 h1, h2, h3, h4, .titleFont {
@@ -124,6 +139,8 @@ select:focus-visible,
   flex-shrink: 0;
   display: block;
   object-fit: contain;
+  /* O logo tem fundo preto: sem isto, vira um retângulo em cima dos discos. */
+  mix-blend-mode: screen;
 }
 
 .headerBackBtn {
