@@ -120,6 +120,8 @@ select:focus-visible,
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
+  /* Instalado como app no iPhone, a página começa atrás do relógio e da câmera. */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
   padding-bottom: calc(var(--bottom-nav-height) + 32px);
 }
 
@@ -593,7 +595,7 @@ input[type='search']::-webkit-search-cancel-button {
   width: 100%;
   max-width: 520px;
   max-height: calc(100vh - 24px);
-  max-height: calc(100dvh - 24px);
+  max-height: calc(100dvh - 24px - env(safe-area-inset-top, 0px));
   background-color: #18181c;
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
@@ -622,7 +624,7 @@ input[type='search']::-webkit-search-cancel-button {
   width: 100%;
   max-width: 540px;
   max-height: calc(100vh - 20px);
-  max-height: calc(100dvh - 20px);
+  max-height: calc(100dvh - 20px - env(safe-area-inset-top, 0px));
   background-color: #18181c;
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
