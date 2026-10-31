@@ -2,7 +2,7 @@ export default function manifest() {
   return {
     id: '/',
     name: 'Freelancer Discos',
-    short_name: 'Freelancer',
+    short_name: 'Freelancer - Vitrine',
     description: 'Catálogo de discos de vinil, CDs, DVDs e fitas VHS da Freelancer Discos',
     lang: 'pt-BR',
     start_url: '/',
