@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { PiVinylRecord } from 'react-icons/pi';
 import { MdStorefront } from 'react-icons/md';
-import { FiShoppingBag } from 'react-icons/fi';
+import { FiShare2, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from './CartProvider';
 
 export default function BottomNav() {
   const pathname = usePathname();
   const isCatalogo = pathname === '/' || pathname.startsWith('/catalogo');
   const isLojas = pathname.startsWith('/lojas');
+  const isCompartilhar = pathname.startsWith('/compartilhar');
   const { quantidade: effectiveCartCount, abrir: handleCartClick } = useCart();
 
   return (
@@ -34,7 +35,7 @@ export default function BottomNav() {
             maxWidth: '600px',
             margin: '0 auto',
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
             height: 'var(--bottom-nav-height, 64px)',
           }}
         >
@@ -102,6 +103,39 @@ export default function BottomNav() {
             )}
             <MdStorefront size={22} color={isLojas ? '#e4e4e7' : '#a1a1aa'} />
             <span>Caixas & Lojas</span>
+          </Link>
+
+          <Link
+            href="/compartilhar"
+            aria-current={isCompartilhar ? 'page' : undefined}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '3px',
+              minHeight: '44px',
+              color: isCompartilhar ? '#ffffff' : '#a1a1aa',
+              textDecoration: 'none',
+              fontSize: '11px',
+              fontWeight: 700,
+              position: 'relative',
+            }}
+          >
+            {isCompartilhar && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  width: '36px',
+                  height: '2px',
+                  backgroundColor: '#8b1e1e',
+                  borderRadius: '0 0 2px 2px',
+                }}
+              />
+            )}
+            <FiShare2 size={21} color={isCompartilhar ? '#e4e4e7' : '#a1a1aa'} />
+            <span>Compartilhar</span>
           </Link>
 
           <button
