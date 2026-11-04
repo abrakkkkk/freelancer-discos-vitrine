@@ -88,6 +88,7 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
                 isInCart={estaNaSacola(item)}
                 onAddToCart={handleAddToCart}
                 onOpenDetail={(i) => setDetailItem(i)}
+                mostrarLinkCaixa={false}
               />
             );
           })}

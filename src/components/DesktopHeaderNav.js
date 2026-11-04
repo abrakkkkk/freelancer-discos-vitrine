@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiShoppingBag } from 'react-icons/fi';
+import { FiShare2, FiShoppingBag } from 'react-icons/fi';
 import { PiVinylRecord } from 'react-icons/pi';
 import { MdStorefront } from 'react-icons/md';
 import { useCart } from './CartProvider';
@@ -11,6 +11,7 @@ export default function DesktopHeaderNav() {
   const pathname = usePathname();
   const isCatalogo = pathname === '/' || pathname.startsWith('/catalogo');
   const isLojas = pathname.startsWith('/lojas');
+  const isCompartilhar = pathname.startsWith('/compartilhar');
   const { quantidade, abrir } = useCart();
 
   return (
@@ -31,6 +32,15 @@ export default function DesktopHeaderNav() {
       >
         <MdStorefront size={18} />
         <span>Lojas & Caixas</span>
+      </Link>
+
+      <Link
+        href="/compartilhar"
+        aria-current={isCompartilhar ? 'page' : undefined}
+        className={`desktopNavLink ${isCompartilhar ? 'desktopNavLinkActive' : ''}`}
+      >
+        <FiShare2 size={17} />
+        <span>Compartilhar</span>
       </Link>
 
       <button

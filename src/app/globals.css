@@ -285,7 +285,7 @@ input[type='search']::-webkit-search-cancel-button {
   max-width: 100%;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
   color: #ffffff;
@@ -307,16 +307,262 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: var(--accent);
 }
 
-.badgeLoja1 {
-  background-color: var(--loja-1);
+/* Localização no card: caixa em destaque e loja ao lado, sem parecer botão. */
+.cardLocal {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin-top: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
-.badgeLoja2 {
-  background-color: var(--loja-2);
+.cardLocalCaixa {
+  font-weight: 700;
+  color: #ffffff;
 }
 
-.badgeAnexo {
-  background-color: var(--loja-anexo);
+.cardLocalLoja {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.cardLocalPonto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* O link da caixa fica acima da área clicável do card e ganha área de toque de 44px. */
+.productCard .cardLocalLink {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+}
+
+.cardLocalLink::after {
+  content: '';
+  position: absolute;
+  inset: -14px -6px;
+}
+
+.cardLocalLink:focus-visible {
+  border-radius: 4px;
+}
+
+@media (hover: hover) {
+  .cardLocalLink:hover .cardLocalCaixa {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* Filtros recolhidos no celular; no computador ficam sempre à vista. */
+.filtrosBtn {
+  min-height: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filtrosBtnAtivo {
+  border-color: var(--accent);
+}
+
+.filtrosBtnContagem {
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background-color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.filtrosPainel {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.filtrosPainelAberto {
+  display: grid;
+}
+
+@media (min-width: 769px) {
+  .filtrosBtn {
+    display: none;
+  }
+
+  .filtrosPainel {
+    display: grid;
+  }
+}
+
+/* Busca com resultados em outros formatos */
+.outrosFormatos {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin: -2px 0 12px;
+  padding: 0 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.semResultados .outrosFormatos {
+  justify-content: center;
+  margin: 14px 0 0;
+}
+
+.semResultados {
+  padding: 40px 16px;
+  text-align: center;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.semResultadosTitulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.semResultadosDica {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.cartCampo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* Avisos da sacola: sólidos, ficam até o cliente agir ou fechar. */
+.cartAviso {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.cartAvisoDesfazer {
+  background-color: #27272a;
+}
+
+.cartAvisoVendido {
+  align-items: flex-start;
+  background-color: #7c4a12;
+  padding-top: 10px;
+}
+
+.cartAvisoBtn {
+  min-height: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: #3f3f46;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cartAvisoBtn:hover {
+  background-color: #52525b;
+}
+
+.cartAvisoVendido .cartAvisoBtn {
+  background-color: #5c360c;
+}
+
+.cartAvisoFechar {
+  width: 44px;
+  padding: 0;
+  justify-content: center;
+}
+
+/* Capa do detalhe: o maior elemento da folha, sem passar de metade da tela. */
+.sheetCapa {
+  width: min(100%, 44dvh, 360px);
+  margin: 0 auto;
+}
+
+.sheetCapa > div {
+  border-radius: var(--radius-md);
+}
+
+/* Botão de adicionar preso no fim da folha, com o mesmo fundo dela. */
+.sheetAcao {
+  position: sticky;
+  bottom: calc(-1 * (env(safe-area-inset-bottom, 16px) + 16px));
+  margin-top: 12px;
+  margin-bottom: calc(-1 * (env(safe-area-inset-bottom, 16px) + 16px));
+  padding: 12px 0 calc(env(safe-area-inset-bottom, 16px) + 16px);
+  background-color: #18181c;
+  border-top: 1px solid var(--border);
+}
+
+/* Localização no detalhe: a primeira informação depois do preço. */
+.sheetLocal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.sheetLocalCaixa {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.sheetLocalLoja {
+  font-size: 13.5px;
+  color: var(--text-muted);
 }
 
 /* Faixa lateral com a cor da loja (cards de /lojas) */
@@ -669,7 +915,7 @@ input[type='search']::-webkit-search-cancel-button {
   .storeHeader {
     display: flex;
     align-items: center;
-    justifyContent: space-between;
+    justify-content: space-between;
     gap: 16px;
     margin-bottom: 20px;
     padding-bottom: 16px;
@@ -790,6 +1036,12 @@ input[type='search']::-webkit-search-cancel-button {
     padding: 24px;
     padding-bottom: 24px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  }
+
+  .productDetailDialog .sheetAcao {
+    bottom: -24px;
+    margin-bottom: -24px;
+    padding-bottom: 24px;
   }
 
   /* Drawer da Sacola Lateral Direita no Desktop */

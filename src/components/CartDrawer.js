@@ -1,11 +1,11 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
 import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
 import { useModalDialog } from '@/hooks/useModalDialog';
-import { FiX, FiTrash2, FiInfo } from 'react-icons/fi';
+import { FiX, FiTrash2, FiInfo, FiRotateCcw } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
 const FORMAT_SHORT = {
@@ -27,10 +27,43 @@ export default function CartDrawer({
   const [bairro, setBairro] = useState('');
   const [validando, setValidando] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  // Última remoção feita pelo cliente, com a sacola de antes, para o botão "Desfazer".
+  const [desfazer, setDesfazer] = useState(null);
   const panelRef = useRef(null);
   useModalDialog(isOpen, onClose, panelRef);
 
+  // Avisos valem só para a sacola aberta: ao reabrir, começa sem eles.
+  useEffect(() => {
+    if (!isOpen) {
+      setDesfazer(null);
+      setFeedback(null);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  const removerComDesfazer = (texto, acao) => {
+    setDesfazer({ texto, itensAntes: itens });
+    setFeedback(null);
+    acao();
+  };
+
+  const handleLimpar = () => {
+    const qtd = itens.length;
+    removerComDesfazer(
+      `${qtd} ${qtd === 1 ? 'item removido' : 'itens removidos'} da sacola.`,
+      onClearCart
+    );
+  };
+
+  const handleRemover = (item, itemKey) => {
+    removerComDesfazer(`"${item.titulo}" saiu da sacola.`, () => onRemoveItem && onRemoveItem(itemKey));
+  };
+
+  const handleDesfazer = () => {
+    if (desfazer && onReplaceCart) onReplaceCart(desfazer.itensAntes);
+    setDesfazer(null);
+  };
 
   const total = itens.reduce((acc, item) => acc + (Number(item.preco) || 0), 0);
   const totalFmt = total.toLocaleString('pt-BR', {
@@ -76,24 +109,25 @@ export default function CartDrawer({
           indisponiveisKeys.size > 0 ? indisponiveisKeys.size : indisponiveisIds.size;
 
         if (qtdIndisponiveis > 0) {
-          const restantes = itens.filter((i) => {
-            const key = getCartItemKey(i);
-            if (indisponiveisKeys.size > 0) {
-              return !indisponiveisKeys.has(key);
-            }
-            return !indisponiveisIds.has(i.id);
-          });
+          const disponivel = (i) =>
+            indisponiveisKeys.size > 0
+              ? !indisponiveisKeys.has(getCartItemKey(i))
+              : !indisponiveisIds.has(i.id);
+          const restantes = itens.filter(disponivel);
+          const removidos = itens.filter((i) => !disponivel(i));
           if (onReplaceCart) onReplaceCart(restantes);
 
+          // O aviso fica até o cliente fechar: ele precisa saber quais discos saíram.
+          setDesfazer(null);
           setFeedback({
             tipo: 'aviso',
-            texto: `${qtdIndisponiveis} ${qtdIndisponiveis === 1 ? 'item indisponível foi removido' : 'itens indisponíveis foram removidos'} da sua sacola.`,
+            texto:
+              removidos.length === 1
+                ? 'Este item não está mais disponível e saiu da sacola:'
+                : `Estes ${removidos.length} itens não estão mais disponíveis e saíram da sacola:`,
+            titulos: removidos.map((i) => [i.artista, i.titulo].filter(Boolean).join(' - ')),
           });
           setValidando(false);
-
-          setTimeout(() => {
-            setFeedback(null);
-          }, 5000);
           return;
         }
       }
@@ -162,7 +196,7 @@ export default function CartDrawer({
             {itens.length > 1 && onClearCart && (
               <button
                 type="button"
-                onClick={onClearCart}
+                onClick={handleLimpar}
                 className="textBtn"
               >
                 Limpar
@@ -191,22 +225,41 @@ export default function CartDrawer({
           </div>
         </div>
 
-        {/* Feedback / Aviso */}
-        {feedback && (
-          <div
-            style={{
-              marginTop: '12px',
-              padding: '10px 14px',
-              backgroundColor: '#7c4a12',
-              borderRadius: '8px',
-              color: '#ffffff',
-              fontSize: '13px',
-              fontWeight: 500,
-            }}
-          >
-            {feedback.texto}
-          </div>
-        )}
+        {/* Avisos: remoção com desfazer e itens que já foram vendidos */}
+        <div role="status" aria-live="polite">
+          {desfazer && (
+            <div className="cartAviso cartAvisoDesfazer">
+              <span style={{ flex: 1, minWidth: 0, overflowWrap: 'anywhere' }}>{desfazer.texto}</span>
+              <button type="button" onClick={handleDesfazer} className="cartAvisoBtn">
+                <FiRotateCcw size={15} aria-hidden="true" />
+                Desfazer
+              </button>
+            </div>
+          )}
+
+          {feedback && (
+            <div className="cartAviso cartAvisoVendido">
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontWeight: 600 }}>{feedback.texto}</p>
+                {feedback.titulos?.length > 0 && (
+                  <ul style={{ marginTop: '4px', paddingLeft: '18px', overflowWrap: 'anywhere' }}>
+                    {feedback.titulos.map((t, idx) => (
+                      <li key={`${t}-${idx}`}>{t}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setFeedback(null)}
+                aria-label="Fechar aviso"
+                className="cartAvisoBtn cartAvisoFechar"
+              >
+                <FiX size={16} aria-hidden="true" />
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Lista de Itens */}
         <div
@@ -265,7 +318,7 @@ export default function CartDrawer({
                     {item.artista && (
                       <p
                         style={{
-                          fontSize: '10.5px',
+                          fontSize: '12px',
                           color: '#a1a1aa',
                           fontWeight: 700,
                           textTransform: 'uppercase',
@@ -277,7 +330,7 @@ export default function CartDrawer({
                         {item.artista}
                       </p>
                     )}
-                    <h4
+                    <h3
                       style={{
                         fontSize: '13.5px',
                         fontWeight: 700,
@@ -288,7 +341,7 @@ export default function CartDrawer({
                       }}
                     >
                       {item.titulo}
-                    </h4>
+                    </h3>
                     <span className="tabularNums" style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
                       {fmtTag} · {item.loja} · {rotuloCaixa}
                     </span>
@@ -308,7 +361,7 @@ export default function CartDrawer({
 
                     <button
                       type="button"
-                      onClick={() => onRemoveItem && onRemoveItem(itemKey)}
+                      onClick={() => handleRemover(item, itemKey)}
                       aria-label={`Remover ${item.titulo} da sacola`}
                       style={{
                         width: '44px',
@@ -343,23 +396,30 @@ export default function CartDrawer({
               gap: '10px',
             }}
           >
+            {/* Rótulos visíveis: o texto de exemplo some quando o cliente começa a digitar. */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-              <input
-                type="text"
-                placeholder="Nome (opcional)"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                className="fieldInput"
-                style={{ padding: '0 12px' }}
-              />
-              <input
-                type="text"
-                placeholder="Bairro (opcional)"
-                value={bairro}
-                onChange={(e) => setBairro(e.target.value)}
-                className="fieldInput"
-                style={{ padding: '0 12px' }}
-              />
+              <label className="cartCampo">
+                <span>Seu nome (opcional)</span>
+                <input
+                  type="text"
+                  autoComplete="name"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="fieldInput"
+                  style={{ padding: '0 12px' }}
+                />
+              </label>
+              <label className="cartCampo">
+                <span>Bairro (opcional)</span>
+                <input
+                  type="text"
+                  autoComplete="address-level3"
+                  value={bairro}
+                  onChange={(e) => setBairro(e.target.value)}
+                  className="fieldInput"
+                  style={{ padding: '0 12px' }}
+                />
+              </label>
             </div>
 
             {/* Aviso de disponibilidade (estoque físico) */}
@@ -380,8 +440,8 @@ export default function CartDrawer({
             >
               <FiInfo size={15} style={{ flexShrink: 0, marginTop: '2px', color: '#d4a373' }} />
               <span>
-                Alguns discos podem ter sido vendidos na loja física. A disponibilidade será
-                confirmada pelo WhatsApp.
+                O WhatsApp abre com a lista pronta. Você envia, e a loja confirma se os discos
+                ainda estão disponíveis.
               </span>
             </div>
 

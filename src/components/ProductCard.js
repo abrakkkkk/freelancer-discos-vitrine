@@ -1,8 +1,36 @@
 'use client';
 
+import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
-import { FiCheck, FiPlus } from 'react-icons/fi';
+import { hrefDaCaixa } from '@/utils/lojas';
+import { FiArchive, FiCheck, FiPlus } from 'react-icons/fi';
+
+function CardLocal({ href, caixa, loja, corLoja }) {
+  const conteudo = (
+    <>
+      <FiArchive size={15} aria-hidden="true" style={{ flexShrink: 0, color: '#d4d4d8' }} />
+      {caixa && <span className="cardLocalCaixa">{caixa}</span>}
+      {loja && (
+        <span className="cardLocalLoja">
+          <span className="cardLocalPonto" style={{ backgroundColor: corLoja }} aria-hidden="true" />
+          {loja}
+        </span>
+      )}
+    </>
+  );
+
+  if (!href) return <p className="cardLocal tabularNums">{conteudo}</p>;
+  return (
+    <Link
+      href={href}
+      className="cardLocal cardLocalLink tabularNums"
+      aria-label={`Ver tudo da ${caixa || 'caixa'}${loja ? `, ${loja}` : ''}`}
+    >
+      {conteudo}
+    </Link>
+  );
+}
 
 export default function ProductCard({
   item,
@@ -10,6 +38,7 @@ export default function ProductCard({
   onOpenDetail,
   onAddToCart,
   isInCart = false,
+  mostrarLinkCaixa = true,
 }) {
   const precoFormatado = Number(item.preco || 0).toLocaleString('pt-BR', {
     style: 'currency',
@@ -17,17 +46,16 @@ export default function ProductCard({
   });
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
-  const localizacao = [item.loja, rotuloCaixa !== '—' ? rotuloCaixa : null]
-    .filter(Boolean)
-    .join(' · ');
-  const lojaBadgeClass =
-    item.loja === 'Anexo' || /anexo/i.test(localizacao)
-      ? 'badgeAnexo'
-      : item.loja === 'Loja 2'
-        ? 'badgeLoja2'
-        : item.loja === 'Loja 1'
-          ? 'badgeLoja1'
-          : '';
+  const temCaixa = rotuloCaixa !== '—';
+  const caixaHref = mostrarLinkCaixa ? hrefDaCaixa(item.loja, item.caixa) : null;
+  const corLoja =
+    item.loja === 'Loja 2'
+      ? 'var(--loja-2)'
+      : item.loja === 'Loja 1'
+        ? 'var(--loja-1)'
+        : /anexo/i.test(`${item.loja || ''} ${item.caixa || ''}`)
+          ? 'var(--loja-anexo)'
+          : 'var(--badge-neutral)';
 
   const recordLabel = extractRecordLabel(item.observacao);
   const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
@@ -88,10 +116,17 @@ export default function ProductCard({
           </button>
         </h2>
 
+        {/* Onde o disco está: é o que a vitrine tem de diferente, então vem antes das etiquetas. */}
+        {(temCaixa || item.loja) && (
+          <CardLocal
+            href={caixaHref}
+            caixa={temCaixa ? rotuloCaixa : null}
+            loja={item.loja}
+            corLoja={corLoja}
+          />
+        )}
+
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
-          {localizacao && (
-            <span className={`badge ${lojaBadgeClass} tabularNums`}>{localizacao}</span>
-          )}
           {recordLabel && (
             <span className="badge badgeLabel tabularNums" title={`Selo: ${recordLabel}`}>
               {recordLabel}

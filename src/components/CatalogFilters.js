@@ -1,6 +1,17 @@
 'use client';
 
-import { FiSearch, FiX } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiSearch, FiSliders, FiX } from 'react-icons/fi';
+
+// Curto para caber ao lado do botão Filtros; o formato buscado é o da aba aberta.
+const PLACEHOLDER_BUSCA = {
+  discos: 'Artista ou álbum',
+  cds: 'Artista ou álbum',
+  dvds: 'Título do filme',
+  vhs: 'Título do filme',
+};
+
+const NOME_FORMATO = { discos: 'discos', cds: 'CDs', dvds: 'DVDs', vhs: 'fitas VHS' };
 
 const ORDENACAO_LABELS = {
   preco_asc: 'Menor preço',
@@ -22,6 +33,7 @@ export default function CatalogFilters({
   tipo = 'discos',
 }) {
   const isVideo = tipo === 'dvds' || tipo === 'vhs';
+  const [aberto, setAberto] = useState(false);
 
   const caixaSelecionadaObj = caixas.find((c) => String(c.caixa) === String(caixa));
   const labelCaixaAtiva = caixaSelecionadaObj ? caixaSelecionadaObj.label : `Caixa ${caixa}`;
@@ -38,8 +50,9 @@ export default function CatalogFilters({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {/* Campo de Busca */}
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+      {/* Busca e botão Filtros na mesma linha: no celular, loja, caixa e ordem ficam recolhidos. */}
+      <div style={{ display: 'flex', gap: '6px' }}>
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
         <FiSearch
           size={18}
           color="#8a8a93"
@@ -49,8 +62,8 @@ export default function CatalogFilters({
           type="search"
           value={busca}
           onChange={(e) => onBuscaChange(e.target.value)}
-          placeholder={isVideo ? 'Buscar por título' : 'Buscar artista, álbum ou selo'}
-          aria-label="Buscar no catálogo"
+          placeholder={PLACEHOLDER_BUSCA[tipo] || PLACEHOLDER_BUSCA.discos}
+          aria-label={`Buscar em ${NOME_FORMATO[tipo] || NOME_FORMATO.discos}`}
           className="fieldInput"
         />
         {busca && (
@@ -65,14 +78,25 @@ export default function CatalogFilters({
         )}
       </div>
 
+        <button
+          type="button"
+          className={`filtrosBtn ${chipsCount > 0 ? 'filtrosBtnAtivo' : ''}`}
+          aria-expanded={aberto}
+          aria-controls="painel-filtros"
+          onClick={() => setAberto((v) => !v)}
+        >
+          <FiSliders size={17} aria-hidden="true" />
+          <span>Filtros</span>
+          {chipsCount > 0 && (
+            <span className="filtrosBtnContagem tabularNums" aria-label={`${chipsCount} ativos`}>
+              {chipsCount}
+            </span>
+          )}
+        </button>
+      </div>
+
       {/* Seletores: Loja, Caixa, Ordenação */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-          gap: '6px',
-        }}
-      >
+      <div id="painel-filtros" className={`filtrosPainel ${aberto ? 'filtrosPainelAberto' : ''}`}>
         <select
           value={loja}
           onChange={(e) => {

@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import CategoryTabs from '@/components/CategoryTabs';
+import CategoryTabs, { CATEGORIES } from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
 import ProductCard from '@/components/ProductCard';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
@@ -30,6 +30,71 @@ export default function CatalogoPage() {
     <Suspense fallback={<CatalogoCarregando />}>
       <Catalogo />
     </Suspense>
+  );
+}
+
+function OutrosFormatos({ formatos, onEscolher }) {
+  if (!formatos.length) return null;
+  return (
+    <div className="outrosFormatos">
+      <span>Também tem em</span>
+      {formatos.map((f) => (
+        <button key={f.id} type="button" className="filterChip tabularNums" onClick={() => onEscolher(f.id)}>
+          <span>
+            {f.label} ({f.total.toLocaleString('pt-BR')})
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function SemResultados({
+  busca,
+  formato,
+  temFiltros,
+  outrosFormatos,
+  onLimparBusca,
+  onLimparFiltros,
+  onEscolherFormato,
+}) {
+  const titulo = busca
+    ? `Nada encontrado para “${busca}” em ${formato}`
+    : temFiltros
+      ? `Nenhum item em ${formato} com estes filtros`
+      : `Nenhum item em ${formato} no momento`;
+  const dica = outrosFormatos.length
+    ? 'Essa busca tem resultados em outro formato.'
+    : busca && temFiltros
+      ? 'Confira a grafia ou tire os filtros de loja e caixa.'
+      : busca
+        ? 'Confira a grafia ou busque só pelo nome do artista.'
+        : temFiltros
+          ? 'Tire os filtros de loja e caixa para ver mais itens.'
+          : 'Veja os outros formatos nas abas acima.';
+
+  return (
+    <div className="semResultados">
+      <p className="semResultadosTitulo">{titulo}</p>
+      <p className="semResultadosDica">{dica}</p>
+
+      <OutrosFormatos formatos={outrosFormatos} onEscolher={onEscolherFormato} />
+
+      {(busca || temFiltros) && (
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+          {busca && (
+            <button type="button" className="textBtn" onClick={onLimparBusca}>
+              Limpar busca
+            </button>
+          )}
+          {temFiltros && (
+            <button type="button" className="textBtn" onClick={onLimparFiltros}>
+              Limpar filtros
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -279,6 +344,32 @@ function Catalogo() {
     loadCatalogo(false);
   }, [loadCatalogo]);
 
+  // Com busca, conta quantos resultados a mesma busca tem nos outros formatos: a busca só
+  // olha a aba aberta, e quem procura "caetano" em Discos não sabe que há CDs dele.
+  const [outrosFormatos, setOutrosFormatos] = useState([]);
+  useEffect(() => {
+    setOutrosFormatos([]);
+    if (!debouncedBusca) return;
+
+    const controller = new AbortController();
+    const outras = CATEGORIES.filter((c) => c.id !== categoria);
+    Promise.all(
+      outras.map(async (c) => {
+        const params = new URLSearchParams({ categoria: c.id, pagina: '1', loja, busca: debouncedBusca });
+        const res = await fetch(`/api/catalogo?${params.toString()}`, { signal: controller.signal });
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data.total > 0 ? { id: c.id, label: c.label, total: data.total } : null;
+      })
+    )
+      .then((lista) => {
+        if (!controller.signal.aborted) setOutrosFormatos(lista.filter(Boolean));
+      })
+      // Contagem é um extra: se falhar, a busca principal segue normal.
+      .catch(() => {});
+    return () => controller.abort();
+  }, [debouncedBusca, categoria, loja]);
+
   const handleTabChange = (novaCategoria) => {
     setCategoria(novaCategoria);
     setPagina(1);
@@ -359,6 +450,10 @@ function Catalogo() {
         )}
       </p>
 
+      {!loading && !erro && itens.length > 0 && (
+        <OutrosFormatos formatos={outrosFormatos} onEscolher={handleTabChange} />
+      )}
+
       {/* Erro */}
       {erro && (
         <div
@@ -406,22 +501,18 @@ function Catalogo() {
           ))}
         </div>
       ) : itens.length === 0 ? (
-        <div
-          style={{
-            padding: '48px 16px',
-            textAlign: 'center',
-            backgroundColor: '#151518',
-            border: '1px solid #232328',
-            borderRadius: '12px',
+        <SemResultados
+          busca={debouncedBusca}
+          formato={CATEGORIES.find((c) => c.id === categoria)?.label || 'Discos'}
+          temFiltros={Boolean(loja || caixa)}
+          outrosFormatos={outrosFormatos}
+          onLimparBusca={() => handleBuscaChange('')}
+          onLimparFiltros={() => {
+            handleLojaChange('');
+            handleCaixaChange('');
           }}
-        >
-          <p style={{ fontSize: '15px', color: '#e4e4e7', fontWeight: 600 }}>
-            Nenhum item encontrado
-          </p>
-          <p style={{ fontSize: '13px', color: 'var(--text-dim)', marginTop: '4px' }}>
-            Tente buscar com outros termos ou limpar os filtros de loja e caixa.
-          </p>
-        </div>
+          onEscolherFormato={handleTabChange}
+        />
       ) : (
         <div className="catalogGrid">
           {itens.map((item) => {

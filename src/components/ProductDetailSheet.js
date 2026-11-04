@@ -5,7 +5,8 @@ import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
-import { FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
+import { hrefDaCaixa } from '@/utils/lojas';
+import { FiArchive, FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
 
 const FORMAT_NAMES = {
   discos: 'Vinil (LP)',
@@ -40,11 +41,21 @@ export default function ProductDetailSheet({
     ? String(item.observacao).replace(/\[[^\]]+\]/g, '').trim()
     : '';
 
-  const lojaSlug = item.loja === 'Loja 1' ? 'loja-1' : item.loja === 'Loja 2' ? 'loja-2' : null;
-  const caixaHref =
-    lojaSlug && item.caixa
-      ? `/lojas/${lojaSlug}/${encodeURIComponent(String(item.caixa).trim())}`
-      : null;
+  const caixaHref = hrefDaCaixa(item.loja, item.caixa);
+  const temCaixa = rotuloCaixa !== '—';
+  const localConteudo = (
+    <>
+      <FiArchive size={22} aria-hidden="true" style={{ flexShrink: 0, color: '#d4d4d8' }} />
+      <span style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
+        <span className="sheetLocalCaixa">{temCaixa ? rotuloCaixa : 'Caixa não informada'}</span>
+        <span className="sheetLocalLoja">
+          {item.loja || 'Loja física'}
+          {caixaHref ? ' · ver tudo desta caixa' : ''}
+        </span>
+      </span>
+      {caixaHref && <FiChevronRight size={20} color="#a1a1aa" aria-hidden="true" />}
+    </>
+  );
 
   return (
     <div className="productDetailBackdrop">
@@ -71,6 +82,8 @@ export default function ProductDetailSheet({
             position: 'absolute',
             top: '10px',
             right: '10px',
+            // Fica sobre a capa, que agora ocupa o topo da folha.
+            zIndex: 2,
             width: '44px',
             height: '44px',
             borderRadius: '8px',
@@ -86,19 +99,22 @@ export default function ProductDetailSheet({
           <FiX size={19} />
         </button>
 
-        {/* Capa + Títulos + Preço */}
-        <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', paddingRight: '44px' }}>
+        {/* Capa grande primeiro: é o momento em que o cliente se interessou pelo disco. */}
+        <div className="sheetCapa">
           <AlbumCover
             id={item.id}
             artista={item.artista}
             titulo={item.titulo}
             ano={item.ano}
             capaUrl={item.capa_url}
-            size={112}
+            fluid
             tipo={tipo}
           />
+        </div>
 
-          <div style={{ minWidth: 0, paddingTop: '2px' }}>
+        {/* Títulos + Preço */}
+        <div style={{ marginTop: '14px' }}>
+          <div style={{ minWidth: 0 }}>
             {item.artista && (
               <p
                 style={{
@@ -114,11 +130,12 @@ export default function ProductDetailSheet({
             )}
             <h2
               style={{
-                fontSize: '18px',
+                fontSize: '21px',
                 fontWeight: 700,
                 color: '#ffffff',
-                lineHeight: 1.25,
+                lineHeight: 1.2,
                 marginTop: '2px',
+                overflowWrap: 'anywhere',
               }}
             >
               {item.titulo}
@@ -132,17 +149,30 @@ export default function ProductDetailSheet({
           </div>
         </div>
 
+        {/* Onde está: logo abaixo do preço e maior que a ficha, porque é o que o cliente procura. */}
+        {caixaHref ? (
+          <Link
+            href={caixaHref}
+            className="sheetLocal tabularNums"
+            aria-label={`${temCaixa ? rotuloCaixa : 'Caixa'}, ${item.loja}. Ver tudo desta caixa`}
+            onClick={(e) => {
+              // Ctrl/Cmd+clique (nova aba) segue o comportamento normal do link.
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+              e.preventDefault();
+              fecharENavegar(caixaHref);
+            }}
+          >
+            {localConteudo}
+          </Link>
+        ) : (
+          <p className="sheetLocal tabularNums">{localConteudo}</p>
+        )}
+
         {/* Ficha técnica: linhas com divisória, sem caixas aninhadas */}
-        <dl className="specList tabularNums" style={{ marginTop: '16px', borderTop: '1px solid #232328' }}>
+        <dl className="specList tabularNums">
           <div className="specRow">
             <dt>Formato</dt>
             <dd>{FORMAT_NAMES[tipo] || 'Disco'}</dd>
-          </div>
-          <div className="specRow">
-            <dt>Onde está</dt>
-            <dd>
-              {item.loja || 'Loja física'} · {rotuloCaixa}
-            </dd>
           </div>
           {recordLabel && (
             <div className="specRow">
@@ -164,39 +194,14 @@ export default function ProductDetailSheet({
           )}
         </dl>
 
-        {caixaHref && (
-          <Link
-            href={caixaHref}
-            onClick={(e) => {
-              // Ctrl/Cmd+clique (nova aba) segue o comportamento normal do link.
-              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-              e.preventDefault();
-              fecharENavegar(caixaHref);
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '12px 0',
-              borderTop: '1px solid #232328',
-              color: '#e4e4e7',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-            }}
-          >
-            <span>Ver tudo da {rotuloCaixa}</span>
-            <FiChevronRight size={18} color="#a1a1aa" />
-          </Link>
-        )}
-
+        {/* O botão fica preso no fim da folha: com a capa grande, a ficha pode precisar rolar. */}
+        <div className="sheetAcao">
         <button
           type="button"
           onClick={() => {
             if (onAddToCart) onAddToCart(item);
           }}
           style={{
-            marginTop: '12px',
             width: '100%',
             minHeight: '48px',
             borderRadius: '10px',
@@ -215,6 +220,7 @@ export default function ProductDetailSheet({
           {isInCart ? <FiCheck size={18} /> : <FiShoppingBag size={18} />}
           <span>{isInCart ? 'Na sacola — abrir sacola' : 'Adicionar à sacola'}</span>
         </button>
+        </div>
       </div>
     </div>
   );
