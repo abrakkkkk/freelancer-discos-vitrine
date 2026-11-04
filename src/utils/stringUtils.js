@@ -71,6 +71,46 @@ export function extractSearchTokens(queryStr) {
   };
 }
 
+/** Distância de edição (Levenshtein) entre duas palavras; para cedo acima de `maximo`. */
+export function distanciaEdicao(a, b, maximo = Infinity) {
+  if (a === b) return 0;
+  if (Math.abs(a.length - b.length) > maximo) return maximo + 1;
+  let anterior = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const atual = [i];
+    let menorDaLinha = i;
+    for (let j = 1; j <= b.length; j++) {
+      const custo = a[i - 1] === b[j - 1] ? 0 : 1;
+      atual[j] = Math.min(anterior[j] + 1, atual[j - 1] + 1, anterior[j - 1] + custo);
+      if (atual[j] < menorDaLinha) menorDaLinha = atual[j];
+    }
+    if (menorDaLinha > maximo) return maximo + 1;
+    anterior = atual;
+  }
+  return anterior[b.length];
+}
+
+/** Quantas letras erradas uma palavra da busca aceita: nenhuma em palavras curtas. */
+export function toleranciaDigitacao(palavra) {
+  if (palavra.length >= 7) return 2;
+  if (palavra.length >= 4) return 1;
+  return 0;
+}
+
+/**
+ * A palavra da busca aparece no texto, exata ou com até `toleranciaDigitacao` letras
+ * trocadas, faltando ou sobrando ("beatls" acha "beatles"). Texto já sem acentos.
+ */
+export function palavraParecida(palavra, texto) {
+  if (!palavra) return false;
+  if (texto.includes(palavra)) return true;
+  const limite = toleranciaDigitacao(palavra);
+  if (!limite) return false;
+  return texto
+    .split(/[^a-z0-9]+/)
+    .some((t) => t.length >= 3 && distanciaEdicao(t, palavra, limite) <= limite);
+}
+
 export function calculateItemRelevance(item, allWords = [], effectiveWords = [], isVideo = false) {
   if (!item) return 0;
   let score = 0;

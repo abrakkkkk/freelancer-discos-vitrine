@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { removeAcentos, formatCaixa, extractSearchTokens, extractRecordLabel } from '../src/utils/stringUtils';
+import {
+  removeAcentos,
+  formatCaixa,
+  extractSearchTokens,
+  extractRecordLabel,
+  distanciaEdicao,
+  palavraParecida,
+} from '../src/utils/stringUtils';
 
 describe('stringUtils', () => {
   it('remove acentos corretamente', () => {
@@ -30,5 +37,21 @@ describe('stringUtils', () => {
     expect(extractRecordLabel('[1992]')).toBe(null);
     expect(extractRecordLabel('Apenas observação sem colchetes')).toBe(null);
     expect(extractRecordLabel('')).toBe(null);
+  });
+
+  it('mede a distância de edição entre palavras', () => {
+    expect(distanciaEdicao('beatls', 'beatles')).toBe(1);
+    expect(distanciaEdicao('caetano', 'caetano')).toBe(0);
+    expect(distanciaEdicao('roberto', 'robreto')).toBe(2);
+    expect(distanciaEdicao('abc', 'xyzxyz', 1)).toBe(2);
+  });
+
+  it('aceita erro de digitação só em palavras com 4 letras ou mais', () => {
+    expect(palavraParecida('beatls', 'the beatles abbey road')).toBe(true);
+    expect(palavraParecida('cetano', 'caetano veloso joia')).toBe(true);
+    expect(palavraParecida('elvis', 'elvis presley')).toBe(true);
+    expect(palavraParecida('ab', 'abbey road')).toBe(true);
+    expect(palavraParecida('bel', 'beatles')).toBe(false);
+    expect(palavraParecida('queen', 'madonna true blue')).toBe(false);
   });
 });
