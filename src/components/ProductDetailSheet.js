@@ -22,6 +22,8 @@ export default function ProductDetailSheet({
   onAddToCart,
   isInCart = false,
   tipo = 'discos',
+  // Na página da própria caixa, o bloco de localização não leva a lugar nenhum.
+  linkCaixa = true,
 }) {
   const dialogRef = useRef(null);
   const fecharENavegar = useModalDialog(isOpen && Boolean(item), onClose, dialogRef);
@@ -41,7 +43,7 @@ export default function ProductDetailSheet({
     ? String(item.observacao).replace(/\[[^\]]+\]/g, '').trim()
     : '';
 
-  const caixaHref = hrefDaCaixa(item.loja, item.caixa);
+  const caixaHref = linkCaixa ? hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true }) : null;
   const temCaixa = rotuloCaixa !== '—';
   const localConteudo = (
     <>

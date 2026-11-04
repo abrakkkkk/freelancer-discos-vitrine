@@ -1,12 +1,11 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { FiArrowLeft } from 'react-icons/fi';
 import { supabaseServer } from '@/lib/supabaseServer';
 import { aplicarFiltroCaixaNaQuery } from '@/services/catalogService';
 import { caixaService } from '@/services/caixaService';
 import { chaveCaixa } from '@/utils/caixaUtils';
 import CaixaItemsClient from '@/components/CaixaItemsClient';
 import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import VoltarDaCaixa from '@/components/VoltarDaCaixa';
 import { formatCaixa } from '@/utils/stringUtils';
 import { nomeLojaPorSlug } from '@/utils/lojas';
 
@@ -83,9 +82,7 @@ export default async function CaixaDetalhePage({ params }) {
     <div className="pageContainer">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <Link href={`/lojas/${lojaSlug}`} aria-label={`Voltar para ${nomeLoja}`} className="headerBackBtn">
-            <FiArrowLeft size={19} />
-          </Link>
+          <VoltarDaCaixa lojaHref={`/lojas/${lojaSlug}`} nomeLoja={nomeLoja} />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">{rotuloCaixa}</h1>
             <p className="headerSubtitle tabularNums">

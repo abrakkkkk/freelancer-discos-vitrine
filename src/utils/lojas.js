@@ -9,9 +9,13 @@ export function nomeLojaPorSlug(slug) {
   return LOJAS_POR_SLUG[slug] || null;
 }
 
-/** Endereço da página da caixa do item, ou null quando a loja não tem página própria. */
-export function hrefDaCaixa(loja, caixa) {
+/**
+ * Endereço da página da caixa do item, ou null quando a loja não tem página própria.
+ * Vindo do catálogo, marca `?de=catalogo` para a seta da caixa voltar à busca.
+ */
+export function hrefDaCaixa(loja, caixa, { doCatalogo = false } = {}) {
   const slug = Object.keys(LOJAS_POR_SLUG).find((s) => LOJAS_POR_SLUG[s] === loja);
   const valor = String(caixa ?? '').trim();
-  return slug && valor ? `/lojas/${slug}/${encodeURIComponent(valor)}` : null;
+  if (!slug || !valor) return null;
+  return `/lojas/${slug}/${encodeURIComponent(valor)}${doCatalogo ? '?de=catalogo' : ''}`;
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { FiCheck } from 'react-icons/fi';
 import CartDrawer from './CartDrawer';
 import { getCartItemKey } from '@/utils/cartUtils';
 
@@ -53,16 +54,31 @@ export function CartProvider({ children }) {
   const abrir = useCallback(() => setAberta(true), []);
   const fechar = useCallback(() => setAberta(false), []);
 
+  // Confirmação curta de "adicionado": some sozinha depois de alguns segundos.
+  const [aviso, setAviso] = useState(null);
+  const timerAviso = useRef(null);
+  useEffect(() => () => clearTimeout(timerAviso.current), []);
+
   // Item que já está na sacola: abre a sacola em vez de duplicar.
   const adicionar = useCallback((item) => {
     const chave = getCartItemKey(item);
     if (itensRef.current.some((i) => getCartItemKey(i) === chave)) {
+      setAviso(null);
       setAberta(true);
       return;
     }
     setItens((atuais) =>
       atuais.some((i) => getCartItemKey(i) === chave) ? atuais : [...atuais, item]
     );
+    setAviso({ titulo: item.titulo, id: Date.now() });
+    clearTimeout(timerAviso.current);
+    timerAviso.current = setTimeout(() => setAviso(null), 3500);
+  }, []);
+
+  const abrirPeloAviso = useCallback(() => {
+    clearTimeout(timerAviso.current);
+    setAviso(null);
+    setAberta(true);
   }, []);
 
   const remover = useCallback((idOuChave) => {
@@ -89,6 +105,20 @@ export function CartProvider({ children }) {
   return (
     <CartContext.Provider value={valor}>
       {children}
+      <div className="sacolaAvisoArea" role="status" aria-live="polite">
+        {aviso && !aberta && (
+          <div key={aviso.id} className="sacolaAviso">
+            <FiCheck size={17} aria-hidden="true" style={{ flexShrink: 0 }} />
+            <span className="sacolaAvisoTexto">
+              <strong>Adicionado à sacola</strong>
+              <span>{aviso.titulo}</span>
+            </span>
+            <button type="button" className="sacolaAvisoBtn tabularNums" onClick={abrirPeloAviso}>
+              Ver sacola ({itens.length})
+            </button>
+          </div>
+        )}
+      </div>
       <CartDrawer
         isOpen={aberta}
         onClose={fechar}

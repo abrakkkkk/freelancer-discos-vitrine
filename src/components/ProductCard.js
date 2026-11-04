@@ -38,7 +38,8 @@ export default function ProductCard({
   onOpenDetail,
   onAddToCart,
   isInCart = false,
-  mostrarLinkCaixa = true,
+  // Na página de uma caixa, todos os itens estão nela: a linha de localização seria repetida.
+  mostrarLocal = true,
 }) {
   const precoFormatado = Number(item.preco || 0).toLocaleString('pt-BR', {
     style: 'currency',
@@ -47,7 +48,7 @@ export default function ProductCard({
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
   const temCaixa = rotuloCaixa !== '—';
-  const caixaHref = mostrarLinkCaixa ? hrefDaCaixa(item.loja, item.caixa) : null;
+  const caixaHref = hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true });
   const corLoja =
     item.loja === 'Loja 2'
       ? 'var(--loja-2)'
@@ -117,7 +118,7 @@ export default function ProductCard({
         </h2>
 
         {/* Onde o disco está: é o que a vitrine tem de diferente, então vem antes das etiquetas. */}
-        {(temCaixa || item.loja) && (
+        {mostrarLocal && (temCaixa || item.loja) && (
           <CardLocal
             href={caixaHref}
             caixa={temCaixa ? rotuloCaixa : null}

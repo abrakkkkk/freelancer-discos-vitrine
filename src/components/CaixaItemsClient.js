@@ -88,7 +88,7 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
                 isInCart={estaNaSacola(item)}
                 onAddToCart={handleAddToCart}
                 onOpenDetail={(i) => setDetailItem(i)}
-                mostrarLinkCaixa={false}
+                mostrarLocal={false}
               />
             );
           })}
@@ -103,6 +103,7 @@ export default function CaixaItemsClient({ itens = [], rotuloCaixa, nomeLoja }) 
         isInCart={detailItem ? estaNaSacola(detailItem) : false}
         onAddToCart={handleAddToCart}
         tipo={detailItem?.categoria || 'discos'}
+        linkCaixa={false}
       />
 
       <BottomNav />
