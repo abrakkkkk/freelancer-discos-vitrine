@@ -63,10 +63,17 @@ export default function ProductCard({
   const showAnoBadge = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
   const isImportado = Boolean(item.observacao && /importado/i.test(item.observacao));
 
-  // O card não é um botão: o título é o botão que abre o detalhe e, via ::after,
-  // cobre o card inteiro. Assim o botão "Sacola" fica ao lado, não dentro de outro botão.
+  // O card não é um botão: o título é o botão que abre o detalhe (teclado e leitor de tela).
+  // O toque em qualquer parte do card também abre, mas sem camada por cima do texto, para
+  // o cliente conseguir selecionar e copiar o título. Arrastar para selecionar não abre.
+  const abrirPeloCard = (e) => {
+    if (e.target.closest('a, button')) return;
+    if (window.getSelection()?.toString()) return;
+    if (onOpenDetail) onOpenDetail(item);
+  };
+
   return (
-    <article className="productCard">
+    <article className="productCard" onClick={abrirPeloCard}>
       <AlbumCover
         id={item.id}
         artista={item.artista}
