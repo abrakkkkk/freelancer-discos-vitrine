@@ -102,7 +102,7 @@ export default function BottomNav() {
               />
             )}
             <MdStorefront size={22} color={isLojas ? '#e4e4e7' : '#a1a1aa'} />
-            <span>Caixas & Lojas</span>
+            <span>Lojas & Caixas</span>
           </Link>
 
           <Link

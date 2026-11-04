@@ -183,7 +183,7 @@ export default function AlbumCover({
             padding: '1px 5px',
             borderRadius: '4px',
             backgroundColor: '#3f3f46',
-            fontSize: '10px',
+            fontSize: '12px',
             fontWeight: 700,
             color: '#ffffff',
             letterSpacing: '0.04em',
