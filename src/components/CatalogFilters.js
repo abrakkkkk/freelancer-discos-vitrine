@@ -36,7 +36,20 @@ export default function CatalogFilters({
   const [aberto, setAberto] = useState(false);
 
   const caixaSelecionadaObj = caixas.find((c) => String(c.caixa) === String(caixa));
-  const labelCaixaAtiva = caixaSelecionadaObj ? caixaSelecionadaObj.label : `Caixa ${caixa}`;
+  const labelCaixaAtiva = caixaSelecionadaObj
+    ? loja || !caixaSelecionadaObj.loja
+      ? caixaSelecionadaObj.label
+      : `${caixaSelecionadaObj.label} · ${caixaSelecionadaObj.loja}`
+    : /^caixa\b/i.test(String(caixa))
+      ? String(caixa)
+      : `Caixa ${caixa}`;
+
+  const gruposDeCaixas = loja
+    ? [{ loja: null, lista: caixas }]
+    : [...new Set(caixas.map((cx) => cx.loja || 'Outras'))].map((nome) => ({
+        loja: nome,
+        lista: caixas.filter((cx) => (cx.loja || 'Outras') === nome),
+      }));
   const temOrdenacao = Boolean(ordenacao && ordenacao !== 'padrao');
 
   // A busca já tem seu próprio botão de limpar dentro do campo; chips só para os seletores.
@@ -118,11 +131,21 @@ export default function CatalogFilters({
           className={`fieldSelect tabularNums ${caixa ? 'fieldSelectActive' : ''}`}
         >
           <option value="">Caixas</option>
-          {caixas.map((cx) => (
-            <option key={cx.caixa} value={cx.caixa}>
-              {cx.label} {cx.total > 0 ? `(${cx.total})` : ''}
-            </option>
-          ))}
+          {/* Sem loja escolhida, as caixas das duas lojas vêm separadas por loja. */}
+          {gruposDeCaixas.map(({ loja: nomeLoja, lista }) => {
+            const opcoes = lista.map((cx) => (
+              <option key={cx.caixa} value={cx.caixa}>
+                {cx.label} {cx.total > 0 ? `(${cx.total})` : ''}
+              </option>
+            ));
+            return nomeLoja ? (
+              <optgroup key={nomeLoja} label={nomeLoja}>
+                {opcoes}
+              </optgroup>
+            ) : (
+              opcoes
+            );
+          })}
         </select>
 
         <select

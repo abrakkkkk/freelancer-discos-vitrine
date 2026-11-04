@@ -1,5 +1,11 @@
 import { supabaseServer } from '@/lib/supabaseServer';
-import { removeAcentos, extractSearchTokens, calculateItemRelevance } from '@/utils/stringUtils';
+import {
+  removeAcentos,
+  extractSearchTokens,
+  calculateItemRelevance,
+  palavraParecida,
+  toleranciaDigitacao,
+} from '@/utils/stringUtils';
 import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
@@ -30,6 +36,56 @@ export function aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja = '') {
     filtrada = filtrada.or('loja.is.null,loja.neq."Loja 2"');
   }
   return filtrada;
+}
+
+// Pedaços de 3 letras do começo, do meio e do fim: com um erro de digitação, pelo menos um
+// deles continua certo. Sem curinga nas vogais, que deixaria a busca genérica demais.
+function pedacosDaPalavra(palavra) {
+  const meio = Math.max(0, Math.floor((palavra.length - 3) / 2));
+  return [...new Set([palavra.slice(0, 3), palavra.slice(meio, meio + 3), palavra.slice(-3)])];
+}
+
+async function buscarComErroDeDigitacao(category, {
+  effectiveWords,
+  isVideo,
+  colunas,
+  filtroLoja,
+  filtroCaixa,
+  ordenarColuna,
+  ordenarDirecao,
+}) {
+  const palavrasLongas = effectiveWords.filter((p) => toleranciaDigitacao(p) > 0);
+  const campos = isVideo ? ['titulo'] : ['titulo', 'artista'];
+  let query = supabaseServer
+    .from(category)
+    .select(colunas)
+    .eq('deletado', false)
+    .eq('ativo', true);
+  // Cada palavra precisa bater por algum pedaço (E entre palavras, OU entre pedaços).
+  palavrasLongas.forEach((palavra) => {
+    const condicoes = pedacosDaPalavra(palavra).flatMap((pedaco) =>
+      campos.map((campo) => `${campo}.ilike.%${pedaco}%`)
+    );
+    query = query.or(condicoes.join(','));
+  });
+  if (filtroLoja) query = query.eq('loja', filtroLoja);
+  query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
+  if (ordenarColuna && ordenarDirecao) {
+    const colunaReal = isVideo && ordenarColuna === 'artista' ? 'titulo' : ordenarColuna;
+    query = query.order(colunaReal, { ascending: ordenarDirecao === 'asc', nullsFirst: false });
+  }
+
+  const { data, error } = await query.limit(3000);
+  if (error) {
+    // A segunda tentativa é um extra: se falhar, fica o "nada encontrado" da busca exata.
+    console.error('Erro na busca com erro de digitação:', error);
+    return [];
+  }
+
+  return (data || []).filter((item) => {
+    const texto = removeAcentos(`${isVideo ? '' : item.artista || ''} ${item.titulo || ''}`);
+    return effectiveWords.every((palavra) => palavraParecida(palavra, texto));
+  });
 }
 
 export const catalogService = {
@@ -124,7 +180,7 @@ export const catalogService = {
     if (busca && tokensBusca) {
       const { allWords, effectiveWords } = tokensBusca;
 
-      itensFiltrados = itensFiltrados.filter((item) => {
+      const filtrarExato = (lista) => lista.filter((item) => {
         const tituloSemAcento = removeAcentos(item.titulo || '');
         const artistaSemAcento = removeAcentos(item.artista || '');
         const caixaSemAcento = removeAcentos(item.caixa || '');
@@ -143,6 +199,21 @@ export const catalogService = {
           );
         });
       });
+      itensFiltrados = filtrarExato(itensFiltrados);
+
+      // Nada exato: tenta de novo aceitando erro de digitação ("beatls" acha "beatles").
+      // Os resultados aparecem normalmente, sem aviso de correção.
+      if (itensFiltrados.length === 0 && effectiveWords.some((p) => toleranciaDigitacao(p) > 0)) {
+        itensFiltrados = await buscarComErroDeDigitacao(category, {
+          effectiveWords,
+          isVideo,
+          colunas,
+          filtroLoja,
+          filtroCaixa,
+          ordenarColuna,
+          ordenarDirecao,
+        });
+      }
 
       if (!ordenarColuna) {
         itensFiltrados.sort((itemA, itemB) => {
