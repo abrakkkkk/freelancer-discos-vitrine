@@ -50,13 +50,12 @@ function agruparPorLetra(itens) {
   return grupos;
 }
 
-// Quando a caixa não cabe inteira nesta página, diz que parte dela está aqui.
+// Caixa cortada pela paginação: diz só se ela continua de outra página, sem contador.
 function trechoDaCaixa(itens) {
   const primeiro = itens[0]?.posicaoNaCaixa;
   const total = itens[0]?.totalNaCaixa;
   if (!primeiro || !total || itens.length >= total) return null;
-  const ultimo = primeiro + itens.length - 1;
-  return { continuacao: primeiro > 1, texto: `${primeiro}–${ultimo} de ${total}` };
+  return { continuacao: primeiro > 1 };
 }
 
 function CabecalhoCaixa({ loja, caixa, itens }) {
@@ -74,12 +73,7 @@ function CabecalhoCaixa({ loja, caixa, itens }) {
             {loja}
           </span>
         )}
-        {trecho && (
-          <span className="edCaixaTrecho tabularNums">
-            {trecho.continuacao ? 'continuação, ' : ''}
-            {trecho.texto}
-          </span>
-        )}
+        {trecho?.continuacao && <span className="edCaixaTrecho">continuação</span>}
       </span>
       {href && (
         <Link href={href} className="edCaixaLink">
