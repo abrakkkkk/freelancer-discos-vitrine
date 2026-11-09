@@ -98,12 +98,12 @@
 .edLetra {
   margin-bottom: 10px;
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-light);
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 17px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 1;
-  color: var(--text-muted);
+  color: #ffffff;
 }
 
 /* Atalho de letras: texto simples numa linha que rola de lado, sem caixinhas.
