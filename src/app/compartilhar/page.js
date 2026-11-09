@@ -13,7 +13,6 @@ export default function CompartilharEditorialPage() {
           <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">Compartilhar</h1>
-            <p className="headerSubtitle">Mostre o QR code ou envie o link</p>
           </div>
         </div>
         <NavDesktopEditorial />

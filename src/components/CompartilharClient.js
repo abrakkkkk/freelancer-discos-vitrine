@@ -6,20 +6,6 @@ import { FiCheck, FiCopy, FiShare2 } from 'react-icons/fi';
 
 const semAssinatura = () => () => {};
 
-const estiloBotao = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '8px',
-  width: '100%',
-  minHeight: '48px',
-  padding: '12px 16px',
-  borderRadius: '8px',
-  fontSize: '15px',
-  fontWeight: 700,
-  cursor: 'pointer',
-};
-
 export default function CompartilharClient() {
   // O endereço só existe no navegador: assim o QR sempre aponta para o domínio aberto.
   const url = useSyncExternalStore(semAssinatura, () => window.location.origin, () => '');
@@ -30,6 +16,7 @@ export default function CompartilharClient() {
   );
   const [aviso, setAviso] = useState('');
   const timerAviso = useRef(null);
+  const endereco = url.replace(/^https?:\/\//, '');
 
   const avisar = (texto) => {
     setAviso(texto);
@@ -42,7 +29,7 @@ export default function CompartilharClient() {
       await navigator.clipboard.writeText(url);
       avisar('Link copiado');
     } catch (_) {
-      avisar('Não foi possível copiar. Selecione o link acima.');
+      avisar('Não deu para copiar. Selecione o endereço acima.');
     }
   };
 
@@ -55,19 +42,12 @@ export default function CompartilharClient() {
     }
   };
 
+  const copiado = aviso === 'Link copiado';
+  const iconeCopiar = copiado ? <FiCheck size={17} aria-hidden="true" /> : <FiCopy size={17} aria-hidden="true" />;
+
   return (
-    <div style={{ maxWidth: '360px', margin: '0 auto', padding: '8px 0 16px' }}>
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '280px',
-          aspectRatio: '1 / 1',
-          margin: '0 auto',
-          padding: '16px',
-          borderRadius: '12px',
-          backgroundColor: '#ffffff',
-        }}
-      >
+    <div className="edCompartilhar">
+      <div className="edQr">
         {url && (
           <QRCodeSVG
             value={url}
@@ -75,60 +55,43 @@ export default function CompartilharClient() {
             level="M"
             bgColor="#ffffff"
             fgColor="#000000"
-            title={`QR code do site ${url}`}
+            title={`QR code do site ${endereco}`}
             style={{ display: 'block', width: '100%', height: '100%' }}
           />
         )}
       </div>
 
-      <p style={{ marginTop: '16px', fontSize: '14px', color: '#a1a1aa', textAlign: 'center' }}>
-        Aponte a câmera do celular para abrir o catálogo.
-      </p>
-      <p
-        style={{
-          marginTop: '4px',
-          minHeight: '21px',
-          fontSize: '14px',
-          fontWeight: 600,
-          color: '#ffffff',
-          textAlign: 'center',
-          overflowWrap: 'anywhere',
-          userSelect: 'all',
-        }}
-      >
-        {url}
-      </p>
+      <p className="edQrEndereco">{endereco}</p>
+      <p className="edQrDica">Aponte a câmera para abrir o catálogo.</p>
 
-      <div style={{ display: 'grid', gap: '10px', marginTop: '20px' }}>
-        {podeCompartilhar && (
-          <button
-            type="button"
-            onClick={compartilhar}
-            style={{ ...estiloBotao, backgroundColor: '#8b1e1e', border: '1px solid #8b1e1e', color: '#ffffff' }}
-          >
-            <FiShare2 size={18} aria-hidden="true" />
-            Compartilhar link
+      {/* No celular: o menu do sistema (WhatsApp, Instagram...). No computador: copiar. */}
+      <div className="edCompartilharAcoes">
+        {podeCompartilhar ? (
+          <>
+            <button type="button" onClick={compartilhar} className="edBotaoPrincipal">
+              <FiShare2 size={18} aria-hidden="true" />
+              Compartilhar
+            </button>
+            <button type="button" onClick={copiar} className="edBotaoTexto">
+              {iconeCopiar}
+              {copiado ? 'Link copiado' : 'Copiar link'}
+            </button>
+          </>
+        ) : (
+          <button type="button" onClick={copiar} className="edBotaoPrincipal">
+            {iconeCopiar}
+            {copiado ? 'Link copiado' : 'Copiar link'}
           </button>
         )}
-        <button
-          type="button"
-          onClick={copiar}
-          style={{ ...estiloBotao, backgroundColor: '#151518', border: '1px solid #2d2d35', color: '#ffffff' }}
-        >
-          {aviso === 'Link copiado' ? <FiCheck size={18} aria-hidden="true" /> : <FiCopy size={18} aria-hidden="true" />}
-          Copiar link
-        </button>
       </div>
 
-      <p role="status" style={{ minHeight: '20px', marginTop: '10px', fontSize: '13px', color: '#a1a1aa', textAlign: 'center' }}>
-        {aviso}
+      <p role="status" className="edCompartilharAviso">
+        {aviso && !copiado ? aviso : ''}
       </p>
 
-      <p style={{ marginTop: '16px', fontSize: '12px', color: '#a1a1aa', textAlign: 'center' }}>
-        Disco do fundo: vinyl record, de pool party, do{' '}
-        <a href="https://thenounproject.com/icon/vinyl-record-2198121/" style={{ color: '#a1a1aa' }}>
-          Noun Project
-        </a>
+      <p className="edCredito">
+        Disco do fundo: vinyl record, de pool party,{' '}
+        <a href="https://thenounproject.com/icon/vinyl-record-2198121/">Noun Project</a>
       </p>
     </div>
   );

@@ -732,5 +732,116 @@ body:has(.productDetailDialog) .sacolaAviso {
 /* Topo da página com um véu leve do vermelho da marca que some antes dos discos, como a
    capa de um catálogo. Linear e só no início da página; o fundo de discos continua por cima. */
 body:has(.edPagina) {
-  background: linear-gradient(180deg, rgba(139, 30, 30, 0.24) 0, rgba(139, 30, 30, 0.1) 130px, rgba(139, 30, 30, 0) 260px) no-repeat;
+  background: linear-gradient(180deg, rgba(139, 30, 30, 0.14) 0, rgba(139, 30, 30, 0.05) 120px, rgba(139, 30, 30, 0) 240px) no-repeat;
+}
+
+/* Compartilhar: o QR, o endereço na fonte dos títulos e uma ação principal. */
+.edCompartilhar {
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 8px 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.edQr {
+  width: min(240px, 64vw);
+  aspect-ratio: 1 / 1;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background-color: #ffffff;
+}
+
+.edQrEndereco {
+  margin-top: 18px;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.edQrDica {
+  margin-top: 4px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.edCompartilharAcoes {
+  width: 100%;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.edBotaoPrincipal {
+  width: 100%;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .edBotaoPrincipal:hover {
+    background-color: var(--accent-hover);
+  }
+}
+
+.edBotaoTexto {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .edBotaoTexto:hover {
+    color: var(--text);
+  }
+}
+
+.edBotaoPrincipal:focus-visible,
+.edBotaoTexto:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.edCompartilharAviso {
+  min-height: 18px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Crédito do ícone do fundo (exigido pela licença), discreto no pé da página. */
+.edCredito {
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--text-dim, var(--text-muted));
+}
+
+.edCredito a {
+  color: inherit;
+  text-underline-offset: 2px;
 }
