@@ -7,7 +7,7 @@ import { getCartItemKey } from '@/utils/cartUtils';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
 import { chaveCaixa } from '@/utils/caixaUtils';
-import { FiCheck, FiPlus } from 'react-icons/fi';
+import { FiCheck, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { ed } from './rotas';
 
 const COR_LOJA = { 'Loja 1': 'var(--loja-1)', 'Loja 2': 'var(--loja-2)' };
@@ -51,19 +51,10 @@ function agruparPorLetra(itens) {
   return [...grupos.values()];
 }
 
-// Caixa cortada pela paginação: diz só se ela continua de outra página, sem contador.
-function trechoDaCaixa(itens) {
-  const primeiro = itens[0]?.posicaoNaCaixa;
-  const total = itens[0]?.totalNaCaixa;
-  if (!primeiro || !total || itens.length >= total) return null;
-  return { continuacao: primeiro > 1 };
-}
-
 function CabecalhoCaixa({ loja, caixa, itens }) {
   const rotulo = formatCaixa(caixa, loja);
   const caminho = hrefDaCaixa(loja, caixa, { doCatalogo: true });
   const href = caminho ? ed(caminho) : null;
-  const trecho = trechoDaCaixa(itens);
   return (
     <div className="edCaixaCab">
       <h2 className="edCaixaNum tabularNums">{rotulo === '—' ? 'Sem caixa' : rotulo}</h2>
@@ -77,7 +68,8 @@ function CabecalhoCaixa({ loja, caixa, itens }) {
       </span>
       {href && (
         <Link href={href} className="edCaixaLink">
-          {trecho ? 'Ver caixa inteira' : 'Ver caixa'}
+          Ver caixa
+          <FiChevronRight size={16} aria-hidden="true" />
         </Link>
       )}
     </div>

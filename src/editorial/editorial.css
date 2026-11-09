@@ -76,17 +76,16 @@
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  gap: 2px;
   padding: 0 2px;
-  color: var(--text);
+  color: var(--text-muted);
   font-size: 13.5px;
   font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--border-light);
+  text-decoration: none;
 }
 
 .edCaixaLink:hover {
-  text-decoration-color: currentColor;
+  color: var(--text);
 }
 
 /* Divisória por letra na página da caixa: discreta, uma letra pequena sobre um fio fino. */

@@ -23,6 +23,14 @@ function buildCatalogCacheKey({ categoria, pagina, loja, caixa, busca, ordenacao
   return `${categoria}|${pagina}|${loja}|${caixa}|${busca}|${ordenacao}`;
 }
 
+// Contagem no nome do formato da aba ("12.861 discos"), sem número de páginas.
+const NOME_CONTAGEM = {
+  discos: ['disco', 'discos'],
+  cds: ['CD', 'CDs'],
+  dvds: ['DVD', 'DVDs'],
+  vhs: ['fita', 'fitas'],
+};
+
 // useSearchParams exige um Suspense: no build a página é estática e a URL só existe no navegador.
 // Catálogo no estilo editorial (lista agrupada por caixa).
 export default function CatalogoEditorialPage() {
@@ -427,7 +435,7 @@ function Catalogo() {
       <p
         className="tabularNums"
         aria-live="polite"
-        style={{ fontSize: '13px', color: '#a1a1aa', marginBottom: '10px', padding: '0 2px' }}
+        style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '10px', padding: '0 2px' }}
       >
         {loading ? (
           'Carregando…'
@@ -436,8 +444,7 @@ function Catalogo() {
             <strong style={{ color: '#ffffff', fontWeight: 600 }}>
               {total.toLocaleString('pt-BR')}
             </strong>{' '}
-            {total === 1 ? 'item' : 'itens'}
-            {totalPaginas > 1 && ` · página ${pagina} de ${totalPaginas.toLocaleString('pt-BR')}`}
+            {(NOME_CONTAGEM[categoria] || NOME_CONTAGEM.discos)[total === 1 ? 0 : 1]}
           </>
         )}
       </p>
