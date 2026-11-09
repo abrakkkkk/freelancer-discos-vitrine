@@ -1,0 +1,111 @@
+{
+  "fonte": "Deezer (fãs do artista e do álbum); Tim Maia escolhido à mão no lugar de Taylor Swift",
+  "geradoEm": "2026-11-09T18:49:19.495Z",
+  "lojas": {
+    "Loja 1": [
+      {
+        "artista": "Ed Sheeran",
+        "escolhido": "Play",
+        "ids": [
+          21026,
+          21009
+        ]
+      },
+      {
+        "artista": "Michael Jackson",
+        "escolhido": "Os grandes sucessos de Michael Jackson",
+        "ids": [
+          22715
+        ]
+      },
+      {
+        "artista": "Bruno Mars",
+        "escolhido": "Doo-Wops & Hooligans",
+        "ids": [
+          31007
+        ]
+      },
+      {
+        "artista": "Tim Maia",
+        "escolhido": "Racional Vol. 3",
+        "ids": [
+          30208,
+          30001,
+          29314,
+          22684,
+          8841,
+          8815,
+          8839,
+          30007,
+          22683,
+          22685,
+          8465,
+          21847,
+          22001,
+          8621,
+          20859
+        ]
+      },
+      {
+        "artista": "Bob Marley & The Wailers",
+        "escolhido": "Legend - The Best Of Bob Marley And The Wailers",
+        "ids": [
+          30621,
+          28155,
+          28152,
+          28151,
+          28139,
+          28137,
+          28146,
+          28143,
+          28141,
+          28147,
+          28135,
+          28149
+        ]
+      }
+    ],
+    "Loja 2": [
+      {
+        "artista": "Michael Jackson",
+        "escolhido": "Forever, Michael",
+        "ids": [
+          23869,
+          23868
+        ]
+      },
+      {
+        "artista": "The Beatles",
+        "escolhido": "In The Beginning",
+        "ids": [
+          24310
+        ]
+      },
+      {
+        "artista": "Rolling Stones",
+        "escolhido": "Made In The Shade",
+        "ids": [
+          24215,
+          30728,
+          30730,
+          24216
+        ]
+      },
+      {
+        "artista": "Madonna",
+        "escolhido": "Who's That Girl (Original Motion Picture Soundtrack)",
+        "ids": [
+          30266,
+          24794
+        ]
+      },
+      {
+        "artista": "Scorpions",
+        "escolhido": "Love At First Sting",
+        "ids": [
+          24148
+        ]
+      }
+    ]
+  }
+}

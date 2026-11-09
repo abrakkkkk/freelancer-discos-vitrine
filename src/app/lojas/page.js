@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { FiChevronRight } from 'react-icons/fi';
 import { caixaService } from '@/services/caixaService';
+import { getDestaquesPorLoja } from '@/services/destaquesService';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { ed } from '@/editorial/rotas';
 
@@ -12,9 +14,10 @@ export const metadata = {
 const COR_LOJA = { 'loja-1': 'var(--loja-1)', 'loja-2': 'var(--loja-2)' };
 
 export default async function LojasEditorialPage() {
-  const [caixasLoja1, caixasLoja2] = await Promise.all([
+  const [caixasLoja1, caixasLoja2, destaques] = await Promise.all([
     caixaService.getCaixasComContagem('Loja 1'),
     caixaService.getCaixasComContagem('Loja 2'),
+    getDestaquesPorLoja(),
   ]);
   const resumo = (caixas) => ({
     caixas: caixas.length,
@@ -41,28 +44,41 @@ export default async function LojasEditorialPage() {
         <NavDesktopEditorial />
       </header>
 
-      {/* Cada loja como a capa de uma seção do catálogo: nome grande e o índice de caixas. */}
+      {/* Cada loja como o cabeçalho de caixa do catálogo: nome grande com o traço na cor
+          da loja e o resumo numa linha. A linha inteira leva às caixas. */}
       <div className="edLojas">
         {lojas.map((lj) => (
-          <Link key={lj.id} href={ed(`/lojas/${lj.id}`)} className="edLoja tabularNums">
-            <span className="edLojaFio" style={{ backgroundColor: COR_LOJA[lj.id] }} aria-hidden="true" />
-            <h2 className="edLojaNome">{lj.nome}</h2>
-            <dl className="edLojaNumeros">
-              <div>
-                <dt>Caixas</dt>
-                <dd>{lj.caixas}</dd>
-              </div>
-              <div>
-                <dt>Itens</dt>
-                <dd>{lj.total.toLocaleString('pt-BR')}</dd>
-              </div>
-            </dl>
-            {lj.primeira && (
-              <p className="edLojaFaixa">
-                Da {lj.primeira} à {lj.ultima}
-              </p>
+          <Link
+            key={lj.id}
+            href={ed(`/lojas/${lj.id}`)}
+            className="edLoja tabularNums"
+            style={{ '--cor-loja': COR_LOJA[lj.id] }}
+          >
+            <span className="edLojaTopo">
+              <h2 className="edLojaNome">{lj.nome}</h2>
+              <span className="edLojaVer">
+                Ver caixas
+                <FiChevronRight size={16} aria-hidden="true" />
+              </span>
+            </span>
+            <p className="edLojaResumo">
+              <strong>{lj.caixas}</strong> caixas · <strong>{lj.total.toLocaleString('pt-BR')}</strong>{' '}
+              itens
+            </p>
+            {/* Capas de discos famosos que estão nesta loja: o acervo dá a cor da página. */}
+            {destaques[lj.nome]?.length > 0 && (
+              <span className="edLojaCapas">
+                {destaques[lj.nome].map((d) => (
+                  <img
+                    key={d.id}
+                    src={d.capa_url}
+                    alt={`${d.artista} - ${d.titulo}`}
+                    decoding="async"
+                    className="edLojaCapa"
+                  />
+                ))}
+              </span>
             )}
-            <span className="edLojaVer">Ver caixas</span>
           </Link>
         ))}
       </div>

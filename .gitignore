@@ -12,3 +12,6 @@ coverage
 .idea/
 
 **/scripts/bin/
+
+# Cache do script de ranking (fãs dos artistas no Deezer)
+scripts/.cache/

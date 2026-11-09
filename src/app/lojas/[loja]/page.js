@@ -31,7 +31,12 @@ export default async function LojaEditorialPage({ params }) {
             <FiArrowLeft size={19} />
           </Link>
           <div style={{ minWidth: 0 }}>
-            <h1 className="headerTitle">{nomeLoja}</h1>
+            <h1
+              className="headerTitle edTituloLoja"
+              style={{ '--cor-loja': nomeLoja === 'Loja 2' ? 'var(--loja-2)' : 'var(--loja-1)' }}
+            >
+              {nomeLoja}
+            </h1>
             <p className="headerSubtitle tabularNums">
               {caixas.length} caixas, {totalItens.toLocaleString('pt-BR')} itens
             </p>
