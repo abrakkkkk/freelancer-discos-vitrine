@@ -74,7 +74,6 @@ function CabecalhoCaixa({ loja, caixa, itens }) {
             {loja}
           </span>
         )}
-        {trecho?.continuacao && <span className="edCaixaTrecho">continuação</span>}
       </span>
       {href && (
         <Link href={href} className="edCaixaLink">
