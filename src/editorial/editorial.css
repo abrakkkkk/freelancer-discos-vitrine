@@ -27,17 +27,19 @@
 }
 
 /* Só tipografia sobre o fundo de discos: um traço vermelho curto marca o número. */
-.edCaixaCab::after {
+/* Traço vermelho na largura do número, sobre o fio do cabeçalho (como o sublinhado da aba ativa). */
+.edCaixaNum::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -2px;
-  width: 36px;
+  right: 0;
+  bottom: -10px;
   height: 3px;
   background-color: var(--accent);
 }
 
 .edCaixaNum {
+  position: relative;
   font-family: var(--font-editorial), var(--font-title);
   font-size: 30px;
   font-weight: 700;
@@ -699,4 +701,15 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edPagina .categoryTabBtn:focus-visible {
   outline: 2px solid var(--border-focus);
   outline-offset: 2px;
+}
+
+/* Abas em caixa alta, como o cabeçalho da caixa, e ícones maiores. */
+.edPagina .categoryTabBtn {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.edPagina .categoryTabBtn svg {
+  width: 22px;
+  height: 22px;
 }
