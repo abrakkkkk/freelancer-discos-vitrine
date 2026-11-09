@@ -47,6 +47,8 @@ export default function CompartilharClient() {
 
   return (
     <div className="edCompartilhar">
+      {/* QR, endereço e ações no meio da área livre; o crédito fica no pé. */}
+      <div className="edCompartilharMeio">
       <div className="edQr">
         {url && (
           <QRCodeSVG
@@ -88,6 +90,7 @@ export default function CompartilharClient() {
       <p role="status" className="edCompartilharAviso">
         {aviso && !copiado ? aviso : ''}
       </p>
+      </div>
 
       <p className="edCredito">
         Disco do fundo: vinyl record, de pool party,{' '}

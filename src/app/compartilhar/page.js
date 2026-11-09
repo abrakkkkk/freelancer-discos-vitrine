@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function CompartilharEditorialPage() {
   return (
-    <div className="pageContainer">
+    <div className="pageContainer edPaginaCompartilhar">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
