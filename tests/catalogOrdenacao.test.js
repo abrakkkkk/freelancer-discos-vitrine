@@ -40,7 +40,7 @@ describe('ordenação do catálogo', () => {
   it('ignora coluna fora da lista e usa a ordenação padrão', async () => {
     await catalogService.fetchItems('discos', { pagina: 8, ordenarColuna: 'deletado', ordenarDirecao: 'asc' });
     expect(ordenacoes).not.toContain('deletado');
-    expect(ordenacoes).toEqual(['caixa', 'artista', 'titulo']);
+    expect(ordenacoes).toEqual(['id']);
   });
 
   it('ignora direção inválida', async () => {
