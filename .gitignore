@@ -6,4 +6,9 @@ coverage
 .DS_Store
 .cache
 
+# Logs & IDE
+*.log
+.vscode/
+.idea/
+
 **/scripts/bin/
