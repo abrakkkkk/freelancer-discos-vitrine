@@ -175,15 +175,29 @@ export default function ListaEditorial({
   );
 
   if (dividirPorLetra) {
+    const grupos = agruparPorLetra(itens);
+    const idLetra = (letra) => `letra-${letra === '#' ? 'num' : letra}`;
     return (
-      <div className="edGrupos">
-        {agruparPorLetra(itens).map((g) => (
-          <section key={g.letra} className="edGrupo" aria-label={`Títulos com ${g.letra}`}>
-            <h2 className="edLetra">{g.letra}</h2>
-            <ul className="edLista">{g.itens.map((item) => linha(item, mostrarCaixa))}</ul>
-          </section>
-        ))}
-      </div>
+      <>
+        {/* Atalho para as letras que existem na caixa: pula direto para a divisória. */}
+        {grupos.length > 1 && (
+          <nav className="edLetras" aria-label="Ir para a letra">
+            {grupos.map((g) => (
+              <a key={g.letra} href={`#${idLetra(g.letra)}`} className="edLetraAtalho">
+                {g.letra}
+              </a>
+            ))}
+          </nav>
+        )}
+        <div className="edGrupos">
+          {grupos.map((g) => (
+            <section key={g.letra} id={idLetra(g.letra)} className="edGrupo edGrupoLetra" aria-label={`Títulos com ${g.letra}`}>
+              <h2 className="edLetra">{g.letra}</h2>
+              <ul className="edLista">{g.itens.map((item) => linha(item, mostrarCaixa))}</ul>
+            </section>
+          ))}
+        </div>
+      </>
     );
   }
 

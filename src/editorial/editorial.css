@@ -111,6 +111,69 @@
   color: #ffffff;
 }
 
+/* Faixa de letras da caixa: uma linha que rola de lado no celular, alvos de 44px. */
+.edLetras {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+}
+
+/* Com a faixa fixa no topo, a divisória da letra para logo abaixo dela. */
+.edLetras ~ .edGrupos .edLetra {
+  top: 66px;
+}
+
+.edLetras ~ .edGrupos .edGrupoLetra {
+  scroll-margin-top: 66px;
+}
+
+.edLetras::-webkit-scrollbar {
+  display: none;
+}
+
+.edLetraAtalho {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 8px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card-hover);
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .edLetraAtalho:hover {
+    border-color: var(--text-muted);
+  }
+}
+
+.edLetraAtalho:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Ao pular para a letra, a divisória para no topo sem cobrir o primeiro disco. */
+.edGrupoLetra {
+  scroll-margin-top: 8px;
+}
+
 /* Caixa anterior e próxima. */
 .edVizinhas {
   display: flex;
