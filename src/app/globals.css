@@ -141,8 +141,6 @@ select:focus-visible,
   flex-shrink: 0;
   display: block;
   object-fit: contain;
-  /* O logo tem fundo preto: sem isto, vira um retângulo em cima dos discos. */
-  mix-blend-mode: screen;
 }
 
 .headerBackBtn {

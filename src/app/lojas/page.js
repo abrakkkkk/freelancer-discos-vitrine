@@ -32,7 +32,7 @@ export default async function LojasEditorialPage() {
     <div className="pageContainer">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">Caixas</h1>
             <p className="headerSubtitle">Escolha a loja e a caixa</p>

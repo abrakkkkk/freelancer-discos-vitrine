@@ -7,7 +7,7 @@ export default function LojasLoading() {
     <div className="pageContainer">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">Lojas</h1>
             <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>

@@ -111,7 +111,7 @@ function CatalogoCarregando() {
     <div className="pageContainer">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">Freelancer Discos</h1>
             <p className="headerSubtitle">Vitrine do estoque</p>
@@ -400,7 +400,7 @@ function Catalogo() {
       {/* Cabeçalho */}
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <img src="/logo.jpg" alt="" className="headerLogo" />
+          <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">Freelancer Discos</h1>
             <p className="headerSubtitle">Vitrine do estoque</p>
