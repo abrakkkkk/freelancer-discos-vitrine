@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { MdChevronRight } from 'react-icons/md';
 import { caixaService } from '@/services/caixaService';
-import BottomNav from '@/components/BottomNav';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
+import { ed } from '@/editorial/rotas';
 
 export const revalidate = 60;
 
@@ -10,9 +9,9 @@ export const metadata = {
   title: 'Lojas e caixas',
 };
 
-export default async function LojasPage() {
-  // Mesma fonte da página de cada loja: o número de caixas e de itens sempre bate.
-  // (Antes a faixa era fixa no código: "Caixas 1B a 20B", mas a Loja 2 já vai além.)
+const COR_LOJA = { 'loja-1': 'var(--loja-1)', 'loja-2': 'var(--loja-2)' };
+
+export default async function LojasEditorialPage() {
   const [caixasLoja1, caixasLoja2] = await Promise.all([
     caixaService.getCaixasComContagem('Loja 1'),
     caixaService.getCaixasComContagem('Loja 2'),
@@ -20,6 +19,8 @@ export default async function LojasPage() {
   const resumo = (caixas) => ({
     caixas: caixas.length,
     total: caixas.reduce((acc, c) => acc + (c.total || 0), 0),
+    primeira: caixas[0]?.label,
+    ultima: caixas[caixas.length - 1]?.label,
   });
 
   const lojas = [
@@ -37,40 +38,36 @@ export default async function LojasPage() {
             <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>
           </div>
         </div>
-
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
-      <div className="lojasGridContainer">
+      {/* Cada loja como a capa de uma seção do catálogo: nome grande e o índice de caixas. */}
+      <div className="edLojas">
         {lojas.map((lj) => (
-          <Link
-            key={lj.id}
-            href={`/lojas/${lj.id}`}
-            className={`productCard tabularNums ${lj.id === 'loja-2' ? 'lojaCardLoja2' : 'lojaCardLoja1'}`}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '18px 20px',
-              textDecoration: 'none',
-            }}
-          >
-            <div style={{ minWidth: 0 }}>
-              <h2 style={{ fontSize: '17px', fontWeight: 700, color: '#ffffff' }}>{lj.nome}</h2>
-              <p style={{ fontSize: '13px', color: '#a1a1aa', marginTop: '3px' }}>
-                {lj.caixas} caixas ·{' '}
-                <strong style={{ color: '#ffffff', fontWeight: 600 }}>
-                  {lj.total.toLocaleString('pt-BR')}
-                </strong>{' '}
-                {lj.total === 1 ? 'item' : 'itens'}
+          <Link key={lj.id} href={ed(`/lojas/${lj.id}`)} className="edLoja tabularNums">
+            <span className="edLojaFio" style={{ backgroundColor: COR_LOJA[lj.id] }} aria-hidden="true" />
+            <h2 className="edLojaNome">{lj.nome}</h2>
+            <dl className="edLojaNumeros">
+              <div>
+                <dt>Caixas</dt>
+                <dd>{lj.caixas}</dd>
+              </div>
+              <div>
+                <dt>Itens</dt>
+                <dd>{lj.total.toLocaleString('pt-BR')}</dd>
+              </div>
+            </dl>
+            {lj.primeira && (
+              <p className="edLojaFaixa">
+                Da {lj.primeira} à {lj.ultima}
               </p>
-            </div>
-            <MdChevronRight size={24} color="#a1a1aa" style={{ flexShrink: 0 }} />
+            )}
+            <span className="edLojaVer">Ver caixas</span>
           </Link>
         ))}
       </div>
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

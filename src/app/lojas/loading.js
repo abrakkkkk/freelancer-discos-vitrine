@@ -1,5 +1,5 @@
-import BottomNav from '@/components/BottomNav';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { BarraEditorial } from '@/editorial/NavEditorial';
+import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 
 // Mesma estrutura de lojas/page.js, para a página não "pular" quando carregar.
 export default function LojasLoading() {
@@ -14,7 +14,7 @@ export default function LojasLoading() {
           </div>
         </div>
 
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
       <div className="lojasGridContainer" aria-busy="true" aria-label="Carregando lojas">
@@ -22,7 +22,7 @@ export default function LojasLoading() {
         <div className="skeletonBlock" style={{ height: '76px', width: '100%' }} />
       </div>
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

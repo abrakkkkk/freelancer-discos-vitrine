@@ -1,5 +1,6 @@
-import { Outfit, Figtree } from 'next/font/google';
+import { Outfit, Figtree, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
+import '@/editorial/editorial.css';
 import { CartProvider } from '@/components/CartProvider';
 
 const outfit = Outfit({
@@ -11,6 +12,14 @@ const outfit = Outfit({
 const figtree = Figtree({
   subsets: ['latin'],
   variable: '--font-figtree',
+  display: 'swap',
+});
+
+// Títulos do estilo editorial (caixas, lojas, artistas, preços).
+const barlowCondensed = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  variable: '--font-editorial',
   display: 'swap',
 });
 
@@ -37,9 +46,11 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR" className={`${outfit.variable} ${figtree.variable}`}>
+    <html lang="pt-BR" className={`${outfit.variable} ${figtree.variable} ${barlowCondensed.variable}`}>
       <body>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <div className="edPagina">{children}</div>
+        </CartProvider>
       </body>
     </html>
   );

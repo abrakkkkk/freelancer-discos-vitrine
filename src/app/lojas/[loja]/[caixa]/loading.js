@@ -1,5 +1,5 @@
-import BottomNav from '@/components/BottomNav';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { BarraEditorial } from '@/editorial/NavEditorial';
+import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 
 // Mesma estrutura de [caixa]/page.js (cabeçalho, busca e grade), para a página não "pular".
 export default function CaixaDetalheLoading() {
@@ -14,7 +14,7 @@ export default function CaixaDetalheLoading() {
           </div>
         </div>
 
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
       <div className="skeletonBlock" style={{ height: '44px', width: '100%', marginBottom: '12px' }} />
@@ -30,7 +30,7 @@ export default function CaixaDetalheLoading() {
         ))}
       </div>
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

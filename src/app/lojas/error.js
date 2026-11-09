@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { FiAlertTriangle, FiRefreshCw } from 'react-icons/fi';
-import BottomNav from '@/components/BottomNav';
+import { BarraEditorial } from '@/editorial/NavEditorial';
 
 // Mostrado quando o banco falha ao carregar lojas/caixas. Antes, a falha aparecia
 // como "0 itens" ou "caixa vazia", o que parecia estoque zerado.
@@ -49,7 +49,7 @@ export default function LojasError({ error, retry }) {
         </div>
       </div>
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

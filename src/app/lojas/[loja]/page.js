@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FiArrowLeft } from 'react-icons/fi';
 import { caixaService } from '@/services/caixaService';
-import LojaCaixasGridClient from '@/components/LojaCaixasGridClient';
-import BottomNav from '@/components/BottomNav';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
 import { nomeLojaPorSlug } from '@/utils/lojas';
+import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
+import { ed } from '@/editorial/rotas';
+import GradeCaixasEditorial from '@/editorial/GradeCaixasEditorial';
 
 export const revalidate = 60;
 
@@ -15,36 +15,34 @@ export async function generateMetadata({ params }) {
   return nomeLoja ? { title: `${nomeLoja} · Caixas` } : {};
 }
 
-export default async function LojaCaixasPage({ params }) {
+export default async function LojaEditorialPage({ params }) {
   const { loja: lojaSlug } = await params;
-
   const nomeLoja = nomeLojaPorSlug(lojaSlug);
   if (!nomeLoja) notFound();
 
   const caixas = await caixaService.getCaixasComContagem(nomeLoja);
-  const totalItensLoja = caixas.reduce((acc, c) => acc + (c.total || 0), 0);
+  const totalItens = caixas.reduce((acc, c) => acc + (c.total || 0), 0);
 
   return (
     <div className="pageContainer">
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <Link href="/lojas" aria-label="Voltar para Lojas" className="headerBackBtn">
+          <Link href={ed('/lojas')} aria-label="Voltar para Lojas" className="headerBackBtn">
             <FiArrowLeft size={19} />
           </Link>
           <div style={{ minWidth: 0 }}>
             <h1 className="headerTitle">{nomeLoja}</h1>
             <p className="headerSubtitle tabularNums">
-              {caixas.length} caixas · {totalItensLoja.toLocaleString('pt-BR')} itens
+              {caixas.length} caixas, {totalItens.toLocaleString('pt-BR')} itens
             </p>
           </div>
         </div>
-
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
-      <LojaCaixasGridClient caixas={caixas} lojaSlug={lojaSlug} nomeLoja={nomeLoja} />
+      <GradeCaixasEditorial caixas={caixas} lojaSlug={lojaSlug} nomeLoja={nomeLoja} />
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

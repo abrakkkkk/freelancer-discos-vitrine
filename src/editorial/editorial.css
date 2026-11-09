@@ -1,0 +1,483 @@
+/* Estilo editorial: catálogo impresso de loja de discos, organizado por caixa.
+   Mesmas cores, logo e fundo; muda a fonte dos títulos e o agrupamento por caixa. */
+
+.edPagina .headerTitle {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.edGrupos {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Cabeçalho da caixa: fio vermelho em cima, número grande e fixo no topo enquanto a caixa rola. */
+.edCaixaCab {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 10px 2px 8px;
+  border-top: 3px solid var(--accent);
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg);
+}
+
+.edCaixaNum {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.edCaixaLoja {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.edCaixaLink {
+  margin-left: auto;
+  align-self: center;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 2px;
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--border-light);
+}
+
+.edCaixaLink:hover {
+  text-decoration-color: currentColor;
+}
+
+.edPonto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Discos em pé, em grade: capa em cima e ficha embaixo, como na vitrine atual. */
+.edLista {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.edLinha {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .edLinha:hover {
+    background-color: var(--bg-card-hover);
+  }
+}
+
+.edTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.edArtista {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edTitulo {
+  all: unset;
+  cursor: pointer;
+  user-select: text;
+  -webkit-user-select: text;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #ffffff;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.edLinha:has(.edTitulo:focus-visible) {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.edMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.edMetaCaixa {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Preço e botão no pé do card, separados da ficha por um fio fino. */
+.edAcao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.edPreco {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.edAdicionar {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.edAdicionar:hover {
+  background-color: var(--accent-hover);
+}
+
+.edAdicionarNaSacola,
+.edAdicionarNaSacola:hover {
+  background-color: var(--badge-success);
+}
+
+/* Lojas: cada loja como a abertura de uma seção do catálogo. */
+.edLojas {
+  display: grid;
+  gap: 14px;
+}
+
+.edLoja {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 10px 16px;
+  padding: 20px 18px 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.edLojaFio {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+}
+
+.edLojaNome {
+  grid-column: 1 / -1;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.edLojaNumeros {
+  display: flex;
+  gap: 24px;
+}
+
+.edLojaNumeros dt {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.edLojaNumeros dd {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.edLojaFaixa {
+  grid-column: 1;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.edLojaVer {
+  grid-column: 2;
+  grid-row: 2 / span 2;
+  align-self: end;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  background-color: var(--accent);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (hover: hover) {
+  .edLoja:hover {
+    background-color: var(--bg-card-hover);
+  }
+}
+
+/* Índice de caixas da loja. */
+.edCaixas {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 8px;
+}
+
+/* O fio da loja é uma faixa dentro do card (recortada pelos cantos), não uma borda grossa. */
+.edCaixa {
+  position: relative;
+  overflow: hidden;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  padding: 13px 10px 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.edCaixa::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background-color: var(--cor-loja, var(--accent));
+}
+
+.edCaixaVazia::before {
+  background-color: var(--border-light);
+}
+
+.edCaixaRotulo {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.edCaixaNumero {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.edCaixaItens {
+  margin-top: auto;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.edCaixaVazia {
+  background-color: var(--bg);
+  border-style: dashed;
+}
+
+.edCaixaVazia .edCaixaNumero {
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .edCaixa:hover {
+    background-color: var(--bg-card-hover);
+  }
+}
+
+/* Barra de baixo: ícones da mesma família, rótulos condensados, fio vermelho no ativo. */
+.edBarra {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background-color: var(--bg);
+  border-top: 1px solid var(--border-light);
+}
+
+.edBarraGrade {
+  max-width: 600px;
+  height: var(--bottom-nav-height, 64px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.edBarraItem {
+  position: relative;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.edBarraItemAtivo {
+  color: #ffffff;
+}
+
+.edBarraItemAtivo::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 18%;
+  right: 18%;
+  height: 3px;
+  background-color: var(--accent);
+}
+
+.edBarraIcone {
+  position: relative;
+  display: inline-flex;
+}
+
+.edBarraContagem {
+  position: absolute;
+  top: -6px;
+  right: -12px;
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 10px;
+  background-color: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+/* Detalhe do disco e sacola (montados fora da página): mesma voz nos títulos. */
+body:has(.edPagina) .productDetailDialog h2,
+body:has(.edPagina) .sheetLocalCaixa,
+body:has(.edPagina) .cartDrawerPanel h2,
+body:has(.edPagina) .sacolaAvisoTexto strong {
+  font-family: var(--font-editorial), var(--font-title);
+  letter-spacing: 0.01em;
+}
+
+body:has(.edPagina) .productDetailDialog h2,
+body:has(.edPagina) .cartDrawerPanel h2 {
+  font-size: 20px !important;
+  line-height: 1.05 !important;
+}
+
+/* Só o título do disco fica em caixa alta; "Sua Sacola" fica como está escrito. */
+body:has(.edPagina) .productDetailDialog h2 {
+  text-transform: uppercase;
+}
+
+body:has(.edPagina) .sheetLocalCaixa {
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
+body:has(.edPagina) .sheetLocal {
+  border-top: 3px solid var(--accent);
+}
+
+@media (min-width: 769px) {
+  .edCaixaNum {
+    font-size: 36px;
+  }
+
+  .edLista {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 16px;
+  }
+
+  .edLojas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .edLojaNome {
+    font-size: 60px;
+  }
+
+  .edCaixas {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}

@@ -3,8 +3,8 @@ import { supabaseServer } from '@/lib/supabaseServer';
 import { aplicarFiltroCaixaNaQuery } from '@/services/catalogService';
 import { caixaService } from '@/services/caixaService';
 import { chaveCaixa } from '@/utils/caixaUtils';
-import CaixaItemsClient from '@/components/CaixaItemsClient';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import CaixaEditorialClient from '@/editorial/CaixaEditorialClient';
+import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 import VoltarDaCaixa from '@/components/VoltarDaCaixa';
 import { formatCaixa } from '@/utils/stringUtils';
 import { nomeLojaPorSlug } from '@/utils/lojas';
@@ -92,10 +92,10 @@ export default async function CaixaDetalhePage({ params }) {
           </div>
         </div>
 
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
-      <CaixaItemsClient
+      <CaixaEditorialClient
         itens={todosItens}
         rotuloCaixa={rotuloCaixa}
         nomeLoja={nomeLoja}

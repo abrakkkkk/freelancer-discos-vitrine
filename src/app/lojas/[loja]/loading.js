@@ -1,5 +1,5 @@
-import BottomNav from '@/components/BottomNav';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { BarraEditorial } from '@/editorial/NavEditorial';
+import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 
 // Mesma estrutura de [loja]/page.js, para a página não "pular" quando carregar.
 export default function LojaCaixasLoading() {
@@ -14,7 +14,7 @@ export default function LojaCaixasLoading() {
           </div>
         </div>
 
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
       <div
@@ -37,7 +37,7 @@ export default function LojaCaixasLoading() {
         </div>
       </div>
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }

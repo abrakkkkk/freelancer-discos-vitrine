@@ -24,6 +24,8 @@ export default function ProductDetailSheet({
   tipo = 'discos',
   // Na página da própria caixa, o bloco de localização não leva a lugar nenhum.
   linkCaixa = true,
+  // Prefixo dos links internos (páginas de teste vivem em outra pasta).
+  basePath = '',
 }) {
   const dialogRef = useRef(null);
   const fecharENavegar = useModalDialog(isOpen && Boolean(item), onClose, dialogRef);
@@ -43,7 +45,8 @@ export default function ProductDetailSheet({
     ? String(item.observacao).replace(/\[[^\]]+\]/g, '').trim()
     : '';
 
-  const caixaHref = linkCaixa ? hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true }) : null;
+  const caminhoCaixa = linkCaixa ? hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true }) : null;
+  const caixaHref = caminhoCaixa ? `${basePath}${caminhoCaixa}` : null;
   const temCaixa = rotuloCaixa !== '—';
   const localConteudo = (
     <>

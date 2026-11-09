@@ -13,14 +13,14 @@ function SetaParaLoja({ lojaHref, nomeLoja }) {
   );
 }
 
-function Seta({ lojaHref, nomeLoja }) {
+function Seta({ lojaHref, nomeLoja, catalogoHref = '/' }) {
   const router = useRouter();
   const doCatalogo = useSearchParams().get('de') === 'catalogo';
   if (!doCatalogo) return <SetaParaLoja lojaHref={lojaHref} nomeLoja={nomeLoja} />;
 
   return (
     <Link
-      href="/"
+      href={catalogoHref}
       aria-label="Voltar para a busca"
       className="headerBackBtn"
       onClick={(e) => {

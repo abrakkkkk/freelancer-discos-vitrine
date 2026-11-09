@@ -1,12 +1,11 @@
-import BottomNav from '@/components/BottomNav';
 import CompartilharClient from '@/components/CompartilharClient';
-import DesktopHeaderNav from '@/components/DesktopHeaderNav';
+import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 
 export const metadata = {
   title: 'Compartilhar',
 };
 
-export default function CompartilharPage() {
+export default function CompartilharEditorialPage() {
   return (
     <div className="pageContainer">
       <header className="storeHeader">
@@ -17,13 +16,12 @@ export default function CompartilharPage() {
             <p className="headerSubtitle">Mostre o QR code ou envie o link</p>
           </div>
         </div>
-
-        <DesktopHeaderNav />
+        <NavDesktopEditorial />
       </header>
 
       <CompartilharClient />
 
-      <BottomNav />
+      <BarraEditorial />
     </div>
   );
 }
