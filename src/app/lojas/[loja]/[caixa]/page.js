@@ -67,7 +67,7 @@ export default async function CaixaDetalhePage({ params }) {
       })
     );
     // Discos, CDs, DVDs e fitas juntos por título, a ordem do caixote.
-    const comparador = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
+    const comparador = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true, ignorePunctuation: true });
     todosItens = resultados.flat().sort((a, b) => comparador.compare(a.titulo || '', b.titulo || ''));
   }
 

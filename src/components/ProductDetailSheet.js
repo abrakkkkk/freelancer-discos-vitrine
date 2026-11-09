@@ -3,10 +3,11 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
+import Localizacao from './Localizacao';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
-import { FiArchive, FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
+import { FiX, FiShoppingBag, FiCheck, FiChevronRight } from 'react-icons/fi';
 
 const FORMAT_NAMES = {
   discos: 'Vinil (LP)',
@@ -48,17 +49,13 @@ export default function ProductDetailSheet({
   const caminhoCaixa = linkCaixa ? hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true }) : null;
   const caixaHref = caminhoCaixa ? `${basePath}${caminhoCaixa}` : null;
   const temCaixa = rotuloCaixa !== '—';
+  // Mesmo bloco de localização do card e da sacola, maior: caixa e loja com o mesmo peso.
   const localConteudo = (
     <>
-      <FiArchive size={22} aria-hidden="true" style={{ flexShrink: 0, color: '#d4d4d8' }} />
-      <span style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0, flex: 1 }}>
-        <span className="sheetLocalCaixa">{temCaixa ? rotuloCaixa : 'Caixa não informada'}</span>
-        <span className="sheetLocalLoja">
-          {item.loja || 'Loja física'}
-          {caixaHref ? ' · ver tudo desta caixa' : ''}
-        </span>
+      <span style={{ display: 'flex', minWidth: 0, flex: 1 }}>
+        <Localizacao caixa={item.caixa} loja={item.loja} tamanho="detalhe" />
       </span>
-      {caixaHref && <FiChevronRight size={20} color="#a1a1aa" aria-hidden="true" />}
+      {caixaHref && <FiChevronRight size={20} color="var(--text-muted)" aria-hidden="true" />}
     </>
   );
 

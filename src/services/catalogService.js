@@ -93,7 +93,7 @@ async function buscarComErroDeDigitacao(category, {
 // então a ordem é montada aqui sobre id/loja/caixa/título e guardada por 60 s.
 const SUPABASE_PAGE_SIZE = 1000;
 const ordemDiscosCache = new Map();
-const comparadorTexto = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
+const comparadorTexto = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true, ignorePunctuation: true });
 
 function chaveOrdemCaixa(item) {
   const loja = item.loja || 'Loja 1';

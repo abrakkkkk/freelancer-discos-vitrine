@@ -94,46 +94,25 @@
   text-decoration-color: currentColor;
 }
 
-/* Divisória por letra na página da caixa: mesma voz do cabeçalho de caixa, um degrau abaixo. */
+/* Divisória por letra na página da caixa: discreta, uma letra pequena sobre um fio fino. */
 .edLetra {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  margin-bottom: 12px;
-  padding: 8px 14px 6px;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 24px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1;
-  color: #ffffff;
+  color: var(--text-muted);
 }
 
-/* Faixa de letras da caixa: uma linha que rola de lado no celular, alvos de 44px. */
+/* Atalho de letras: texto simples numa linha que rola de lado, sem caixinhas.
+   O alvo de toque continua com 44px de altura. */
 .edLetras {
-  position: sticky;
-  top: 0;
-  z-index: 3;
   display: flex;
-  gap: 6px;
-  margin: 0 0 16px;
-  padding: 6px;
+  margin: -6px 0 10px;
   overflow-x: auto;
   scrollbar-width: none;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-}
-
-/* Com a faixa fixa no topo, a divisória da letra para logo abaixo dela. */
-.edLetras ~ .edGrupos .edLetra {
-  top: 66px;
-}
-
-.edLetras ~ .edGrupos .edGrupoLetra {
-  scroll-margin-top: 66px;
 }
 
 .edLetras::-webkit-scrollbar {
@@ -145,22 +124,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 44px;
+  min-width: 30px;
   height: 44px;
-  padding: 0 8px;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  background-color: var(--bg-card-hover);
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 20px;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
   text-decoration: none;
 }
 
 @media (hover: hover) {
   .edLetraAtalho:hover {
-    border-color: var(--text-muted);
+    color: #ffffff;
   }
 }
 
@@ -324,6 +299,36 @@
 
 .edLocal + .edAcao {
   margin-top: 0;
+}
+
+.edLocalLoja {
+  color: var(--text);
+}
+
+/* Detalhe do disco: o mesmo bloco, maior; caixa e loja com o mesmo peso. */
+.edLocal-detalhe {
+  margin-top: 0;
+  gap: 8px;
+  font-size: 26px;
+  flex-wrap: wrap;
+}
+
+.edLocal-detalhe .edPonto {
+  width: 10px;
+  height: 10px;
+}
+
+.edLocal-detalhe .edLocalLoja::before {
+  margin-right: 8px;
+  color: var(--text-muted);
+}
+
+/* Sacola: o mesmo bloco, compacto. */
+.edLocal-sacola {
+  margin-top: 0;
+  gap: 5px;
+  font-size: 14px;
+  min-width: 0;
 }
 
 /* Preço e botão no pé do card, separados da ficha por um fio fino. */

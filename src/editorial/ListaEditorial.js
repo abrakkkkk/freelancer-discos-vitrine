@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AlbumCover from '@/components/AlbumCover';
+import Localizacao from '@/components/Localizacao';
 import { getCartItemKey } from '@/utils/cartUtils';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
@@ -39,15 +40,15 @@ function letraDoTitulo(titulo) {
   return /[A-Z]/.test(primeira) ? primeira : '#';
 }
 
+// Uma divisória por letra, mesmo que algum título fora de ordem caia longe das outras.
 function agruparPorLetra(itens) {
-  const grupos = [];
+  const grupos = new Map();
   for (const item of itens) {
     const letra = letraDoTitulo(item.titulo);
-    const ultimo = grupos[grupos.length - 1];
-    if (ultimo && ultimo.letra === letra) ultimo.itens.push(item);
-    else grupos.push({ letra, itens: [item] });
+    if (!grupos.has(letra)) grupos.set(letra, { letra, itens: [] });
+    grupos.get(letra).itens.push(item);
   }
-  return grupos;
+  return [...grupos.values()];
 }
 
 // Caixa cortada pela paginação: diz só se ela continua de outra página, sem contador.
@@ -127,13 +128,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
       </div>
 
       {/* Onde está o disco: linha própria, na fonte dos títulos, logo acima do preço. */}
-      {mostrarCaixa && rotuloCaixa !== '—' && (
-        <span className="edLocal tabularNums">
-          <span className="edPonto" style={{ backgroundColor: COR_LOJA[item.loja] || 'var(--badge-neutral)' }} aria-hidden="true" />
-          {rotuloCaixa}
-          {item.loja && <span className="edLocalLoja">{item.loja}</span>}
-        </span>
-      )}
+      {mostrarCaixa && rotuloCaixa !== '—' && <Localizacao caixa={item.caixa} loja={item.loja} />}
 
       <div className="edAcao">
         <span className="edPreco tabularNums">{precoBRL(item.preco)}</span>

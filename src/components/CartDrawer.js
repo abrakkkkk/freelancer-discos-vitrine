@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
+import Localizacao from './Localizacao';
 import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { FiX, FiTrash2, FiInfo, FiRotateCcw } from 'react-icons/fi';
@@ -342,8 +343,10 @@ export default function CartDrawer({
                     >
                       {item.titulo}
                     </h3>
-                    <span className="tabularNums" style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
-                      {fmtTag} · {item.loja} · {rotuloCaixa}
+                    {/* Na sacola a localização vira lista de separação: mesmo bloco do card. */}
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px', minWidth: 0 }}>
+                      <Localizacao caixa={item.caixa} loja={item.loja} tamanho="sacola" />
+                      <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{fmtTag}</span>
                     </span>
                   </div>
 
