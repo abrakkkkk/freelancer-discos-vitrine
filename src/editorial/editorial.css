@@ -654,3 +654,49 @@ body:has(.edPagina) .sheetLocal {
 body:has(.productDetailDialog) .sacolaAviso {
   display: none;
 }
+
+/* Abas de formato no estilo editorial: texto na fonte dos títulos (sem caixa alta, para manter "CDs" e "DVDs") sobre um fio fino,
+   com o ícone de cada formato ao lado. A ativa fica branca, com ícone e sublinhado
+   vermelhos (o mesmo traço do cabeçalho da caixa). */
+.edPagina .categoryTabsBar {
+  display: flex;
+  gap: 18px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.edPagina .categoryTabBtn {
+  min-height: 44px;
+  padding: 0;
+  gap: 6px;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--text-muted);
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: inset 0 -3px 0 transparent;
+}
+
+.edPagina .categoryTabBtn:hover {
+  background: none;
+  color: var(--text);
+}
+
+.edPagina .categoryTabBtnActive,
+.edPagina .categoryTabBtnActive:hover {
+  background: none;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.edPagina .categoryTabBtnActive svg {
+  color: var(--accent-hover);
+}
+
+.edPagina .categoryTabBtn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
