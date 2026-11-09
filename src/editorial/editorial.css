@@ -729,8 +729,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   height: 22px;
 }
 
-/* Topo da página em vinho escuro que vira preto antes dos discos, como a capa de um
-   catálogo. Linear e só no início da página; o fundo de discos continua por cima. */
+/* Topo da página com um véu leve do vermelho da marca que some antes dos discos, como a
+   capa de um catálogo. Linear e só no início da página; o fundo de discos continua por cima. */
 body:has(.edPagina) {
-  background: linear-gradient(180deg, #2b0c0e 0, #170a0c 140px, rgba(9, 9, 11, 0) 280px) no-repeat;
+  background: linear-gradient(180deg, rgba(139, 30, 30, 0.24) 0, rgba(139, 30, 30, 0.1) 130px, rgba(139, 30, 30, 0) 260px) no-repeat;
 }
