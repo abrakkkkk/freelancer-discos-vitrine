@@ -135,25 +135,6 @@ export default function AlbumCover({
         flexShrink: 0,
       };
 
-  if (resolvedUrl && !error) {
-    return (
-      <div style={containerStyle}>
-        <img
-          src={resolvedUrl}
-          alt={`${artista ? `${artista} - ` : ''}${titulo || 'Capa'}`}
-          loading="lazy"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            display: 'block',
-          }}
-          onError={() => setError(true)}
-        />
-      </div>
-    );
-  }
-
   const iconSize = fluid ? 52 : Math.round(size * 0.46);
   const iconColor = '#52525b';
   const formatLabel = FORMAT_TAG[tipo] || 'LP';
@@ -170,6 +151,29 @@ export default function AlbumCover({
         return <PiVinylRecord size={iconSize} color={iconColor} />;
     }
   };
+
+  if (resolvedUrl && !error) {
+    return (
+      <div style={containerStyle}>
+        {/* Ícone do formato por baixo enquanto a capa carrega: um só visual para "sem imagem ainda". */}
+        {renderIcon()}
+        <img
+          src={resolvedUrl}
+          alt={`${artista ? `${artista} - ` : ''}${titulo || 'Capa'}`}
+          loading="lazy"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+          }}
+          onError={() => setError(true)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div style={containerStyle}>

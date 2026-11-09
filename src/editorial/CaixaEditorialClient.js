@@ -1,14 +1,36 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { FiSearch, FiX } from 'react-icons/fi';
+import Link from 'next/link';
+import { FiChevronLeft, FiChevronRight, FiSearch, FiX } from 'react-icons/fi';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import { useCart } from '@/components/CartProvider';
 import ListaEditorial from './ListaEditorial';
 import { BarraEditorial } from './NavEditorial';
 
 // Itens de uma caixa no estilo editorial, com busca dentro da caixa.
-export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja }) {
+// Caixa anterior e próxima da mesma loja, como folhear os caixotes.
+function VizinhasCaixa({ anterior, proxima }) {
+  if (!anterior && !proxima) return null;
+  return (
+    <nav className="edVizinhas" aria-label="Outras caixas">
+      {anterior ? (
+        <Link href={anterior.href} className="edVizinha">
+          <FiChevronLeft size={18} aria-hidden="true" />
+          {anterior.rotulo}
+        </Link>
+      ) : <span />}
+      {proxima && (
+        <Link href={proxima.href} className="edVizinha edVizinhaProxima">
+          {proxima.rotulo}
+          <FiChevronRight size={18} aria-hidden="true" />
+        </Link>
+      )}
+    </nav>
+  );
+}
+
+export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja, anterior, proxima }) {
   const [detailItem, setDetailItem] = useState(null);
   const [busca, setBusca] = useState('');
   const { estaNaSacola, adicionar } = useCart();
@@ -25,6 +47,7 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
 
   return (
     <>
+      <VizinhasCaixa anterior={anterior} proxima={proxima} />
       {itens.length > 6 && (
         <div style={{ marginBottom: '14px' }}>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -44,7 +67,7 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
             )}
           </div>
           {busca && (
-            <p className="tabularNums" style={{ fontSize: '13px', color: '#a1a1aa', marginTop: '8px' }}>
+            <p className="tabularNums" style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '8px' }}>
               {filtrados.length.toLocaleString('pt-BR')} de {itens.length.toLocaleString('pt-BR')} itens
             </p>
           )}
@@ -65,12 +88,15 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
           itens={filtrados}
           categoria="discos"
           agruparPorCaixa={false}
+          dividirPorLetra={!busca}
           mostrarCaixa={false}
           estaNaSacola={estaNaSacola}
           onAdicionar={handleAdd}
           onAbrir={(i) => setDetailItem(i)}
         />
       )}
+
+      <VizinhasCaixa anterior={anterior} proxima={proxima} />
 
       <ProductDetailSheet
         item={detailItem}

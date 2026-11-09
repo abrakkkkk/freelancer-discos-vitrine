@@ -40,11 +40,23 @@
   color: #ffffff;
 }
 
+.edCaixaInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .edCaixaLoja {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.edCaixaTrecho {
+  font-size: 12.5px;
   color: var(--text-muted);
 }
 
@@ -65,6 +77,63 @@
 
 .edCaixaLink:hover {
   text-decoration-color: currentColor;
+}
+
+/* Divisória por letra na página da caixa: mesma voz do cabeçalho de caixa, um degrau abaixo. */
+.edLetra {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-bottom: 12px;
+  padding: 8px 2px 6px;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg);
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+}
+
+/* Caixa anterior e próxima. */
+.edVizinhas {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+
+.edGrupos + .edVizinhas,
+.edLista + .edVizinhas,
+.semResultados + .edVizinhas {
+  margin: 24px 0 0;
+}
+
+.edVizinha {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.edVizinhaProxima {
+  margin-left: auto;
+}
+
+@media (hover: hover) {
+  .edVizinha:hover {
+    background-color: var(--bg-card-hover);
+  }
 }
 
 .edPonto {
@@ -149,12 +218,33 @@
   color: var(--text-muted);
 }
 
-.edMetaCaixa {
-  display: inline-flex;
+/* Localização no card (busca e listas sem agrupamento): tão legível quanto o preço. */
+.edLocal {
+  display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  margin-top: auto;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.edLocalLoja {
   font-weight: 600;
-  color: var(--text);
+  color: var(--text-muted);
+}
+
+.edLocalLoja::before {
+  content: '·';
+  margin-right: 6px;
+}
+
+.edLocal + .edAcao {
+  margin-top: 0;
 }
 
 /* Preço e botão no pé do card, separados da ficha por um fio fino. */
@@ -480,4 +570,9 @@ body:has(.edPagina) .sheetLocal {
   .edCaixas {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
+}
+
+/* Com o detalhe aberto, o próprio botão já vira "Na sacola": o aviso não cobre a ficha. */
+body:has(.productDetailDialog) .sacolaAviso {
+  display: none;
 }

@@ -34,8 +34,8 @@ export default async function LojasEditorialPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.jpg" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
-            <h1 className="headerTitle">Lojas</h1>
-            <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>
+            <h1 className="headerTitle">Caixas</h1>
+            <p className="headerSubtitle">Escolha a loja e a caixa</p>
           </div>
         </div>
         <NavDesktopEditorial />

@@ -88,6 +88,87 @@ async function buscarComErroDeDigitacao(category, {
   });
 }
 
+// Ordem padrão dos discos: loja, número da caixa (como número: 1, 2 … 10, não 1, 10, 2) e
+// título, a mesma ordem do caixote físico. O banco só ordena a coluna "caixa" como texto,
+// então a ordem é montada aqui sobre id/loja/caixa/título e guardada por 60 s.
+const SUPABASE_PAGE_SIZE = 1000;
+const ordemDiscosCache = new Map();
+const comparadorTexto = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
+
+function chaveOrdemCaixa(item) {
+  const loja = item.loja || 'Loja 1';
+  const rankLoja = loja === 'Loja 1' ? 0 : loja === 'Loja 2' ? 1 : 2;
+  const raw = String(item.caixa ?? '').trim();
+  if (!raw) return { rankLoja: 3, numero: 0, texto: '' };
+  const numero = parseInt(raw.replace(/\D/g, ''), 10);
+  return {
+    rankLoja,
+    numero: Number.isNaN(numero) ? Number.MAX_SAFE_INTEGER : numero,
+    texto: chaveCaixa(raw, loja),
+  };
+}
+
+async function idsDiscosEmOrdem(filtroLoja) {
+  const cacheKey = filtroLoja || '__ALL__';
+  const cached = ordemDiscosCache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) return cached.resultado;
+
+  const consulta = (inicio) => {
+    let q = supabaseServer
+      .from('discos')
+      .select('id, loja, caixa, titulo', { count: 'exact' })
+      .eq('deletado', false)
+      .eq('ativo', true)
+      .order('id')
+      .range(inicio, inicio + SUPABASE_PAGE_SIZE - 1);
+    if (filtroLoja) q = q.eq('loja', filtroLoja);
+    return q;
+  };
+
+  const primeira = await consulta(0);
+  if (primeira.error) throw primeira.error;
+  let linhas = primeira.data || [];
+  const total = primeira.count || linhas.length;
+  const restantes = [];
+  for (let inicio = SUPABASE_PAGE_SIZE; inicio < total; inicio += SUPABASE_PAGE_SIZE) {
+    restantes.push(consulta(inicio));
+  }
+  for (const res of await Promise.all(restantes)) {
+    if (res.error) throw res.error;
+    linhas = linhas.concat(res.data || []);
+  }
+
+  const comChave = linhas.map((item) => ({ item, chave: chaveOrdemCaixa(item) }));
+  comChave.sort((a, b) =>
+    a.chave.rankLoja - b.chave.rankLoja ||
+    a.chave.numero - b.chave.numero ||
+    comparadorTexto.compare(a.chave.texto, b.chave.texto) ||
+    comparadorTexto.compare(a.item.titulo || '', b.item.titulo || '') ||
+    String(a.item.id).localeCompare(String(b.item.id))
+  );
+  // Posição de cada disco dentro da sua caixa, para o cabeçalho avisar quando a caixa
+  // começou na página anterior ("continuação, 41–80 de 118").
+  const ids = comChave.map(({ item }) => item.id);
+  const posicoes = new Map();
+  let inicioGrupo = 0;
+  for (let i = 1; i <= comChave.length; i++) {
+    const atual = comChave[i];
+    const anterior = comChave[i - 1];
+    const mudou = !atual ||
+      atual.chave.rankLoja !== anterior.chave.rankLoja ||
+      atual.chave.texto !== anterior.chave.texto;
+    if (!mudou) continue;
+    const total = i - inicioGrupo;
+    for (let j = inicioGrupo; j < i; j++) {
+      posicoes.set(comChave[j].item.id, { posicao: j - inicioGrupo + 1, total });
+    }
+    inicioGrupo = i;
+  }
+  const resultado = { ids, posicoes };
+  ordemDiscosCache.set(cacheKey, { resultado, expiresAt: Date.now() + CATALOG_CACHE_TTL_MS });
+  return resultado;
+}
+
 export const catalogService = {
   async fetchItems(category = 'discos', {
     pagina = 1,
@@ -123,6 +204,37 @@ export const catalogService = {
       colunas += ', artista';
     }
 
+    // Catálogo padrão de discos: caixa por número e título (ver idsDiscosEmOrdem).
+    if (category === 'discos' && !busca && !filtroCaixa && !ordenarColuna) {
+      const { ids, posicoes } = await idsDiscosEmOrdem(filtroLoja);
+      const idsPagina = ids.slice((pagina - 1) * itensPorPagina, pagina * itensPorPagina);
+      let itensPagina = [];
+      if (idsPagina.length > 0) {
+        const { data, error } = await supabaseServer
+          .from('discos')
+          .select(colunas)
+          .in('id', idsPagina);
+        if (error) {
+          console.error('Erro na consulta do catálogo:', error);
+          throw error;
+        }
+        const porId = new Map((data || []).map((item) => [item.id, item]));
+        itensPagina = idsPagina
+          .filter((id) => porId.has(id))
+          .map((id) => ({
+            ...porId.get(id),
+            posicaoNaCaixa: posicoes.get(id)?.posicao,
+            totalNaCaixa: posicoes.get(id)?.total,
+          }));
+      }
+      const resultado = { data: itensPagina, count: ids.length };
+      catalogServerCache.set(cacheKey, {
+        result: resultado,
+        expiresAt: Date.now() + CATALOG_CACHE_TTL_MS,
+      });
+      return resultado;
+    }
+
     // Regra Estrita: Somente itens ativos e não deletados
     let query = supabaseServer
       .from(category)
@@ -143,9 +255,13 @@ export const catalogService = {
       const colunaReal = (isVideo && ordenarColuna === 'artista') ? 'titulo' : ordenarColuna;
       query = query.order(colunaReal, { ascending: crescente, nullsFirst: false });
     } else {
-      if (category === 'discos') query = query.order('caixa');
-      if (!isVideo) query = query.order('artista');
-      query = query.order('titulo');
+      // Discos numa caixa só (filtro de caixa): título, como no caixote e na página da caixa.
+      if (category === 'discos') {
+        query = query.order('titulo');
+      } else {
+        if (!isVideo) query = query.order('artista');
+        query = query.order('titulo');
+      }
     }
 
     let tokensBusca = null;

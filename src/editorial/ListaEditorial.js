@@ -5,6 +5,7 @@ import AlbumCover from '@/components/AlbumCover';
 import { getCartItemKey } from '@/utils/cartUtils';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
+import { chaveCaixa } from '@/utils/caixaUtils';
 import { FiCheck, FiPlus } from 'react-icons/fi';
 import { ed } from './rotas';
 
@@ -18,7 +19,8 @@ function precoBRL(valor) {
 function agrupar(itens) {
   const grupos = [];
   for (const item of itens) {
-    const chave = `${item.loja || ''}|${item.caixa || ''}`;
+    // Chave canônica: "1" e "Caixa 1" são a mesma caixa.
+    const chave = `${item.loja || ''}|${chaveCaixa(item.caixa, item.loja || 'Loja 1')}`;
     const ultimo = grupos[grupos.length - 1];
     if (ultimo && ultimo.chave === chave) ultimo.itens.push(item);
     else grupos.push({ chave, loja: item.loja, caixa: item.caixa, itens: [item] });
@@ -26,22 +28,62 @@ function agrupar(itens) {
   return grupos;
 }
 
-function CabecalhoCaixa({ loja, caixa }) {
+// Primeira letra do título sem acento; números e símbolos ficam juntos em "#".
+function letraDoTitulo(titulo) {
+  const primeira = String(titulo || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/^[^a-z0-9]+/i, '')
+    .charAt(0)
+    .toUpperCase();
+  return /[A-Z]/.test(primeira) ? primeira : '#';
+}
+
+function agruparPorLetra(itens) {
+  const grupos = [];
+  for (const item of itens) {
+    const letra = letraDoTitulo(item.titulo);
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.letra === letra) ultimo.itens.push(item);
+    else grupos.push({ letra, itens: [item] });
+  }
+  return grupos;
+}
+
+// Quando a caixa não cabe inteira nesta página, diz que parte dela está aqui.
+function trechoDaCaixa(itens) {
+  const primeiro = itens[0]?.posicaoNaCaixa;
+  const total = itens[0]?.totalNaCaixa;
+  if (!primeiro || !total || itens.length >= total) return null;
+  const ultimo = primeiro + itens.length - 1;
+  return { continuacao: primeiro > 1, texto: `${primeiro}–${ultimo} de ${total}` };
+}
+
+function CabecalhoCaixa({ loja, caixa, itens }) {
   const rotulo = formatCaixa(caixa, loja);
   const caminho = hrefDaCaixa(loja, caixa, { doCatalogo: true });
   const href = caminho ? ed(caminho) : null;
+  const trecho = trechoDaCaixa(itens);
   return (
     <div className="edCaixaCab">
       <h2 className="edCaixaNum tabularNums">{rotulo === '—' ? 'Sem caixa' : rotulo}</h2>
-      {loja && (
-        <span className="edCaixaLoja">
-          <span className="edPonto" style={{ backgroundColor: COR_LOJA[loja] || 'var(--badge-neutral)' }} aria-hidden="true" />
-          {loja}
-        </span>
-      )}
+      <span className="edCaixaInfo">
+        {loja && (
+          <span className="edCaixaLoja">
+            <span className="edPonto" style={{ backgroundColor: COR_LOJA[loja] || 'var(--badge-neutral)' }} aria-hidden="true" />
+            {loja}
+          </span>
+        )}
+        {trecho && (
+          <span className="edCaixaTrecho tabularNums">
+            {trecho.continuacao ? 'continuação, ' : ''}
+            {trecho.texto}
+          </span>
+        )}
+      </span>
       {href && (
         <Link href={href} className="edCaixaLink">
-          Ver caixa
+          {trecho ? 'Ver caixa inteira' : 'Ver caixa'}
         </Link>
       )}
     </div>
@@ -84,18 +126,20 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
           {item.titulo}
         </button>
         <span className="edMeta tabularNums">
-          {mostrarCaixa && rotuloCaixa !== '—' && (
-            <span className="edMetaCaixa">
-              <span className="edPonto" style={{ backgroundColor: COR_LOJA[item.loja] || 'var(--badge-neutral)' }} aria-hidden="true" />
-              {rotuloCaixa}
-              {item.loja ? `, ${item.loja}` : ''}
-            </span>
-          )}
           {selo && <span>{selo}</span>}
           {ano && (!selo || !selo.includes(ano)) && <span>{ano}</span>}
           {importado && <span>Importado</span>}
         </span>
       </div>
+
+      {/* Onde está o disco: linha própria, na fonte dos títulos, logo acima do preço. */}
+      {mostrarCaixa && rotuloCaixa !== '—' && (
+        <span className="edLocal tabularNums">
+          <span className="edPonto" style={{ backgroundColor: COR_LOJA[item.loja] || 'var(--badge-neutral)' }} aria-hidden="true" />
+          {rotuloCaixa}
+          {item.loja && <span className="edLocalLoja">{item.loja}</span>}
+        </span>
+      )}
 
       <div className="edAcao">
         <span className="edPreco tabularNums">{precoBRL(item.preco)}</span>
@@ -116,6 +160,8 @@ export default function ListaEditorial({
   itens,
   categoria,
   agruparPorCaixa,
+  // Página da caixa: divide os títulos por letra, como as divisórias do caixote.
+  dividirPorLetra = false,
   // Na página de uma caixa, todos os itens são dela: a caixa não se repete no card.
   mostrarCaixa = true,
   estaNaSacola,
@@ -134,6 +180,19 @@ export default function ListaEditorial({
     />
   );
 
+  if (dividirPorLetra) {
+    return (
+      <div className="edGrupos">
+        {agruparPorLetra(itens).map((g) => (
+          <section key={g.letra} className="edGrupo" aria-label={`Títulos com ${g.letra}`}>
+            <h2 className="edLetra">{g.letra}</h2>
+            <ul className="edLista">{g.itens.map((item) => linha(item, mostrarCaixa))}</ul>
+          </section>
+        ))}
+      </div>
+    );
+  }
+
   if (!agruparPorCaixa) {
     return <ul className="edLista">{itens.map((item) => linha(item, mostrarCaixa))}</ul>;
   }
@@ -142,7 +201,7 @@ export default function ListaEditorial({
     <div className="edGrupos">
       {agrupar(itens).map((g) => (
         <section key={g.chave} className="edGrupo">
-          <CabecalhoCaixa loja={g.loja} caixa={g.caixa} />
+          <CabecalhoCaixa loja={g.loja} caixa={g.caixa} itens={g.itens} />
           <ul className="edLista">{g.itens.map((item) => linha(item, false))}</ul>
         </section>
       ))}

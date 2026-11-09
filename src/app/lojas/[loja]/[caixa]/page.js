@@ -7,7 +7,7 @@ import CaixaEditorialClient from '@/editorial/CaixaEditorialClient';
 import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 import VoltarDaCaixa from '@/components/VoltarDaCaixa';
 import { formatCaixa } from '@/utils/stringUtils';
-import { nomeLojaPorSlug } from '@/utils/lojas';
+import { nomeLojaPorSlug, hrefDaCaixa } from '@/utils/lojas';
 
 export const revalidate = 60;
 
@@ -66,8 +66,18 @@ export default async function CaixaDetalhePage({ params }) {
         return (data || []).map((d) => ({ ...d, categoria: tab.id }));
       })
     );
-    todosItens = resultados.flat();
+    // Discos, CDs, DVDs e fitas juntos por título, a ordem do caixote.
+    const comparador = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
+    todosItens = resultados.flat().sort((a, b) => comparador.compare(a.titulo || '', b.titulo || ''));
   }
+
+  // Caixas vizinhas da mesma loja, para ir de uma caixa à outra sem voltar ao índice.
+  const chaveAtual = chaveCaixa(caixaDecodificada, nomeLoja);
+  const caixasDaLoja = (await caixaService.getCaixasComContagem(nomeLoja)).filter((c) => c.loja === nomeLoja);
+  const indiceAtual = caixasDaLoja.findIndex((c) => c.caixa === chaveAtual);
+  const vizinha = (c) => c && { rotulo: formatCaixa(c.caixa, nomeLoja), href: hrefDaCaixa(nomeLoja, c.caixa) };
+  const anterior = indiceAtual > 0 ? vizinha(caixasDaLoja[indiceAtual - 1]) : null;
+  const proxima = indiceAtual >= 0 ? vizinha(caixasDaLoja[indiceAtual + 1]) : null;
 
   // Caixa sem itens só existe se for uma das caixas padrão da loja; senão é 404.
   if (todosItens.length === 0) {
@@ -99,6 +109,8 @@ export default async function CaixaDetalhePage({ params }) {
         itens={todosItens}
         rotuloCaixa={rotuloCaixa}
         nomeLoja={nomeLoja}
+        anterior={anterior}
+        proxima={proxima}
       />
     </div>
   );
