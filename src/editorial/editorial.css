@@ -15,29 +15,24 @@
   gap: 28px;
 }
 
-/* Cabeçalho da caixa: card na mesma superfície dos discos (não um recorte preto no fundo de
-   discos), fio vermelho no topo e fixo enquanto a caixa rola. */
+/* Cabeçalho da caixa: só texto sobre o fundo de discos, com fio fino embaixo. */
 .edCaixaCab {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 10px;
-  margin-bottom: 12px;
-  padding: 10px 14px 8px;
-  overflow: hidden;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
 }
 
-.edCaixaCab::before {
+/* Só tipografia sobre o fundo de discos: um traço vermelho curto marca o número. */
+.edCaixaCab::after {
   content: '';
   position: absolute;
-  top: 0;
   left: 0;
-  right: 0;
+  bottom: -2px;
+  width: 36px;
   height: 3px;
   background-color: var(--accent);
 }
