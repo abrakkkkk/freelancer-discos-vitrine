@@ -858,3 +858,562 @@ body:has(.productDetailDialog) .sacolaAviso {
   color: inherit;
   text-underline-offset: 2px;
 }
+
+/* ==========================================================================
+   COMPUTADOR (1024px ou mais)
+   Regra da casa: abaixo de 1024px nada muda. As peças novas ficam escondidas e os
+   contêineres novos usam display: contents (não geram caixa nem mexem na disposição).
+   ========================================================================== */
+.edCatalogo,
+.edCatalogoPrincipal {
+  display: contents;
+}
+
+.edLateral,
+.atalhoBusca {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  /* Catálogo: coluna de filtros fixa à esquerda + discos à direita. */
+  .edCatalogo {
+    display: grid;
+    grid-template-columns: 212px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .edCatalogoPrincipal {
+    display: block;
+    min-width: 0;
+  }
+
+  /* As abas e as listas de loja/caixa/ordem passam para a coluna lateral. */
+  .edAbasCatalogo,
+  .edCatalogo .filtrosBtn,
+  .edCatalogo .filtrosPainel {
+    display: none;
+  }
+
+  /* As etiquetas de filtro têm display escrito no próprio elemento: precisa do !important. */
+  .edCatalogo .filtrosAtivos {
+    display: none !important;
+  }
+
+  .edLista {
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+  }
+
+  .edLateral {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding-top: 2px;
+  }
+
+  .edLatTitulo {
+    margin: 0 0 6px 10px;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #ffffff;
+  }
+
+  .edLatOpcao {
+    width: 100%;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .edLatOpcao:hover {
+    color: var(--text);
+    background-color: var(--bg-card);
+  }
+
+  .edLatOpcaoAtiva,
+  .edLatOpcaoAtiva:hover {
+    color: #ffffff;
+    font-weight: 600;
+    background-color: var(--bg-card);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .edLatOpcaoNome {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .edLatOpcaoExtra {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .edLatDica {
+    padding: 0 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .edLatCaixas {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 6px;
+    padding: 0 2px;
+  }
+
+  .edLatCaixa {
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    background: none;
+    color: #ffffff;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .edLatCaixa:hover {
+    border-color: var(--text-muted);
+    background-color: var(--bg-card);
+  }
+
+  .edLatCaixaAtiva,
+  .edLatCaixaAtiva:hover {
+    border-color: var(--accent);
+    background-color: var(--bg-card);
+  }
+
+  .edLatCaixaVazia {
+    border-style: dashed;
+    color: var(--text-muted);
+  }
+
+  .edLatOpcao:focus-visible,
+  .edLatCaixa:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 1px;
+  }
+
+  /* Indicação do atalho "/" dentro da busca (só com mouse, ver regra abaixo). */
+}
+
+/* Telas largas: um pouco mais de área útil, 6 colunas de discos ao lado da coluna. */
+@media (min-width: 1280px) {
+  .pageContainer {
+    max-width: 1320px;
+  }
+}
+
+/* Atalho "/" da busca: visível só em tela grande com mouse e com a busca vazia. */
+@media (min-width: 1024px) and (pointer: fine) {
+  .atalhoBusca {
+    position: absolute;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+}
+
+/* Link sobre a capa do card: só no computador (abre a página do disco, aceita nova aba). */
+.edCapaLink {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .edLinha {
+    position: relative;
+  }
+
+  .edCapaLink {
+    display: block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    aspect-ratio: 1 / 1;
+    z-index: 1;
+    border-radius: 8px;
+  }
+}
+
+/* ==========================================================================
+   Página do disco (/disco/...). Página nova: uma coluna no celular (link
+   compartilhado), capa e ficha lado a lado no computador.
+   ========================================================================== */
+.edDiscoTrilha {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 4px 0 18px;
+}
+
+.edDiscoVoltar {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edDiscoCaminho {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+}
+
+.edDiscoCaminho a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.edDiscoCorpo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edDiscoCapa {
+  width: min(100%, 420px);
+}
+
+.edDiscoCapa > div {
+  border-radius: var(--radius-md);
+}
+
+.edDiscoArtista {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.edDiscoTitulo {
+  margin-top: 2px;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.edDiscoPreco {
+  margin-top: 10px;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.edDiscoSacola {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--accent);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.edDiscoSacolaNa {
+  background-color: #1f5f3a;
+}
+
+.edDiscoVizinhos {
+  margin-top: 40px;
+}
+
+.edDiscoVoltar:focus-visible,
+.edDiscoSacola:focus-visible,
+.edDiscoCaminho a:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .edDiscoVoltar:hover {
+    background-color: var(--bg-card);
+  }
+
+  .edDiscoCaminho a:hover {
+    color: var(--text);
+  }
+
+  .edDiscoSacola:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .edDiscoSacolaNa:hover {
+    background-color: #24703f;
+  }
+}
+
+@media (min-width: 1024px) {
+  .edDiscoCorpo {
+    display: grid;
+    grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+    gap: 44px;
+    align-items: start;
+  }
+
+  .edDiscoCapa {
+    width: 100%;
+    position: sticky;
+    top: 16px;
+  }
+
+  .edDiscoFicha {
+    max-width: 520px;
+    padding-top: 6px;
+  }
+
+  .edDiscoTitulo {
+    font-size: 40px;
+  }
+
+  .edDiscoPreco {
+    font-size: 30px;
+  }
+
+  .edDiscoSacola {
+    max-width: 360px;
+  }
+}
+
+/* ==========================================================================
+   Página da caixa no computador: busca, letras e caixas vizinhas fixas à esquerda.
+   No celular os contêineres não geram caixa e a coluna fica escondida.
+   ========================================================================== */
+.edCaixaPagina,
+.edCaixaPrincipal {
+  display: contents;
+}
+
+.edCaixaLateral {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .edCaixaPagina {
+    display: grid;
+    grid-template-columns: 212px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .edCaixaPrincipal {
+    display: block;
+    min-width: 0;
+  }
+
+  /* A busca, as letras e a caixa anterior/próxima de cima passam para a coluna. */
+  .edCaixaPrincipal > .edVizinhas:first-child,
+  .edCaixaBuscaCelular,
+  .edCaixaPrincipal .edLetras {
+    display: none;
+  }
+
+  .edCaixaLateral {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: sticky;
+    top: 16px;
+    padding-top: 2px;
+  }
+
+  .edCaixaLatBusca {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .edCaixaLatBuscaIcone {
+    position: absolute;
+    left: 12px;
+    pointer-events: none;
+  }
+
+  .edCaixaLatContagem {
+    margin-top: -12px;
+    padding: 0 2px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .edCaixaLatLetras {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+    padding: 0 2px;
+  }
+
+  .edCaixaLatLetra {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .edCaixaLatLetra:hover {
+    color: #ffffff;
+    background-color: var(--bg-card);
+  }
+
+  .edCaixaLatLetra:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 1px;
+  }
+
+  .edCaixaLatVizinhas {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .edCaixaLateral a.edLatOpcao {
+    text-decoration: none;
+  }
+}
+
+/* ==========================================================================
+   Lojas e Compartilhar no computador.
+   ========================================================================== */
+.edLojaBloco {
+  display: contents;
+}
+
+.edLojaCaixasDireto,
+.edQrVinil {
+  display: none;
+}
+
+.edQrCapa {
+  display: contents;
+}
+
+@media (min-width: 1024px) {
+  /* Lojas: cada loja com os números das caixas logo abaixo das capas. */
+  .edLojaBloco {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+  }
+
+  .edLojaCaixasDireto {
+    display: grid;
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  a.edLatCaixa {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  /* Compartilhar: o QR é a capa e um vinil sai dela; o conjunto fica centralizado. */
+  .edQrCapa {
+    --capa: 300px;
+    position: relative;
+    display: block;
+    /* capa + parte do vinil que sai: a largura do conjunto centraliza capa e disco juntos */
+    width: calc(var(--capa) * 1.38);
+    height: var(--capa);
+  }
+
+  .edQrCapa > .edQr {
+    position: relative;
+    z-index: 1;
+    width: var(--capa);
+    height: var(--capa);
+  }
+
+  .edQrVinil {
+    position: absolute;
+    top: 3%;
+    left: calc(var(--capa) * 0.44);
+    width: calc(var(--capa) * 0.94);
+    height: calc(var(--capa) * 0.94);
+    display: block;
+    animation: edVinilSai 700ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+  }
+
+  .edQrEndereco {
+    margin-top: 22px;
+  }
+}
+
+@keyframes edVinilSai {
+  from {
+    transform: translateX(calc(var(--capa) * -0.4)) rotate(-60deg);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edQrVinil {
+    animation: none;
+  }
+}

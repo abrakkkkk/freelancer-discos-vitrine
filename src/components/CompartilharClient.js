@@ -49,6 +49,17 @@ export default function CompartilharClient() {
     <div className="edCompartilhar">
       {/* QR, endereço e ações no meio da área livre; o crédito fica no pé. */}
       <div className="edCompartilharMeio">
+      {/* Computador: o QR é a capa e um vinil sai dela. No celular o contêiner não gera
+          caixa e o vinil fica escondido (editorial.css). */}
+      <div className="edQrCapa">
+      <svg className="edQrVinil" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <circle cx="50" cy="50" r="49.5" fill="#1b1b20" stroke="var(--border-light)" strokeWidth="0.5" />
+        {[46, 42, 38, 34, 30, 26].map((r) => (
+          <circle key={r} cx="50" cy="50" r={r} fill="none" stroke="#2c2c33" strokeWidth="0.6" />
+        ))}
+        <circle cx="50" cy="50" r="20" fill="var(--accent)" />
+        <circle cx="50" cy="50" r="2.6" fill="#f4f4f5" />
+      </svg>
       <div className="edQr">
         {url && (
           <QRCodeSVG
@@ -61,6 +72,7 @@ export default function CompartilharClient() {
             style={{ display: 'block', width: '100%', height: '100%' }}
           />
         )}
+      </div>
       </div>
 
       <p className="edQrEndereco">{endereco}</p>

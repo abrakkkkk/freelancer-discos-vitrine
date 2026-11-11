@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import AlbumCover from '@/components/AlbumCover';
 import Localizacao from '@/components/Localizacao';
 import { getCartItemKey } from '@/utils/cartUtils';
@@ -41,7 +42,7 @@ function letraDoTitulo(titulo) {
 }
 
 // Uma divisória por letra, mesmo que algum título fora de ordem caia longe das outras.
-function agruparPorLetra(itens) {
+export function agruparPorLetra(itens) {
   const grupos = new Map();
   for (const item of itens) {
     const letra = letraDoTitulo(item.titulo);
@@ -50,6 +51,9 @@ function agruparPorLetra(itens) {
   }
   return [...grupos.values()];
 }
+
+// Âncora de cada divisória de letra (usada pela faixa de letras e pela coluna da caixa).
+export const idLetra = (letra) => `letra-${letra === '#' ? 'num' : letra}`;
 
 function CabecalhoCaixa({ loja, caixa, itens }) {
   const rotulo = formatCaixa(caixa, loja);
@@ -82,15 +86,27 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
   const importado = Boolean(item.observacao && /importado/i.test(item.observacao));
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
 
+  const router = useRouter();
+  const hrefDisco = `/disco/${categoria}/${item.id}`;
+
+  // No computador o disco abre na página própria; no celular, no detalhe de sempre.
+  const abrir = () => {
+    if (window.matchMedia('(min-width: 1024px)').matches) router.push(hrefDisco);
+    else onAbrir(item);
+  };
+
   // Toque em qualquer parte da linha abre o detalhe; botões e links seguem o próprio clique.
   const abrirPelaLinha = (e) => {
     if (e.target.closest('a, button')) return;
     if (window.getSelection()?.toString()) return;
-    onAbrir(item);
+    abrir();
   };
 
   return (
     <li className="edLinha" onClick={abrirPelaLinha}>
+      {/* Link de verdade sobre a capa (computador): abrir em nova aba, copiar o endereço.
+          Escondido no celular; o título continua sendo o acesso pelo teclado. */}
+      <Link href={hrefDisco} prefetch={false} className="edCapaLink" tabIndex={-1} aria-hidden="true" />
       <AlbumCover
         id={item.id}
         artista={item.artista}
@@ -106,7 +122,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         <button
           type="button"
           className="edTitulo"
-          onClick={() => onAbrir(item)}
+          onClick={abrir}
           aria-label={`Ver detalhes de ${item.artista ? `${item.artista} - ` : ''}${item.titulo}`}
         >
           {item.titulo}
@@ -162,7 +178,7 @@ export default function ListaEditorial({
 
   if (dividirPorLetra) {
     const grupos = agruparPorLetra(itens);
-    const idLetra = (letra) => `letra-${letra === '#' ? 'num' : letra}`;
+
     return (
       <>
         {/* Atalho para as letras que existem na caixa: pula direto para a divisória. */}

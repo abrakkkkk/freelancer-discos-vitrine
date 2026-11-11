@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import CategoryTabs, { CATEGORIES } from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
 import ListaEditorial, { ListaCarregando } from './ListaEditorial';
+import FiltrosLaterais from './FiltrosLaterais';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CatalogPagination from '@/components/CatalogPagination';
 import { BarraEditorial, NavDesktopEditorial } from './NavEditorial';
@@ -410,8 +411,27 @@ function Catalogo() {
         <NavDesktopEditorial />
       </header>
 
+      {/* No computador: coluna de filtros + área principal. No celular os dois contêineres
+          usam display: contents e não mudam nada na disposição. */}
+      <div className="edCatalogo">
+      <FiltrosLaterais
+        categoria={categoria}
+        onCategoria={handleTabChange}
+        loja={loja}
+        onLoja={(nova) => {
+          handleLojaChange(nova);
+          handleCaixaChange('');
+        }}
+        caixa={caixa}
+        onCaixa={handleCaixaChange}
+        caixas={caixas}
+        ordenacao={ordenacao}
+        onOrdenacao={handleOrdenacaoChange}
+      />
+      <div className="edCatalogoPrincipal">
+
       {/* Abas de Categoria */}
-      <div style={{ marginBottom: '12px' }}>
+      <div className="edAbasCatalogo" style={{ marginBottom: '12px' }}>
         <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
       </div>
 
@@ -523,6 +543,8 @@ function Catalogo() {
           onPageChange={(p) => setPagina(p)}
         />
       )}
+      </div>
+      </div>
 
       {/* Bottom Sheet com Detalhes */}
       <ProductDetailSheet

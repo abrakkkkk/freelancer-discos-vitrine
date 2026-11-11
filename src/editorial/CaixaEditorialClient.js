@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FiChevronLeft, FiChevronRight, FiSearch, FiX } from 'react-icons/fi';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import { useCart } from '@/components/CartProvider';
-import ListaEditorial from './ListaEditorial';
+import ListaEditorial, { agruparPorLetra, idLetra } from './ListaEditorial';
 import { BarraEditorial } from './NavEditorial';
 
 // Itens de uma caixa no estilo editorial, com busca dentro da caixa.
@@ -45,11 +45,76 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
     );
   }, [itens, busca]);
 
+  // Letras presentes na caixa, para a coluna do computador.
+  const letras = useMemo(() => agruparPorLetra(itens).map((g) => g.letra), [itens]);
+
   return (
-    <>
+    <div className="edCaixaPagina">
+      {/* Computador: busca, índice de letras e caixas vizinhas fixos à esquerda.
+          Escondida no celular, que usa a faixa de letras e os botões de sempre. */}
+      <aside className="edCaixaLateral" aria-label={`Navegar na ${rotuloCaixa}`}>
+        {itens.length > 6 && (
+          <div className="edCaixaLatBusca">
+            <FiSearch size={17} color="var(--text-muted)" aria-hidden="true" className="edCaixaLatBuscaIcone" />
+            <input
+              type="search"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Buscar nesta caixa"
+              aria-label={`Buscar dentro da ${rotuloCaixa}`}
+              className="fieldInput"
+            />
+            {busca && (
+              <button type="button" onClick={() => setBusca('')} aria-label="Limpar busca na caixa" className="inputClearBtn">
+                <FiX size={16} />
+              </button>
+            )}
+          </div>
+        )}
+        {busca && (
+          <p className="tabularNums edCaixaLatContagem">
+            {filtrados.length.toLocaleString('pt-BR')} de {itens.length.toLocaleString('pt-BR')} itens
+          </p>
+        )}
+        {!busca && letras.length > 1 && (
+          <section>
+            <h2 className="edLatTitulo">Ir para a letra</h2>
+            <nav className="edCaixaLatLetras" aria-label="Ir para a letra">
+              {letras.map((l) => (
+                <a key={l} href={`#${idLetra(l)}`} className="edCaixaLatLetra">
+                  {l}
+                </a>
+              ))}
+            </nav>
+          </section>
+        )}
+        {(anterior || proxima) && (
+          <section>
+            <h2 className="edLatTitulo">Outras caixas</h2>
+            <div className="edCaixaLatVizinhas">
+              {anterior && (
+                <Link href={anterior.href} className="edLatOpcao">
+                  <span className="edLatOpcaoNome">
+                    <FiChevronLeft size={16} aria-hidden="true" />
+                    {anterior.rotulo}
+                  </span>
+                </Link>
+              )}
+              {proxima && (
+                <Link href={proxima.href} className="edLatOpcao">
+                  <span className="edLatOpcaoNome">{proxima.rotulo}</span>
+                  <FiChevronRight size={16} aria-hidden="true" />
+                </Link>
+              )}
+            </div>
+          </section>
+        )}
+      </aside>
+
+      <div className="edCaixaPrincipal">
       <VizinhasCaixa anterior={anterior} proxima={proxima} />
       {itens.length > 6 && (
-        <div style={{ marginBottom: '14px' }}>
+        <div className="edCaixaBuscaCelular" style={{ marginBottom: '14px' }}>
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <FiSearch size={18} color="#8a8a93" style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }} />
             <input
@@ -97,6 +162,7 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
       )}
 
       <VizinhasCaixa anterior={anterior} proxima={proxima} />
+      </div>
 
       <ProductDetailSheet
         item={detailItem}
@@ -109,6 +175,6 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
       />
 
       <BarraEditorial />
-    </>
+    </div>
   );
 }

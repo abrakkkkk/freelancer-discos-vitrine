@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiSearch, FiSliders, FiX } from 'react-icons/fi';
 
 // Curto para caber ao lado do botão Filtros; o formato buscado é o da aba aberta.
@@ -34,6 +34,21 @@ export default function CatalogFilters({
 }) {
   const isVideo = tipo === 'dvds' || tipo === 'vhs';
   const [aberto, setAberto] = useState(false);
+  const campoBusca = useRef(null);
+
+  // Atalho de teclado (computador): "/" leva à busca, como em outros catálogos.
+  useEffect(() => {
+    const aoTeclar = (e) => {
+      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+      const alvo = e.target;
+      if (alvo.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(alvo.tagName)) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      e.preventDefault();
+      campoBusca.current?.focus();
+    };
+    window.addEventListener('keydown', aoTeclar);
+    return () => window.removeEventListener('keydown', aoTeclar);
+  }, []);
 
   const caixaSelecionadaObj = caixas.find((c) => String(c.caixa) === String(caixa));
   const labelCaixaAtiva = caixaSelecionadaObj
@@ -72,13 +87,21 @@ export default function CatalogFilters({
           style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }}
         />
         <input
+          ref={campoBusca}
           type="search"
           value={busca}
           onChange={(e) => onBuscaChange(e.target.value)}
           placeholder={PLACEHOLDER_BUSCA[tipo] || PLACEHOLDER_BUSCA.discos}
           aria-label={`Buscar em ${NOME_FORMATO[tipo] || NOME_FORMATO.discos}`}
+          aria-keyshortcuts="/"
           className="fieldInput"
         />
+        {/* Indicação do atalho: só aparece em tela grande com mouse (editorial.css). */}
+        {!busca && (
+          <kbd className="atalhoBusca" aria-hidden="true">
+            /
+          </kbd>
+        )}
         {busca && (
           <button
             type="button"
@@ -167,7 +190,7 @@ export default function CatalogFilters({
 
       {/* Filtros ativos: remoção em 1 toque */}
       {chipsCount > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+        <div className="filtrosAtivos" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
           {loja && (
             <button
               type="button"

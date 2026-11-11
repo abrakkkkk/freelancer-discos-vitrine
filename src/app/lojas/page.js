@@ -27,8 +27,8 @@ export default async function LojasEditorialPage() {
   });
 
   const lojas = [
-    { id: 'loja-1', nome: 'Loja 1', ...resumo(caixasLoja1) },
-    { id: 'loja-2', nome: 'Loja 2', ...resumo(caixasLoja2) },
+    { id: 'loja-1', nome: 'Loja 1', lista: caixasLoja1.filter((c) => c.loja === 'Loja 1'), ...resumo(caixasLoja1) },
+    { id: 'loja-2', nome: 'Loja 2', lista: caixasLoja2.filter((c) => c.loja === 'Loja 2'), ...resumo(caixasLoja2) },
   ];
 
   return (
@@ -48,8 +48,9 @@ export default async function LojasEditorialPage() {
           da loja e o resumo numa linha. A linha inteira leva às caixas. */}
       <div className="edLojas">
         {lojas.map((lj) => (
+          // No celular o bloco não gera caixa (display: contents): só o link da loja aparece.
+          <div key={lj.id} className="edLojaBloco">
           <Link
-            key={lj.id}
             href={ed(`/lojas/${lj.id}`)}
             className="edLoja tabularNums"
             style={{ '--cor-loja': COR_LOJA[lj.id] }}
@@ -80,6 +81,20 @@ export default async function LojasEditorialPage() {
               </span>
             )}
           </Link>
+          {/* Computador: os números das caixas da loja direto aqui, sem um clique a mais. */}
+          <nav className="edLojaCaixasDireto" aria-label={`Caixas da ${lj.nome}`}>
+            {lj.lista.map((cx) => (
+              <Link
+                key={cx.caixa}
+                href={ed(`/lojas/${lj.id}/${encodeURIComponent(cx.caixa)}`)}
+                className={`edLatCaixa tabularNums ${cx.total ? '' : 'edLatCaixaVazia'}`}
+                aria-label={`${cx.label}, ${cx.total || 0} ${cx.total === 1 ? 'item' : 'itens'}`}
+              >
+                {String(cx.label).replace(/^caixa\s*/i, '')}
+              </Link>
+            ))}
+          </nav>
+          </div>
         ))}
       </div>
 
