@@ -37,7 +37,13 @@ export default function FiltrosLaterais({
   ordenacao,
   onOrdenacao,
 }) {
-  const caixasDaLoja = loja ? caixas.filter((c) => !c.loja || c.loja === loja) : [];
+  // Caixas com nome (como "Painel 2") não cabem no quadradinho: vão para o fim, em duas colunas.
+  const comNome = (cx) => /\s/.test(String(cx.label).replace(/^caixa\s*/i, ''));
+  const caixasDaLoja = loja
+    ? caixas
+        .filter((c) => !c.loja || c.loja === loja)
+        .sort((a, b) => Number(comNome(a)) - Number(comNome(b)))
+    : [];
 
   return (
     <aside className="edLateral" aria-label="Filtros do catálogo">
@@ -76,7 +82,7 @@ export default function FiltrosLaterais({
                 <button
                   key={cx.caixa}
                   type="button"
-                  className={`edLatCaixa tabularNums ${ativa ? 'edLatCaixaAtiva' : ''} ${cx.total ? '' : 'edLatCaixaVazia'}`}
+                  className={`edLatCaixa tabularNums ${ativa ? 'edLatCaixaAtiva' : ''} ${cx.total ? '' : 'edLatCaixaVazia'} ${comNome(cx) ? 'edLatCaixaLarga' : ''}`}
                   aria-pressed={ativa}
                   aria-label={`${cx.label}, ${cx.total || 0} ${cx.total === 1 ? 'item' : 'itens'}`}
                   onClick={() => onCaixa(ativa ? '' : cx.caixa)}

@@ -624,8 +624,7 @@ body:has(.edPagina) .sacolaAvisoTexto strong {
   letter-spacing: 0.01em;
 }
 
-body:has(.edPagina) .productDetailDialog h2,
-body:has(.edPagina) .cartDrawerPanel h2 {
+body:has(.edPagina) .productDetailDialog h2 {
   font-size: 20px !important;
   line-height: 1.05 !important;
 }
@@ -999,6 +998,11 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edLatCaixaAtiva:hover {
     border-color: var(--accent);
     background-color: var(--bg-card);
+  }
+
+  .edLatCaixaLarga {
+    grid-column: span 2;
+    white-space: nowrap;
   }
 
   .edLatCaixaVazia {
@@ -1655,4 +1659,203 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edLinha:hover {
     border-color: var(--accent);
   }
+}
+
+/* ---------- Sacola (celular e computador) ----------
+   Mesma voz do catálogo: títulos na fonte editorial em caixa alta, traço vermelho,
+   preço grande. O site fica visível por trás, desfocado. */
+.cartFundo {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(5, 5, 6, 0.82);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: cartFundoEntra 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cartFundoEntra {
+  from { opacity: 0; }
+}
+
+/* Limpar no mesmo traço dos botões de ícone. */
+.cartTopo .textBtn {
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid #2d2d35;
+  background-color: transparent;
+  color: #ffffff;
+}
+
+@media (hover: hover) {
+  .cartTopo .textBtn:hover { border-color: var(--accent); background-color: #1f1f24; }
+}
+
+/* Sem suporte a desfoque ou com transparência reduzida: volta ao fundo sólido. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cartFundo { background-color: #050506; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .cartFundo {
+    background-color: #050506;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartFundo { animation: none; }
+}
+
+.cartTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #232328;
+}
+
+.cartTopoTitulo {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cartTopoTitulo h2 {
+  position: relative;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding-bottom: 8px;
+}
+
+.cartTopoTitulo h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 26px;
+  height: 3px;
+  background-color: var(--accent);
+}
+
+.cartContagem {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cartIconeBtn {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #2d2d35;
+  background-color: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.cartIconeBtn:focus-visible {
+  outline: 2px solid #c23a3a;
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .cartIconeBtn:hover {
+    border-color: var(--accent);
+    background-color: #1f1f24;
+  }
+}
+
+.cartItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #232328;
+}
+
+.cartItemArtista {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartItemTitulo {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cartItemPreco {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.cartNota {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #e4e4e7;
+}
+
+.cartNota svg {
+  flex-shrink: 0;
+  color: #c23a3a;
+}
+
+.cartTotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid #232328;
+}
+
+.cartTotal span {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cartTotal strong {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
 }

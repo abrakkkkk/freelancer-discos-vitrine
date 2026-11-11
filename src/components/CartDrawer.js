@@ -144,16 +144,8 @@ export default function CartDrawer({
 
   return (
     <div className="cartDrawerBackdrop">
-      {/* Overlay Sólido e Opaco (#050506) */}
-      <div
-        onClick={onClose}
-        style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: '#050506',
-          zIndex: 1,
-        }}
-      />
+      {/* Fundo: o site continua por trás, desfocado e escurecido. */}
+      <div onClick={onClose} className="cartFundo" />
 
       {/* Painel da Sacola */}
       <div
@@ -165,30 +157,10 @@ export default function CartDrawer({
         className="cartDrawerPanel"
       >
         {/* Cabeçalho */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingBottom: '12px',
-            borderBottom: '1px solid #232328',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff' }}>
-              Sua Sacola
-            </h2>
-            <span
-              className="tabularNums"
-              style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                color: '#ffffff',
-                backgroundColor: '#8b1e1e',
-                padding: '2px 8px',
-                borderRadius: '6px',
-              }}
-            >
+        <div className="cartTopo">
+          <div className="cartTopoTitulo">
+            <h2>Sua sacola</h2>
+            <span className="tabularNums cartContagem">
               {itens.length} {itens.length === 1 ? 'item' : 'itens'}
             </span>
           </div>
@@ -208,18 +180,7 @@ export default function CartDrawer({
               type="button"
               onClick={onClose}
               aria-label="Fechar sacola"
-              style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '8px',
-                backgroundColor: '#27272a',
-                border: 'none',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-              }}
+              className="cartIconeBtn"
             >
               <FiX size={19} />
             </button>
@@ -295,16 +256,7 @@ export default function CartDrawer({
               const fmtTag = FORMAT_SHORT[item.categoria] || 'LP';
 
               return (
-                <div
-                  key={itemKey}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px 0',
-                    borderBottom: '1px solid #232328',
-                  }}
-                >
+                <div key={itemKey} className="cartItem">
                   <AlbumCover
                     id={item.id}
                     artista={item.artista}
@@ -316,33 +268,8 @@ export default function CartDrawer({
                   />
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    {item.artista && (
-                      <p
-                        style={{
-                          fontSize: '12px',
-                          color: '#a1a1aa',
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {item.artista}
-                      </p>
-                    )}
-                    <h3
-                      style={{
-                        fontSize: '13.5px',
-                        fontWeight: 700,
-                        color: '#ffffff',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {item.titulo}
-                    </h3>
+                    {item.artista && <p className="cartItemArtista">{item.artista}</p>}
+                    <h3 className="cartItemTitulo">{item.titulo}</h3>
                     {/* Na sacola a localização vira lista de separação: mesmo bloco do card. */}
                     <span style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px', minWidth: 0 }}>
                       <Localizacao caixa={item.caixa} loja={item.loja} tamanho="sacola" />
@@ -351,33 +278,13 @@ export default function CartDrawer({
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                    <span
-                      className="tabularNums"
-                      style={{
-                        fontSize: '13.5px',
-                        fontWeight: 800,
-                        color: '#ffffff',
-                      }}
-                    >
-                      {precoFmt}
-                    </span>
+                    <span className="tabularNums cartItemPreco">{precoFmt}</span>
 
                     <button
                       type="button"
                       onClick={() => handleRemover(item, itemKey)}
                       aria-label={`Remover ${item.titulo} da sacola`}
-                      style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '7px',
-                        backgroundColor: '#27272a',
-                        border: 'none',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                      }}
+                      className="cartIconeBtn"
                     >
                       <FiTrash2 size={15} />
                     </button>
@@ -425,45 +332,16 @@ export default function CartDrawer({
               </label>
             </div>
 
-            {/* Aviso de disponibilidade (estoque físico) */}
-            <div
-              role="note"
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px',
-                padding: '10px 12px',
-                backgroundColor: '#121215',
-                border: '1px solid #2d2d35',
-                borderRadius: '8px',
-                color: '#a1a1aa',
-                fontSize: '12.5px',
-                lineHeight: 1.45,
-              }}
-            >
-              <FiInfo size={15} style={{ flexShrink: 0, marginTop: '2px', color: '#d4a373' }} />
-              <span>
-                O WhatsApp abre com a lista pronta. Você envia, e a loja confirma se os discos
-                ainda estão disponíveis.
-              </span>
-            </div>
+            {/* Disponibilidade: o estoque é físico, a loja confirma na conversa. */}
+            <p role="note" className="cartNota">
+              <FiInfo size={14} aria-hidden="true" />
+              A loja confirma a disponibilidade no WhatsApp.
+            </p>
 
             {/* Total e Botão WhatsApp */}
-            <div
-              className="tabularNums"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '2px 0',
-              }}
-            >
-              <span style={{ fontSize: '13px', fontWeight: 600, color: '#a1a1aa' }}>
-                Total
-              </span>
-              <strong style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-                {totalFmt}
-              </strong>
+            <div className="tabularNums cartTotal">
+              <span>Total</span>
+              <strong>{totalFmt}</strong>
             </div>
 
             <button
@@ -473,14 +351,17 @@ export default function CartDrawer({
               onClick={handleFinalizarWhatsApp}
               style={{
                 width: '100%',
-                minHeight: '48px',
+                minHeight: '52px',
                 borderRadius: '10px',
                 // Estado "verificando" com verde mais escuro e sólido (sem opacidade)
                 backgroundColor: validando ? '#1a9e4f' : '#25D366',
                 border: 'none',
                 color: '#050506',
-                fontSize: '15px',
-                fontWeight: 800,
+                fontFamily: 'var(--font-editorial), var(--font-title)',
+                fontSize: '18px',
+                fontWeight: 700,
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
