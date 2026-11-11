@@ -1,110 +1,730 @@
 {
-  "fonte": "Deezer (fãs do artista e do álbum); Tim Maia escolhido à mão no lugar de Taylor Swift",
-  "geradoEm": "2026-11-09T18:49:19.495Z",
+  "fonte": "Deezer (fãs do artista e do álbum)",
+  "geradoEm": "2026-11-09T19:23:50.256Z",
   "lojas": {
     "Loja 1": [
       {
         "artista": "Ed Sheeran",
-        "escolhido": "Play",
+        "brasileiro": false,
+        "fasArtista": 20963037,
         "ids": [
           21026,
           21009
-        ]
-      },
-      {
-        "artista": "Michael Jackson",
-        "escolhido": "Os grandes sucessos de Michael Jackson",
-        "ids": [
-          22715
-        ]
-      },
-      {
-        "artista": "Bruno Mars",
-        "escolhido": "Doo-Wops & Hooligans",
-        "ids": [
-          31007
-        ]
+        ],
+        "escolhido": "Play",
+        "fasAlbum": 17197
       },
       {
         "artista": "Tim Maia",
-        "escolhido": "Racional Vol. 3",
+        "brasileiro": false,
+        "manual": "Racional Vol. 3 escolhido à mão no lugar de Michael Jackson",
         "ids": [
           30208,
           30001,
           29314,
-          22684,
           8841,
-          8815,
-          8839,
-          30007,
-          22683,
-          22685,
-          8465,
-          21847,
-          22001,
-          8621,
-          20859
-        ]
+          8815
+        ],
+        "escolhido": "Racional Vol. 3"
+      },
+      {
+        "artista": "Bruno Mars",
+        "brasileiro": false,
+        "fasArtista": 12860152,
+        "ids": [
+          31007
+        ],
+        "escolhido": "Doo-Wops & Hooligans",
+        "fasAlbum": 580123
+      },
+      {
+        "artista": "Taylor Swift",
+        "brasileiro": false,
+        "fasArtista": 12777129,
+        "ids": [
+          22701
+        ],
+        "escolhido": "The Life Of A Showgirl",
+        "fasAlbum": 69363
       },
       {
         "artista": "Bob Marley & The Wailers",
-        "escolhido": "Legend - The Best Of Bob Marley And The Wailers",
+        "brasileiro": false,
+        "fasArtista": 12307350,
         "ids": [
           30621,
           28155,
           28152,
-          28151,
           28139,
-          28137,
-          28146,
-          28143,
-          28141,
-          28147,
-          28135,
-          28149
-        ]
+          28151
+        ],
+        "escolhido": "Legend - The Best Of Bob Marley And The Wailers",
+        "fasAlbum": 163782
+      },
+      {
+        "artista": "Shakira",
+        "brasileiro": false,
+        "fasArtista": 11799097,
+        "ids": [
+          21090
+        ],
+        "escolhido": "She Wolf",
+        "fasAlbum": 3051
+      },
+      {
+        "artista": "Nirvana",
+        "brasileiro": false,
+        "fasArtista": 10106171,
+        "ids": [
+          31001
+        ],
+        "escolhido": "Nirvana",
+        "fasAlbum": 57063
+      },
+      {
+        "artista": "Billie Eilish",
+        "brasileiro": false,
+        "fasArtista": 9302157,
+        "ids": [
+          30215
+        ],
+        "escolhido": "When We All Fall Asleep, Where Do We Go?",
+        "fasAlbum": 557153
+      },
+      {
+        "artista": "Metallica",
+        "brasileiro": false,
+        "fasArtista": 8183527,
+        "ids": [
+          21012
+        ],
+        "escolhido": "...And Justice For All",
+        "fasAlbum": 11493
+      },
+      {
+        "artista": "The Beatles",
+        "brasileiro": false,
+        "fasArtista": 8169795,
+        "ids": [
+          30029,
+          8052,
+          22561,
+          26173,
+          30214
+        ],
+        "escolhido": "A Hard Day's Night (Original Motion Picture Sound Track)",
+        "fasAlbum": 0
+      },
+      {
+        "artista": "Nicki Minaj",
+        "brasileiro": false,
+        "fasArtista": 7421560,
+        "ids": [
+          21029
+        ],
+        "escolhido": "Pink Friday (Roman Reloaded)",
+        "fasAlbum": 104226
+      },
+      {
+        "artista": "U2",
+        "brasileiro": false,
+        "fasArtista": 7370834,
+        "ids": [
+          20868,
+          30812,
+          7400,
+          22997
+        ],
+        "escolhido": "Rattle and Hum",
+        "fasAlbum": 69054
+      },
+      {
+        "artista": "The Rolling Stones",
+        "brasileiro": false,
+        "fasArtista": 7125852,
+        "ids": [
+          28335,
+          30885,
+          28336,
+          28883,
+          28349
+        ],
+        "escolhido": "Between The Buttons",
+        "fasAlbum": 11020
+      },
+      {
+        "artista": "Pink Floyd",
+        "brasileiro": false,
+        "fasArtista": 6844283,
+        "ids": [
+          30787
+        ],
+        "escolhido": "Obscured By Clouds",
+        "fasAlbum": 20590
+      },
+      {
+        "artista": "Shawn Mendes",
+        "brasileiro": false,
+        "fasArtista": 6793601,
+        "ids": [
+          21104,
+          21103,
+          21091,
+          21095,
+          21041
+        ],
+        "escolhido": "Shawn Mendes",
+        "fasAlbum": 194963
+      },
+      {
+        "artista": "Roberto Carlos",
+        "brasileiro": true,
+        "fasArtista": 2059067,
+        "ids": [
+          30438,
+          8434,
+          8175,
+          8104,
+          12974
+        ],
+        "escolhido": "Roberto Carlos",
+        "fasAlbum": 20514
+      },
+      {
+        "artista": "Zé Ramalho",
+        "brasileiro": true,
+        "fasArtista": 1618575,
+        "ids": [
+          30028,
+          21412,
+          8820,
+          20849,
+          9430
+        ],
+        "escolhido": "Força Verde",
+        "fasAlbum": 3278
+      },
+      {
+        "artista": "Engenheiros Do Hawaii",
+        "brasileiro": true,
+        "fasArtista": 1452638,
+        "ids": [
+          30211
+        ],
+        "escolhido": "Surfando Karmas & DNA",
+        "fasAlbum": 10452
+      },
+      {
+        "artista": "Zeca Pagodinho",
+        "brasileiro": true,
+        "fasArtista": 1434598,
+        "ids": [
+          31004,
+          21389,
+          11121
+        ],
+        "escolhido": "Deixa Clarear",
+        "fasAlbum": 4520
+      },
+      {
+        "artista": "Leonardo",
+        "brasileiro": true,
+        "fasArtista": 1425017,
+        "ids": [
+          12411
+        ],
+        "escolhido": "Coisas da Vida",
+        "fasAlbum": 0
+      },
+      {
+        "artista": "Emicida",
+        "brasileiro": true,
+        "fasArtista": 1290269,
+        "ids": [
+          22712,
+          30247
+        ],
+        "escolhido": "Emicida Racional Volume 2 - Mesmas Cores & Mesmos Valores",
+        "fasAlbum": 0
+      },
+      {
+        "artista": "Lulu Santos",
+        "brasileiro": true,
+        "fasArtista": 1270898,
+        "ids": [
+          21430,
+          20938,
+          14416,
+          21524,
+          13201
+        ],
+        "escolhido": "Tudo Azul",
+        "fasAlbum": 2593
+      },
+      {
+        "artista": "Kid Abelha",
+        "brasileiro": true,
+        "fasArtista": 1036694,
+        "ids": [
+          20831,
+          23347,
+          8964
+        ],
+        "escolhido": "Educação Sentimental",
+        "fasAlbum": 5673
+      },
+      {
+        "artista": "Chico Buarque",
+        "brasileiro": true,
+        "fasArtista": 1008328,
+        "ids": [
+          20905,
+          21409,
+          22056,
+          22093,
+          29309
+        ],
+        "escolhido": "Caravanas",
+        "fasAlbum": 14226
+      },
+      {
+        "artista": "Gilberto Gil",
+        "brasileiro": true,
+        "fasArtista": 944377,
+        "ids": [
+          22668,
+          20907,
+          30248,
+          8327,
+          22853
+        ],
+        "escolhido": "Extra",
+        "fasAlbum": 1380
+      },
+      {
+        "artista": "Alceu Valença",
+        "brasileiro": true,
+        "fasArtista": 942220,
+        "ids": [
+          18361,
+          21937,
+          8095,
+          27957,
+          22602
+        ],
+        "escolhido": "Coração Bobo",
+        "fasAlbum": 2624
+      },
+      {
+        "artista": "Elis Regina",
+        "brasileiro": true,
+        "fasArtista": 921612,
+        "ids": [
+          22018,
+          21703,
+          22848,
+          11178,
+          22314
+        ],
+        "escolhido": "Elis",
+        "fasAlbum": 3349
+      },
+      {
+        "artista": "Leandro & Leonardo",
+        "brasileiro": true,
+        "fasArtista": 839445,
+        "ids": [
+          11335
+        ],
+        "escolhido": "Volume 9",
+        "fasAlbum": 7819
+      },
+      {
+        "artista": "Fagner",
+        "brasileiro": true,
+        "fasArtista": 818896,
+        "ids": [
+          22224,
+          22678,
+          22842,
+          21507,
+          20943
+        ],
+        "escolhido": "Fagner",
+        "fasAlbum": 22025
       }
     ],
     "Loja 2": [
       {
         "artista": "Michael Jackson",
-        "escolhido": "Forever, Michael",
+        "brasileiro": false,
+        "fasArtista": 13263106,
         "ids": [
           23869,
           23868
-        ]
+        ],
+        "escolhido": "Forever, Michael",
+        "fasAlbum": 3261
       },
       {
         "artista": "The Beatles",
-        "escolhido": "In The Beginning",
+        "brasileiro": false,
+        "fasArtista": 8169795,
         "ids": [
           24310
-        ]
+        ],
+        "escolhido": "In The Beginning",
+        "fasAlbum": 0
       },
       {
         "artista": "Rolling Stones",
-        "escolhido": "Made In The Shade",
+        "brasileiro": false,
+        "fasArtista": 7125852,
         "ids": [
           24215,
           30728,
           30730,
           24216
-        ]
+        ],
+        "escolhido": "Made In The Shade",
+        "fasAlbum": 17192
       },
       {
         "artista": "Madonna",
-        "escolhido": "Who's That Girl (Original Motion Picture Soundtrack)",
+        "brasileiro": false,
+        "fasArtista": 4934600,
         "ids": [
-          30266,
-          24794
-        ]
+          24794,
+          30266
+        ],
+        "escolhido": "Who's That Girl",
+        "fasAlbum": 223
       },
       {
         "artista": "Scorpions",
-        "escolhido": "Love At First Sting",
+        "brasileiro": false,
+        "fasArtista": 3691249,
         "ids": [
           24148
-        ]
+        ],
+        "escolhido": "Love At First Sting",
+        "fasAlbum": 7150
+      },
+      {
+        "artista": "Elvis Presley",
+        "brasileiro": false,
+        "fasArtista": 3276889,
+        "ids": [
+          24022,
+          23965,
+          23973,
+          24023,
+          23980
+        ],
+        "escolhido": "From Elvis Presley Boulevard, Memphis, Tennessee",
+        "fasAlbum": 3470
+      },
+      {
+        "artista": "Elton John",
+        "brasileiro": false,
+        "fasArtista": 3025046,
+        "ids": [
+          30254,
+          23920,
+          23923,
+          26285,
+          23934
+        ],
+        "escolhido": "Captain Fantastic And The Brown Dirt Cowboy",
+        "fasAlbum": 9027
+      },
+      {
+        "artista": "Ray Charles",
+        "brasileiro": false,
+        "fasArtista": 2936271,
+        "ids": [
+          24608,
+          24602,
+          24604,
+          24623,
+          24517
+        ],
+        "escolhido": "Love Country Style",
+        "fasAlbum": 2
+      },
+      {
+        "artista": "Legião Urbana",
+        "brasileiro": false,
+        "fasArtista": 2922838,
+        "ids": [
+          27569
+        ],
+        "escolhido": "O Descobrimento Do Brasil",
+        "fasAlbum": 50423
+      },
+      {
+        "artista": "Bee Gees",
+        "brasileiro": false,
+        "fasArtista": 2622090,
+        "ids": [
+          24183,
+          24181,
+          24184,
+          24182,
+          24782
+        ],
+        "escolhido": "Spirits Having Flown",
+        "fasAlbum": 6814
+      },
+      {
+        "artista": "John Lennon",
+        "brasileiro": false,
+        "fasArtista": 2609777,
+        "ids": [
+          24129,
+          24135,
+          24133
+        ],
+        "escolhido": "Imagine: John Lennon",
+        "fasAlbum": 96988
+      },
+      {
+        "artista": "Frank Sinatra",
+        "brasileiro": false,
+        "fasArtista": 2490151,
+        "ids": [
+          23556,
+          24571,
+          24587,
+          24593,
+          24629
+        ],
+        "escolhido": "Ol' Blue Eyes Is Back",
+        "fasAlbum": 1436
+      },
+      {
+        "artista": "Stevie Wonder",
+        "brasileiro": false,
+        "fasArtista": 2462076,
+        "ids": [
+          23931,
+          25157,
+          25154,
+          25155,
+          25156
+        ],
+        "escolhido": "Characters",
+        "fasAlbum": 824
+      },
+      {
+        "artista": "Caetano Veloso",
+        "brasileiro": false,
+        "fasArtista": 2180122,
+        "ids": [
+          29117,
+          27626,
+          26236,
+          29116
+        ],
+        "escolhido": "Outras Palavras",
+        "fasAlbum": 5193
+      },
+      {
+        "artista": "Louis Armstrong",
+        "brasileiro": false,
+        "fasArtista": 2067147,
+        "ids": [
+          24576,
+          27341,
+          24579,
+          24582,
+          24580
+        ],
+        "escolhido": "Louis Armstrong's Greatest Hits",
+        "fasAlbum": 280
+      },
+      {
+        "artista": "Roberto Carlos",
+        "brasileiro": true,
+        "fasArtista": 2059067,
+        "ids": [
+          27372,
+          25443,
+          27356,
+          27369,
+          25486
+        ],
+        "escolhido": "Roberto Carlos",
+        "fasAlbum": 20514
+      },
+      {
+        "artista": "Zezé Di Camargo & Luciano",
+        "brasileiro": true,
+        "fasArtista": 1898833,
+        "ids": [
+          25400,
+          25402,
+          25340,
+          25401
+        ],
+        "escolhido": "Zezé Di Camargo & Luciano",
+        "fasAlbum": 19794
+      },
+      {
+        "artista": "Zé Ramalho",
+        "brasileiro": true,
+        "fasArtista": 1618575,
+        "ids": [
+          27631
+        ],
+        "escolhido": "A Terceira Lâmina",
+        "fasAlbum": 6267
+      },
+      {
+        "artista": "Roupa Nova",
+        "brasileiro": true,
+        "fasArtista": 1500825,
+        "ids": [
+          25742,
+          25741,
+          25745
+        ],
+        "escolhido": "Roupa Nova",
+        "fasAlbum": 8055
+      },
+      {
+        "artista": "Zeca Pagodinho",
+        "brasileiro": true,
+        "fasArtista": 1434598,
+        "ids": [
+          28571,
+          29389
+        ],
+        "escolhido": "Zeca Pagodinho",
+        "fasAlbum": 6597
+      },
+      {
+        "artista": "Leonardo",
+        "brasileiro": true,
+        "fasArtista": 1425017,
+        "ids": [
+          25773,
+          29905
+        ],
+        "escolhido": "Leonardo",
+        "fasAlbum": 111593
+      },
+      {
+        "artista": "Lulu Santos",
+        "brasileiro": true,
+        "fasArtista": 1270898,
+        "ids": [
+          29092,
+          28832
+        ],
+        "escolhido": "Honolulu",
+        "fasAlbum": 912
+      },
+      {
+        "artista": "Chico Buarque",
+        "brasileiro": true,
+        "fasArtista": 1008328,
+        "ids": [
+          26214,
+          26216,
+          27557,
+          26229,
+          26271
+        ],
+        "escolhido": "Chico Buarque",
+        "fasAlbum": 16369
+      },
+      {
+        "artista": "Gilberto Gil",
+        "brasileiro": true,
+        "fasArtista": 944377,
+        "ids": [
+          26618,
+          26235
+        ],
+        "escolhido": "A Gente Precisa Ver O Luar",
+        "fasAlbum": 7276
+      },
+      {
+        "artista": "Elis Regina",
+        "brasileiro": true,
+        "fasArtista": 921612,
+        "ids": [
+          28986,
+          28952,
+          29001,
+          29002,
+          30628
+        ],
+        "escolhido": "Elis",
+        "fasAlbum": 3349
+      },
+      {
+        "artista": "Leandro & Leonardo",
+        "brasileiro": true,
+        "fasArtista": 839445,
+        "ids": [
+          25330,
+          25325,
+          25341,
+          25329,
+          25327
+        ],
+        "escolhido": "Leandro & Leonardo",
+        "fasAlbum": 1355
+      },
+      {
+        "artista": "Fagner",
+        "brasileiro": true,
+        "fasArtista": 818896,
+        "ids": [
+          26221
+        ],
+        "escolhido": "Ave Noturna",
+        "fasAlbum": 2334
+      },
+      {
+        "artista": "Amado Batista",
+        "brasileiro": true,
+        "fasArtista": 740469,
+        "ids": [
+          27763,
+          27028,
+          27670,
+          27751,
+          27752
+        ],
+        "escolhido": "Amado Batista",
+        "fasAlbum": 8965
+      },
+      {
+        "artista": "Barão Vermelho",
+        "brasileiro": true,
+        "fasArtista": 739212,
+        "ids": [
+          29061
+        ],
+        "escolhido": "Barão Ao Vivo",
+        "fasAlbum": 0
+      },
+      {
+        "artista": "Alcione",
+        "brasileiro": true,
+        "fasArtista": 679084,
+        "ids": [
+          29261,
+          28647,
+          28651,
+          28645,
+          28591
+        ],
+        "escolhido": "Alerta Geral",
+        "fasAlbum": 1420
       }
     ]
   }
