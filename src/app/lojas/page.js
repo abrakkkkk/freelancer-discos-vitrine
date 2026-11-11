@@ -27,8 +27,8 @@ export default async function LojasEditorialPage() {
   });
 
   const lojas = [
-    { id: 'loja-1', nome: 'Loja 1', lista: caixasLoja1.filter((c) => c.loja === 'Loja 1'), ...resumo(caixasLoja1) },
-    { id: 'loja-2', nome: 'Loja 2', lista: caixasLoja2.filter((c) => c.loja === 'Loja 2'), ...resumo(caixasLoja2) },
+    { id: 'loja-1', nome: 'Loja 1', ...resumo(caixasLoja1) },
+    { id: 'loja-2', nome: 'Loja 2', ...resumo(caixasLoja2) },
   ];
 
   return (
@@ -81,19 +81,6 @@ export default async function LojasEditorialPage() {
               </span>
             )}
           </Link>
-          {/* Computador: os números das caixas da loja direto aqui, sem um clique a mais. */}
-          <nav className="edLojaCaixasDireto" aria-label={`Caixas da ${lj.nome}`}>
-            {lj.lista.map((cx) => (
-              <Link
-                key={cx.caixa}
-                href={ed(`/lojas/${lj.id}/${encodeURIComponent(cx.caixa)}`)}
-                className={`edLatCaixa tabularNums ${cx.total ? '' : 'edLatCaixaVazia'}`}
-                aria-label={`${cx.label}, ${cx.total || 0} ${cx.total === 1 ? 'item' : 'itens'}`}
-              >
-                {String(cx.label).replace(/^caixa\s*/i, '')}
-              </Link>
-            ))}
-          </nav>
           </div>
         ))}
       </div>

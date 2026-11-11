@@ -10,23 +10,23 @@ const ORDENS = [
   { id: 'titulo_asc', label: 'Título A–Z' },
 ];
 
-function Opcao({ ativa, onClick, children, extra }) {
+// Botão de escolha: a opção ativa fica em vermelho cheio.
+function Escolha({ ativa, onClick, children }) {
   return (
     <button
       type="button"
-      className={`edLatOpcao ${ativa ? 'edLatOpcaoAtiva' : ''}`}
+      className={`edLatEscolha ${ativa ? 'edLatEscolhaAtiva' : ''}`}
       aria-pressed={ativa}
       onClick={onClick}
     >
-      <span className="edLatOpcaoNome">{children}</span>
-      {extra != null && <span className="edLatOpcaoExtra tabularNums">{extra}</span>}
+      {children}
     </button>
   );
 }
 
 /**
  * Coluna de filtros do catálogo no computador (a partir de 1024px; escondida abaixo disso).
- * Faz o trabalho das listas de loja, caixa e ordem, sempre visível (o formato fica nas abas do topo).
+ * Loja, caixa e ordem sempre visíveis; o formato fica nas abas do topo.
  */
 export default function FiltrosLaterais({
   loja,
@@ -37,67 +37,67 @@ export default function FiltrosLaterais({
   ordenacao,
   onOrdenacao,
 }) {
-  const contarCaixas = (nome) => caixas.filter((c) => c.loja === nome).length;
   const caixasDaLoja = loja ? caixas.filter((c) => !c.loja || c.loja === loja) : [];
 
   return (
     <aside className="edLateral" aria-label="Filtros do catálogo">
       <section className="edLatGrupo">
         <h2 className="edLatTitulo">Loja</h2>
-        <Opcao ativa={!loja} onClick={() => onLoja('')}>
-          Todas
-        </Opcao>
-        {['Loja 1', 'Loja 2'].map((nome) => (
-          <Opcao
-            key={nome}
-            ativa={loja === nome}
-            onClick={() => onLoja(nome)}
-            extra={!loja && contarCaixas(nome) ? `${contarCaixas(nome)} cx` : null}
-          >
-            <span className="edPonto" style={{ backgroundColor: COR_LOJA[nome] }} aria-hidden="true" />
-            {nome}
-          </Opcao>
-        ))}
+        <div className="edLatEscolhas">
+          <Escolha ativa={!loja} onClick={() => onLoja('')}>
+            Todas
+          </Escolha>
+          {['Loja 1', 'Loja 2'].map((nome) => (
+            <Escolha key={nome} ativa={loja === nome} onClick={() => onLoja(nome)}>
+              <span className="edPonto" style={{ backgroundColor: COR_LOJA[nome] }} aria-hidden="true" />
+              {nome}
+            </Escolha>
+          ))}
+        </div>
       </section>
 
       <section className="edLatGrupo">
-        <h2 className="edLatTitulo">Caixa</h2>
+        <div className="edLatTituloLinha">
+          <h2 className="edLatTitulo">Caixa</h2>
+          {caixa && (
+            <button type="button" className="edLatLimpar" onClick={() => onCaixa('')}>
+              Limpar
+            </button>
+          )}
+        </div>
         {!loja ? (
           <p className="edLatDica">Escolha a loja para ver as caixas.</p>
         ) : (
-          <>
-            <Opcao ativa={!caixa} onClick={() => onCaixa('')}>
-              Todas as caixas
-            </Opcao>
-            <div className="edLatCaixas">
-              {caixasDaLoja.map((cx) => {
-                const ativa = String(caixa) === String(cx.caixa);
-                const numero = String(cx.label).replace(/^caixa\s*/i, '');
-                return (
-                  <button
-                    key={cx.caixa}
-                    type="button"
-                    className={`edLatCaixa tabularNums ${ativa ? 'edLatCaixaAtiva' : ''} ${cx.total ? '' : 'edLatCaixaVazia'}`}
-                    aria-pressed={ativa}
-                    aria-label={`${cx.label}, ${cx.total || 0} ${cx.total === 1 ? 'item' : 'itens'}`}
-                    onClick={() => onCaixa(ativa ? '' : cx.caixa)}
-                  >
-                    {numero}
-                  </button>
-                );
-              })}
-            </div>
-          </>
+          <div className="edLatCaixas">
+            {caixasDaLoja.map((cx) => {
+              const ativa = String(caixa) === String(cx.caixa);
+              const numero = String(cx.label).replace(/^caixa\s*/i, '');
+              return (
+                <button
+                  key={cx.caixa}
+                  type="button"
+                  className={`edLatCaixa tabularNums ${ativa ? 'edLatCaixaAtiva' : ''} ${cx.total ? '' : 'edLatCaixaVazia'}`}
+                  aria-pressed={ativa}
+                  aria-label={`${cx.label}, ${cx.total || 0} ${cx.total === 1 ? 'item' : 'itens'}`}
+                  onClick={() => onCaixa(ativa ? '' : cx.caixa)}
+                >
+                  {numero}
+                </button>
+              );
+            })}
+          </div>
         )}
       </section>
 
       <section className="edLatGrupo">
         <h2 className="edLatTitulo">Ordenar</h2>
-        {ORDENS.map((o) => (
-          <Opcao key={o.id} ativa={(ordenacao || 'padrao') === o.id} onClick={() => onOrdenacao(o.id)}>
-            {o.label}
-          </Opcao>
-        ))}
+        <div className="edLatEscolhas">
+          {ORDENS.map((o) => (
+            <Escolha key={o.id} ativa={(ordenacao || 'padrao') === o.id} onClick={() => onOrdenacao(o.id)}>
+              {o.label}
+            </Escolha>
+          ))}
+        </div>
       </section>
     </aside>
   );

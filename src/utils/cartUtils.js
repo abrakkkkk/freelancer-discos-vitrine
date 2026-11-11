@@ -1,6 +1,6 @@
 import { formatCaixa } from './stringUtils';
 
-export const WHATSAPP_PHONE = '5585987879214';
+export const WHATSAPP_PHONE = '5585988817621';
 
 export function getCartItemKey(item) {
   if (!item) return '';

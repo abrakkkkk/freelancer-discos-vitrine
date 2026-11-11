@@ -93,16 +93,14 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
             <h2 className="edLatTitulo">Outras caixas</h2>
             <div className="edCaixaLatVizinhas">
               {anterior && (
-                <Link href={anterior.href} className="edLatOpcao">
-                  <span className="edLatOpcaoNome">
-                    <FiChevronLeft size={16} aria-hidden="true" />
-                    {anterior.rotulo}
-                  </span>
+                <Link href={anterior.href} className="edLatEscolha">
+                  <FiChevronLeft size={16} aria-hidden="true" />
+                  {anterior.rotulo}
                 </Link>
               )}
               {proxima && (
-                <Link href={proxima.href} className="edLatOpcao">
-                  <span className="edLatOpcaoNome">{proxima.rotulo}</span>
+                <Link href={proxima.href} className="edLatEscolha edCaixaLatProxima">
+                  {proxima.rotulo}
                   <FiChevronRight size={16} aria-hidden="true" />
                 </Link>
               )}
