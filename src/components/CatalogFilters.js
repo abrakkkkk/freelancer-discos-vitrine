@@ -190,7 +190,9 @@ export default function CatalogFilters({
 
       {/* Filtros ativos: remoção em 1 toque */}
       {chipsCount > 0 && (
-        <div className="filtrosAtivos" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
+        // Com o painel aberto, os seletores já mostram o que está escolhido: as etiquetas somem
+        // e fica só o "Limpar filtros".
+        <div className={`filtrosAtivos ${aberto ? 'filtrosAtivosPainelAberto' : ''}`} style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
           {loja && (
             <button
               type="button"
@@ -230,7 +232,7 @@ export default function CatalogFilters({
             </button>
           )}
 
-          {chipsCount >= 2 && (
+          {(chipsCount >= 2 || aberto) && (
             <button type="button" className="textBtn" onClick={handleClearAll}>
               Limpar filtros
             </button>

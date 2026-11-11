@@ -1860,23 +1860,9 @@ body:has(.productDetailDialog) .sacolaAviso {
   color: #ffffff;
 }
 
-/* ---------- Celular e tablet: vermelho nas escolhas e na barra ----------
-   Mesma marca do computador: escolha ativa em vermelho cheio e o traço curto
-   sob a página atual. */
+/* ---------- Celular e tablet: vermelho nas escolhas ----------
+   Mesma marca do computador: escolha ativa em vermelho cheio. */
 @media (max-width: 1023px) {
-  .edBarraItem {
-    padding-bottom: 6px;
-  }
-
-  .edBarraItemAtivo::before {
-    top: auto;
-    bottom: 7px;
-    left: 50%;
-    right: auto;
-    width: 22px;
-    transform: translateX(-50%);
-  }
-
   /* Ordenar fica um pouco mais largo para "Menor preço" caber inteiro. */
   .filtrosPainel {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr);
@@ -1890,6 +1876,17 @@ body:has(.productDetailDialog) .sacolaAviso {
 
   .filtrosAtivos {
     margin-top: 2px;
+  }
+
+  .filtrosAtivosPainelAberto .filterChip {
+    display: none;
+  }
+
+  /* Tablet: os seletores ficam sempre à mostra, então as etiquetas também sobram. */
+  @media (min-width: 769px) {
+    .filtrosAtivos .filterChip {
+      display: none;
+    }
   }
 
   .filtrosAtivos .filterChip {
