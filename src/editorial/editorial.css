@@ -1859,3 +1859,59 @@ body:has(.productDetailDialog) .sacolaAviso {
   line-height: 1;
   color: #ffffff;
 }
+
+/* ---------- Celular e tablet: vermelho nas escolhas e na barra ----------
+   Mesma marca do computador: escolha ativa em vermelho cheio e o traço curto
+   sob a página atual. */
+@media (max-width: 1023px) {
+  .edBarraItem {
+    padding-bottom: 6px;
+  }
+
+  .edBarraItemAtivo::before {
+    top: auto;
+    bottom: 7px;
+    left: 50%;
+    right: auto;
+    width: 22px;
+    transform: translateX(-50%);
+  }
+
+  /* Ordenar fica um pouco mais largo para "Menor preço" caber inteiro. */
+  .filtrosPainel {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+
+  .fieldSelectActive {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+
+  .filtrosAtivos {
+    margin-top: 2px;
+  }
+
+  .filtrosAtivos .filterChip {
+    min-height: 32px;
+    padding: 0 8px 0 10px;
+    border-radius: var(--radius-md);
+    background-color: var(--accent);
+    color: #ffffff;
+    font-weight: 700;
+  }
+
+  .filtrosAtivos .textBtn,
+  .filtrosAtivos .textBtn:hover {
+    height: 32px;
+    min-height: 32px;
+    margin-left: auto;
+    padding: 0 2px;
+    border-radius: 0;
+    background-color: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
