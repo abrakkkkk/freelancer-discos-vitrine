@@ -1,7 +1,5 @@
 'use client';
 
-import { CATEGORIES } from '@/components/CategoryTabs';
-
 const COR_LOJA = { 'Loja 1': 'var(--loja-1)', 'Loja 2': 'var(--loja-2)' };
 
 const ORDENS = [
@@ -28,11 +26,9 @@ function Opcao({ ativa, onClick, children, extra }) {
 
 /**
  * Coluna de filtros do catálogo no computador (a partir de 1024px; escondida abaixo disso).
- * Faz o trabalho das abas de formato e das listas de loja, caixa e ordem, sempre visível.
+ * Faz o trabalho das listas de loja, caixa e ordem, sempre visível (o formato fica nas abas do topo).
  */
 export default function FiltrosLaterais({
-  categoria,
-  onCategoria,
   loja,
   onLoja,
   caixa,
@@ -46,15 +42,6 @@ export default function FiltrosLaterais({
 
   return (
     <aside className="edLateral" aria-label="Filtros do catálogo">
-      <section className="edLatGrupo">
-        <h2 className="edLatTitulo">Formato</h2>
-        {CATEGORIES.map((c) => (
-          <Opcao key={c.id} ativa={categoria === c.id} onClick={() => onCategoria(c.id)}>
-            {c.label}
-          </Opcao>
-        ))}
-      </section>
-
       <section className="edLatGrupo">
         <h2 className="edLatTitulo">Loja</h2>
         <Opcao ativa={!loja} onClick={() => onLoja('')}>

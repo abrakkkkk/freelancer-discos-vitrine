@@ -888,8 +888,8 @@ body:has(.productDetailDialog) .sacolaAviso {
     min-width: 0;
   }
 
-  /* As abas e as listas de loja/caixa/ordem passam para a coluna lateral. */
-  .edAbasCatalogo,
+  /* As listas de loja/caixa/ordem passam para a coluna lateral; as abas de formato,
+     com ícones, ficam no topo da área de discos. */
   .edCatalogo .filtrosBtn,
   .edCatalogo .filtrosPainel {
     display: none;

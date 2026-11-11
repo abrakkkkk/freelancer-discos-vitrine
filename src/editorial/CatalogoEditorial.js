@@ -415,8 +415,6 @@ function Catalogo() {
           usam display: contents e não mudam nada na disposição. */}
       <div className="edCatalogo">
       <FiltrosLaterais
-        categoria={categoria}
-        onCategoria={handleTabChange}
         loja={loja}
         onLoja={(nova) => {
           handleLojaChange(nova);
