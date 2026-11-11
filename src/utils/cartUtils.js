@@ -36,6 +36,7 @@ export function formatWhatsAppMessage(itens = [], nome = '', bairro = '') {
 
   const partes = [
     'Olá, Freelancer Discos! Tenho interesse nestes itens:',
+    '',
     ...linhasItens,
     '',
     `Total: ${totalFmt}`,
