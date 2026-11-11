@@ -25,7 +25,7 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata = {
   title: {
-    default: 'Freelancer Discos — Vitrine do Catálogo',
+    default: 'Freelancer Discos — Vitrine do Estoque',
     // Páginas internas: "Caixa 5 · Loja 1 · Freelancer Discos"
     template: '%s · Freelancer Discos',
   },
