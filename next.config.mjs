@@ -3,6 +3,19 @@ const nextConfig = {
   // Não anuncia a versão do framework no header x-powered-by.
   poweredByHeader: false,
 
+  // O endereço antigo da Vercel leva para o domínio da loja, no mesmo caminho
+  // (ex.: freelancer-discos-vitrine.vercel.app/lojas -> freelancerdiscos.com.br/lojas).
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'freelancer-discos-vitrine.vercel.app' }],
+        destination: 'https://freelancerdiscos.com.br/:path*',
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
