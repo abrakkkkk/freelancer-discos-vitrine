@@ -53,21 +53,46 @@ export const MUSIC_STOP_WORDS = new Set([
   'feat', 'ft', 'featuring', 'vs', 'part'
 ]);
 
+const SEARCH_NOISE = /[-–—:()/\_\\*~!?[\]+"',.;&]/g;
+
+const ACCENT_CLASSES = {
+  a: '[aáàâãäÁÀÂÃÄ]',
+  e: '[eéèêëÉÈÊË]',
+  i: '[iíìîïÍÌÎÏ]',
+  o: '[oóòôõöÓÒÔÕÖ]',
+  u: '[uúùûüÚÙÛÜ]',
+  c: '[cçÇ]',
+  n: '[nñÑ]',
+  y: '[yýÿÝ]',
+};
+
+export function accentInsensitivePattern(palavra) {
+  return [...removeAcentos(palavra)]
+    .map((letra) => ACCENT_CLASSES[letra] || (/[a-z0-9]/.test(letra) ? letra : '.'))
+    .join('');
+}
+
+const normalizeForMatch = (texto) => removeAcentos(texto).replace(SEARCH_NOISE, ' ').replace(/\s+/g, ' ').trim();
+const escapeRegExp = (texto) => texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 export function extractSearchTokens(queryStr) {
-  if (!queryStr) return { allWords: [], contentWords: [], effectiveWords: [] };
+  if (!queryStr) return { allWords: [], contentWords: [], effectiveWords: [], accentedWords: [] };
 
-  const clean = removeAcentos(queryStr)
-    .replace(/[-–—:()/\_\\*~!?[\]+"',.;&]/g, ' ')
-    .trim();
-
-  const allWords = clean.split(/\s+/).filter(Boolean);
+  const allWords = normalizeForMatch(queryStr).split(' ').filter(Boolean);
   const contentWords = allWords.filter(w => !MUSIC_STOP_WORDS.has(w) && w.length >= 2);
   const effectiveWords = contentWords.length > 0 ? contentWords : allWords;
+  const accentedWords = queryStr
+    .normalize('NFC')
+    .toLowerCase()
+    .replace(SEARCH_NOISE, ' ')
+    .split(/\s+/)
+    .filter((word) => word && word !== removeAcentos(word));
 
   return {
     allWords,
     contentWords,
     effectiveWords,
+    accentedWords,
   };
 }
 
@@ -111,32 +136,50 @@ export function palavraParecida(palavra, texto) {
     .some((t) => t.length >= 3 && distanciaEdicao(t, palavra, limite) <= limite);
 }
 
-export function calculateItemRelevance(item, allWords = [], effectiveWords = [], isVideo = false) {
-  if (!item) return 0;
-  let score = 0;
+export function createRelevanceScorer({ allWords = [], effectiveWords = [], accentedWords = [] }, isVideo = false) {
+  const wordPatterns = effectiveWords.map((word) => ({
+    word,
+    wholeWord: new RegExp(`(^|[^a-z0-9])${escapeRegExp(word)}($|[^a-z0-9])`),
+  }));
+  const fullQuery = allWords.join(' ');
 
-  const itemTitulo = removeAcentos(item.titulo || '');
-  const itemArtista = isVideo ? '' : removeAcentos(item.artista || '');
-  const itemCaixa = removeAcentos(item.caixa || '');
-  const fullText = `${itemArtista} ${itemTitulo} ${itemCaixa}`.trim();
+  return (item) => {
+    if (!item) return 0;
+    let score = 0;
 
-  if (allWords.length > 0 && allWords.every(w => fullText.includes(w))) {
-    score += 100;
-  }
+    const itemTitulo = removeAcentos(item.titulo || '');
+    const itemArtista = isVideo ? '' : removeAcentos(item.artista || '');
+    const itemCaixa = removeAcentos(item.caixa || '');
+    const fullText = `${itemArtista} ${itemTitulo} ${itemCaixa}`.trim();
 
-  let matchedEffective = 0;
-  effectiveWords.forEach(w => {
-    if (fullText.includes(w)) {
+    if (allWords.length > 0 && allWords.every(w => fullText.includes(w))) {
+      score += 100;
+    }
+
+    let matchedEffective = 0;
+    wordPatterns.forEach(({ word, wholeWord }) => {
+      if (!fullText.includes(word)) return;
       matchedEffective++;
       score += 30;
-      if (!isVideo && itemArtista.includes(w)) score += 20;
-      if (itemTitulo.includes(w)) score += 20;
+      if (itemArtista.includes(word)) score += wholeWord.test(itemArtista) ? 60 : 20;
+      if (itemTitulo.includes(word)) score += wholeWord.test(itemTitulo) ? 50 : 20;
+    });
+
+    if (effectiveWords.length > 0 && matchedEffective === effectiveWords.length) {
+      score += 50;
     }
-  });
 
-  if (effectiveWords.length > 0 && matchedEffective === effectiveWords.length) {
-    score += 50;
-  }
+    if (fullQuery && (normalizeForMatch(itemArtista) === fullQuery || normalizeForMatch(itemTitulo) === fullQuery)) {
+      score += 80;
+    }
 
-  return score;
+    if (accentedWords.length > 0) {
+      const originalText = `${isVideo ? '' : item.artista || ''} ${item.titulo || ''}`.normalize('NFC').toLowerCase();
+      accentedWords.forEach((word) => {
+        if (originalText.includes(word)) score += 25;
+      });
+    }
+
+    return score;
+  };
 }

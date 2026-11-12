@@ -2,7 +2,8 @@ import { supabaseServer } from '@/lib/supabaseServer';
 import {
   removeAcentos,
   extractSearchTokens,
-  calculateItemRelevance,
+  createRelevanceScorer,
+  accentInsensitivePattern,
   palavraParecida,
   toleranciaDigitacao,
 } from '@/utils/stringUtils';
@@ -270,13 +271,11 @@ export const catalogService = {
       const { effectiveWords } = tokensBusca;
 
       effectiveWords.forEach((palavra) => {
-        const palavraComCuringa = palavra.replace(/[aeiou]/g, '_');
+        const padrao = accentInsensitivePattern(palavra);
         if (isVideo) {
-          query = query.ilike('titulo', `%${palavraComCuringa}%`);
+          query = query.filter('titulo', 'imatch', padrao);
         } else {
-          query = query.or(
-            `titulo.ilike.%${palavraComCuringa}%,artista.ilike.%${palavraComCuringa}%,caixa.ilike.%${palavraComCuringa}%`
-          );
+          query = query.or(`titulo.imatch."${padrao}",artista.imatch."${padrao}",caixa.imatch."${padrao}"`);
         }
       });
       query = query.limit(3000);
@@ -294,7 +293,7 @@ export const catalogService = {
 
     // Refinamento em memória
     if (busca && tokensBusca) {
-      const { allWords, effectiveWords } = tokensBusca;
+      const { effectiveWords } = tokensBusca;
 
       const filtrarExato = (lista) => lista.filter((item) => {
         const tituloSemAcento = removeAcentos(item.titulo || '');
@@ -332,11 +331,9 @@ export const catalogService = {
       }
 
       if (!ordenarColuna) {
-        itensFiltrados.sort((itemA, itemB) => {
-          const pontuacaoA = calculateItemRelevance(itemA, allWords, effectiveWords, isVideo);
-          const pontuacaoB = calculateItemRelevance(itemB, allWords, effectiveWords, isVideo);
-          return pontuacaoB - pontuacaoA;
-        });
+        const pontuar = createRelevanceScorer(tokensBusca, isVideo);
+        const pontuacoes = new Map(itensFiltrados.map((item) => [item, pontuar(item)]));
+        itensFiltrados.sort((itemA, itemB) => pontuacoes.get(itemB) - pontuacoes.get(itemA));
       }
 
       const inicio = (pagina - 1) * itensPorPagina;

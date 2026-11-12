@@ -10,6 +10,7 @@ const supabaseFalso = {
       in: () => q,
       or: () => q,
       ilike: () => q,
+      filter: () => q,
       limit: () => q,
       range: () => q,
       order: (coluna) => (ordenacoes.push(coluna), q),
