@@ -9,6 +9,7 @@ import VoltarDaCaixa from '@/components/VoltarDaCaixa';
 import { formatCaixa } from '@/utils/stringUtils';
 import { nomeLojaPorSlug, hrefDaCaixa } from '@/utils/lojas';
 import { compartilhamento } from '@/utils/seo';
+import { JsonLd, trilha } from '@/utils/dadosEstruturados';
 
 export const revalidate = 60;
 
@@ -100,6 +101,14 @@ export default async function CaixaDetalhePage({ params }) {
 
   return (
     <div className="pageContainer">
+      <JsonLd
+        dados={trilha([
+          ['Início', '/'],
+          ['Caixas', '/lojas'],
+          [nomeLoja, `/lojas/${lojaSlug}`],
+          [rotuloCaixa, `/lojas/${lojaSlug}/${caixaParam}`],
+        ])}
+      />
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <VoltarDaCaixa lojaHref={`/lojas/${lojaSlug}`} nomeLoja={nomeLoja} />

@@ -7,6 +7,7 @@ import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { ed } from '@/editorial/rotas';
 import GradeCaixasEditorial from '@/editorial/GradeCaixasEditorial';
 import { compartilhamento } from '@/utils/seo';
+import { JsonLd, trilha } from '@/utils/dadosEstruturados';
 
 export const revalidate = 60;
 
@@ -36,6 +37,13 @@ export default async function LojaEditorialPage({ params }) {
 
   return (
     <div className="pageContainer">
+      <JsonLd
+        dados={trilha([
+          ['Início', '/'],
+          ['Caixas', '/lojas'],
+          [nomeLoja, `/lojas/${lojaSlug}`],
+        ])}
+      />
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <Link href={ed('/lojas')} aria-label="Voltar para Lojas" className="headerBackBtn">

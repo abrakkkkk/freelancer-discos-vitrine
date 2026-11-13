@@ -5,6 +5,7 @@ import { formatCaixa } from '@/utils/stringUtils';
 import DiscoEditorialClient from '@/editorial/DiscoEditorialClient';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { compartilhamento } from '@/utils/seo';
+import { dadosDoDisco, JsonLd } from '@/utils/dadosEstruturados';
 
 export const revalidate = 60;
 
@@ -80,6 +81,7 @@ export default async function DiscoPage({ params }) {
 
   return (
     <div className="pageContainer">
+      <JsonLd dados={dadosDoDisco(resultado.item, categoria)} />
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
