@@ -27,6 +27,10 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           // A vitrine não usa câmera, microfone nem localização.
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          // Outros sites não podem exibir a vitrine dentro de um quadro (clickjacking).
+          // O mapa do Google na página Contato não é afetado: é a vitrine que embute o mapa.
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Content-Security-Policy', value: "frame-ancestors 'none'" },
         ],
       },
     ];
