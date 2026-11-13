@@ -1,5 +1,4 @@
 // Dados estruturados (schema.org em JSON-LD) para o Google entender a loja e os discos.
-import { WHATSAPP_PHONE } from '@/utils/cartUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
 import { formatCaixa } from '@/utils/stringUtils';
 
@@ -8,21 +7,44 @@ const ORG_ID = `${SITE}/#loja`;
 
 const FORMATO = { discos: 'Disco de vinil', cds: 'CD', dvds: 'DVD', vhs: 'Fita VHS' };
 
-// "5585988817621" -> "+55 85 98881-7621"
-const telefone = WHATSAPP_PHONE.replace(/^(\d{2})(\d{2})(\d{5})(\d{4})$/, '+$1 $2 $3-$4');
+// Telefone oficial da loja, o mesmo do Perfil da Empresa no Google. Não é o WhatsApp dos
+// pedidos do site (WHATSAPP_PHONE), que pode mudar por um tempo.
+const telefone = '+55 85 98787-9214';
 
 export function dadosDoSite() {
   return {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'Organization',
+        // Loja física: os mesmos dados do Perfil da Empresa no Google. Loja 1, Loja 2 e o
+        // Anexo ficam lado a lado, no mesmo endereço.
+        '@type': ['MusicStore', 'Organization'],
         '@id': ORG_ID,
         name: 'Freelancer Discos',
         url: SITE,
         logo: `${SITE}/logo.jpg`,
         image: `${SITE}/og.png`,
-        description: 'Discos de vinil, CDs, DVDs e fitas VHS nas lojas 1 e 2.',
+        description: 'Discos de vinil, CDs, DVDs e fitas VHS nas lojas 1 e 2, no Centro de Fortaleza.',
+        telephone: telefone,
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Rua Dr. João Moreira, 485 - próximo à Estação das Artes',
+          addressLocality: 'Fortaleza',
+          addressRegion: 'CE',
+          postalCode: '60030-000',
+          addressCountry: 'BR',
+        },
+        hasMap: 'https://maps.google.com/?cid=5205041543162428716',
+        openingHoursSpecification: [
+          {
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+            opens: '09:00',
+            closes: '17:00',
+          },
+          { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '09:00', closes: '15:00' },
+        ],
+        sameAs: ['https://www.instagram.com/freelancer_discosalex/'],
         contactPoint: {
           '@type': 'ContactPoint',
           telephone: telefone,
