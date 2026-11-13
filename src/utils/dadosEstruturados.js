@@ -11,6 +11,18 @@ const FORMATO = { discos: 'Disco de vinil', cds: 'CD', dvds: 'DVD', vhs: 'Fita V
 // pedidos do site (WHATSAPP_PHONE), que pode mudar por um tempo.
 const telefone = '+55 85 98787-9214';
 
+// Dados da loja física, usados também na página Contato.
+export const LOJA = {
+  rua: 'Rua Dr. João Moreira, 485',
+  referencia: 'Próximo à Estação das Artes',
+  bairroCidade: 'Centro, Fortaleza - CE',
+  cep: '60030-000',
+  telefoneVisivel: '(85) 98787-9214',
+  whatsapp: '5585987879214',
+  instagram: 'freelancer_discosalex',
+  mapa: 'https://maps.google.com/?cid=5205041543162428716',
+};
+
 export function dadosDoSite() {
   return {
     '@context': 'https://schema.org',
@@ -34,7 +46,7 @@ export function dadosDoSite() {
           postalCode: '60030-000',
           addressCountry: 'BR',
         },
-        hasMap: 'https://maps.google.com/?cid=5205041543162428716',
+        hasMap: LOJA.mapa,
         openingHoursSpecification: [
           {
             '@type': 'OpeningHoursSpecification',
@@ -44,7 +56,7 @@ export function dadosDoSite() {
           },
           { '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '09:00', closes: '15:00' },
         ],
-        sameAs: ['https://www.instagram.com/freelancer_discosalex/'],
+        sameAs: [`https://www.instagram.com/${LOJA.instagram}/`],
         contactPoint: {
           '@type': 'ContactPoint',
           telephone: telefone,

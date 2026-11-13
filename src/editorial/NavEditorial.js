@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { PiArchiveBold, PiQrCodeBold, PiShoppingBagOpenBold, PiVinylRecordBold } from 'react-icons/pi';
+import { PiArchiveBold, PiMapPinBold, PiQrCodeBold, PiShoppingBagOpenBold, PiVinylRecordBold } from 'react-icons/pi';
 import { useCart } from '@/components/CartProvider';
 
 import { BASE, ed } from './rotas';
@@ -12,6 +12,7 @@ function useAtivos() {
   return {
     catalogo: pathname === '/',
     lojas: pathname.startsWith(`${BASE}/lojas`),
+    contato: pathname.startsWith(`${BASE}/contato`),
     compartilhar: pathname.startsWith(`${BASE}/compartilhar`),
   };
 }
@@ -19,6 +20,7 @@ function useAtivos() {
 const ITENS = [
   { chave: 'catalogo', href: ed('/'), rotulo: 'Catálogo', Icone: PiVinylRecordBold },
   { chave: 'lojas', href: ed('/lojas'), rotulo: 'Caixas', Icone: PiArchiveBold },
+  { chave: 'contato', href: ed('/contato'), rotulo: 'Contato', Icone: PiMapPinBold },
   { chave: 'compartilhar', href: ed('/compartilhar'), rotulo: 'Compartilhar', Icone: PiQrCodeBold },
 ];
 

@@ -557,7 +557,7 @@
   height: var(--bottom-nav-height, 64px);
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .edBarraItem {
@@ -582,6 +582,14 @@
 
 .edBarraItemAtivo {
   color: #ffffff;
+}
+
+/* Com cinco itens, "Compartilhar" precisa de letra menor nos celulares estreitos. */
+@media (max-width: 389px) {
+  .edBarraItem {
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+  }
 }
 
 .edBarraItemAtivo::before {
@@ -858,6 +866,133 @@ body:has(.productDetailDialog) .sacolaAviso {
   text-underline-offset: 2px;
 }
 
+/* Contato: endereço, horário, WhatsApp e Instagram em blocos separados por fio; o mapa
+   entra logo depois do endereço no celular e ocupa a coluna da direita no computador. */
+.edContato {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px;
+}
+
+.edContatoInfo {
+  display: contents;
+}
+
+.edContatoBloco {
+  order: 3;
+  padding: 20px 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.edContatoBloco:first-child {
+  order: 1;
+  border-top: none;
+  padding-top: 4px;
+}
+
+.edContatoRotulo {
+  margin: 0 0 6px;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.edContatoValor {
+  margin: 0;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.edContatoNota {
+  margin: 6px 0 0;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.edContatoLink {
+  min-height: 44px;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-hover);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.edContatoLink svg:last-child {
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .edContatoLink:hover {
+    text-decoration-color: #ffffff;
+  }
+}
+
+.edContatoLink:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 3px;
+}
+
+.edContatoHorarios {
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.edContatoHorarios div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  max-width: 300px;
+}
+
+.edContatoHorarios dt {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.edContatoHorarios dd {
+  margin: 0;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* O mapa do Google vem claro; o filtro o escurece para não acender a página preta. */
+.edContatoMapa {
+  order: 2;
+  margin: 8px 0 12px;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-light);
+}
+
+.edContatoMapa iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  filter: invert(0.9) hue-rotate(180deg) saturate(0.7);
+}
+
 /* ==========================================================================
    COMPUTADOR (1024px ou mais)
    Regra da casa: abaixo de 1024px nada muda. As peças novas ficam escondidas e os
@@ -874,6 +1009,31 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 @media (min-width: 1024px) {
+  /* Contato: dados à esquerda, mapa alto e fixo à direita. */
+  .edContato {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 48px;
+    align-items: start;
+    padding-top: 12px;
+  }
+
+  .edContatoInfo {
+    display: block;
+  }
+
+  .edContatoValor {
+    font-size: 34px;
+  }
+
+  .edContatoMapa {
+    position: sticky;
+    top: 24px;
+    margin: 0;
+    aspect-ratio: auto;
+    height: min(560px, calc(100dvh - 140px));
+  }
+
   /* Catálogo: coluna de filtros fixa à esquerda + discos à direita. */
   .edCatalogo {
     display: grid;
