@@ -13,6 +13,7 @@ import { useCart } from '@/components/CartProvider';
 import { getCartItemKey } from '@/utils/cartUtils';
 import { ESTADO_PADRAO, lerEstadoDaUrl, montarQueryDoEstado } from '@/utils/catalogUrl';
 import Botao from '@/components/Botao';
+import BuscaTopo from './BuscaTopo';
 
 const CLIENT_CACHE_TTL_MS = 60 * 1000;
 
@@ -34,10 +35,11 @@ const NOME_CONTAGEM = {
 };
 
 // useSearchParams exige um Suspense: no build a página é estática e a URL só existe no navegador.
-export default function CatalogoEditorialPage() {
+// `vitrine`: conteúdo mostrado acima do catálogo enquanto não há busca nem filtro.
+export default function CatalogoEditorialPage({ vitrine = null, className = '' }) {
   return (
     <Suspense fallback={<CatalogoCarregando />}>
-      <Catalogo />
+      <Catalogo vitrine={vitrine} className={className} />
     </Suspense>
   );
 }
@@ -122,7 +124,7 @@ function CatalogoCarregando() {
   );
 }
 
-function Catalogo() {
+function Catalogo({ vitrine = null, className = '' }) {
   const searchParams = useSearchParams();
   // Filtros da URL têm prioridade (link compartilhado, F5); sem eles, volta ao último estado.
   const [estadoInicial] = useState(() => lerEstadoDaUrl(searchParams) || savedViewState);
@@ -390,8 +392,10 @@ function Catalogo() {
     setPagina(1);
   };
 
+  const semFiltro = categoria === 'discos' && !debouncedBusca && !loja && !caixa && ordenacao === 'padrao' && pagina === 1;
+
   return (
-    <div className="pageContainer">
+    <div className={`pageContainer ${className}`.trim()}>
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
@@ -401,8 +405,36 @@ function Catalogo() {
           </div>
         </div>
 
+        {vitrine && (
+          <BuscaTopo
+            busca={busca}
+            onBuscaChange={handleBuscaChange}
+            placeholder="Buscar por artista ou álbum"
+            rotulo={`Buscar em ${(NOME_CONTAGEM[categoria] || NOME_CONTAGEM.discos)[1]}`}
+          />
+        )}
+
         <NavDesktopEditorial />
       </header>
+
+      {vitrine && semFiltro && vitrine}
+
+      {vitrine && (
+        <div className="edCaixaCab edEstoqueCab">
+          <h2 className="edCaixaNum">{debouncedBusca ? `Busca: “${debouncedBusca}”` : 'Todo o estoque'}</h2>
+          <p className="edEstoqueContagem tabularNums" aria-live="polite">
+            {loading ? 'Carregando…' : erro ? null : (
+              <>
+                <strong>{total.toLocaleString('pt-BR')}</strong>{' '}
+                {(NOME_CONTAGEM[categoria] || NOME_CONTAGEM.discos)[total === 1 ? 0 : 1]}
+              </>
+            )}
+          </p>
+          <div className="edEstoqueAbas">
+            <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
+          </div>
+        </div>
+      )}
 
       {/* No celular estes dois contêineres usam display: contents e não afetam
           a disposição. */}
@@ -425,7 +457,7 @@ function Catalogo() {
         <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
       </div>
 
-      <div style={{ marginBottom: '14px' }}>
+      <div className="edBuscaCatalogo" style={{ marginBottom: '14px' }}>
         <CatalogFilters
           busca={busca}
           onBuscaChange={handleBuscaChange}
@@ -441,7 +473,7 @@ function Catalogo() {
       </div>
 
       <p
-        className="tabularNums"
+        className="tabularNums edContagem"
         aria-live="polite"
         style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '10px', padding: '0 2px' }}
       >
@@ -449,7 +481,7 @@ function Catalogo() {
           'Carregando…'
         ) : erro ? null : (
           <>
-            <strong style={{ color: '#ffffff', fontWeight: 600 }}>
+            <strong style={{ color: '#ffffff', fontWeight: 500 }}>
               {total.toLocaleString('pt-BR')}
             </strong>{' '}
             {(NOME_CONTAGEM[categoria] || NOME_CONTAGEM.discos)[total === 1 ? 0 : 1]}

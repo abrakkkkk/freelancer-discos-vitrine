@@ -44,7 +44,9 @@ export default function CatalogFilters({
       if (alvo.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(alvo.tagName)) return;
       if (document.querySelector('[role="dialog"]')) return;
       e.preventDefault();
-      campoBusca.current?.focus();
+      // Na versão com a busca no cabeçalho, este campo fica escondido no computador.
+      const campo = campoBusca.current?.offsetParent ? campoBusca.current : document.getElementById('busca-topo');
+      campo?.focus();
     };
     window.addEventListener('keydown', aoTeclar);
     return () => window.removeEventListener('keydown', aoTeclar);

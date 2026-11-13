@@ -1167,6 +1167,19 @@ input[type='search']::-webkit-search-cancel-button {
   color: #fca5a5;
 }
 
+@media (min-width: 1024px) {
+  .botao--desktop-secundario {
+    background-color: transparent;
+    border-color: var(--border-light);
+    color: #ffffff;
+  }
+
+  .botao--desktop-secundario:not(:disabled):hover {
+    background-color: #1f1f24;
+    border-color: #3f3f46;
+  }
+}
+
 /* Item já na sacola: o mesmo botão em verde. */
 .botao--feito,
 .botao--feito:not(:disabled):hover {
@@ -1236,7 +1249,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .paginacaoResumo strong {
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .paginacaoNumeros {

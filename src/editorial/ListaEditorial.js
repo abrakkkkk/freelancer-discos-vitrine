@@ -117,6 +117,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         fluid
         tipo={categoria}
       />
+      {importado && <span className="edSeloCapa" aria-hidden="true">Importado</span>}
 
       <div className="edTexto">
         {item.artista && <span className="edArtista">{item.artista}</span>}
@@ -131,7 +132,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         <span className="edMeta tabularNums">
           {selo && <span>{selo}</span>}
           {ano && (!selo || !selo.includes(ano)) && <span>{ano}</span>}
-          {importado && <span>Importado</span>}
+          {importado && <span className="edMetaImportado">Importado</span>}
         </span>
       </div>
 
@@ -141,12 +142,14 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         <span className="edPreco tabularNums">{precoBRL(item.preco)}</span>
         <Botao
           variante="primario"
+          varianteDesktop="secundario"
           icone
           className={naSacola ? 'botao--feito' : ''}
           onClick={() => onAdicionar(item)}
           aria-label={naSacola ? 'Item já na sacola — abrir sacola' : `Adicionar ${item.titulo} à sacola`}
         >
           {naSacola ? <FiCheck size={18} strokeWidth={2.5} /> : <FiPlus size={18} strokeWidth={2.5} />}
+          <span className="edAdicionarTexto">{naSacola ? 'Na sacola' : 'Adicionar'}</span>
         </Botao>
       </div>
     </li>
@@ -208,8 +211,8 @@ export default function ListaEditorial({
 
   return (
     <div className="edGrupos">
-      {agrupar(itens).map((g) => (
-        <section key={g.chave} className="edGrupo">
+      {agrupar(itens).map((g, i) => (
+        <section key={`${g.chave}|${i}`} className="edGrupo">
           <CabecalhoCaixa loja={g.loja} caixa={g.caixa} itens={g.itens} />
           <ul className="edLista">{g.itens.map((item) => linha(item, false))}</ul>
         </section>

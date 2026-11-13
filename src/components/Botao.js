@@ -7,9 +7,11 @@ const TAMANHOS = { p: 'botao--p', m: '', g: 'botao--g' };
  * Botão do site. Com `href` vira link com a mesma aparência.
  * `tamanho="p"` (36px) é só para o computador: no celular a área de toque mínima é 44px.
  * Botão só com ícone (`icone`) precisa de `aria-label`.
+ * `varianteDesktop`: outra variante a partir de 1024px (ex.: contorno numa grade de cards).
  */
 export default function Botao({
   variante = 'secundario',
+  varianteDesktop = null,
   tamanho = 'm',
   icone = false,
   bloco = false,
@@ -26,6 +28,7 @@ export default function Botao({
   const classes = [
     'botao',
     `botao--${VARIANTES.includes(variante) ? variante : 'secundario'}`,
+    VARIANTES.includes(varianteDesktop) ? `botao--desktop-${varianteDesktop}` : '',
     TAMANHOS[tamanho] ?? '',
     icone ? 'botao--icone' : '',
     bloco ? 'botao--bloco' : '',

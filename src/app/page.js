@@ -1,4 +1,6 @@
 import CatalogoEditorial from '@/editorial/CatalogoEditorial';
+import VitrineLoja, { FaixaServico } from '@/editorial/VitrineLoja';
+import { getVitrine } from '@/services/vitrineService';
 import { compartilhamento } from '@/utils/seo';
 import { dadosDoSite, JsonLd } from '@/utils/dadosEstruturados';
 
@@ -8,11 +10,17 @@ export const metadata = {
   ...compartilhamento({ titulo: 'Freelancer Discos — Discos de vinil, CDs e DVDs', caminho: '/' }),
 };
 
-export default function Inicio() {
+// As prateleiras são atualizadas a cada 5 minutos.
+export const revalidate = 300;
+
+// No computador: faixa de serviço, abertura e prateleiras acima do catálogo. No celular, só o catálogo.
+export default async function Inicio() {
+  const vitrine = await getVitrine();
   return (
     <>
       <JsonLd dados={dadosDoSite()} />
-      <CatalogoEditorial />
+      <FaixaServico />
+      <CatalogoEditorial className="edInicio" vitrine={<VitrineLoja vitrine={vitrine} />} />
     </>
   );
 }
