@@ -62,7 +62,6 @@ export async function generateMetadata({ params }) {
     .join(' · ');
   return {
     title: nome,
-    description: `${nome}. ${descricao}.`,
     alternates: { canonical: `/disco/${categoria}/${id}` },
     // No WhatsApp o disco aparece com a própria capa, o preço e onde está.
     ...compartilhamento({
@@ -71,6 +70,8 @@ export async function generateMetadata({ params }) {
       caminho: `/disco/${categoria}/${id}`,
       imagem: item.capa_url ? { url: item.capa_url, alt: `Capa de ${nome}` } : null,
     }),
+    // No Google o nome do disco abre a descrição; no WhatsApp ele já vem no título.
+    description: `${nome}. ${descricao}. Freelancer Discos.`,
   };
 }
 

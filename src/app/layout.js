@@ -28,12 +28,12 @@ export const metadata = {
   // Base dos endereços absolutos (canonical, Open Graph). Cada página declara o próprio canonical.
   metadataBase: new URL('https://freelancerdiscos.com.br'),
   title: {
-    default: 'Freelancer Discos — Vitrine do Estoque',
+    default: 'Freelancer Discos — Discos de vinil, CDs e DVDs',
     // Páginas internas: "Caixa 5 · Loja 1 · Freelancer Discos"
     template: '%s · Freelancer Discos',
   },
   description: DESCRICAO_PADRAO,
-  ...compartilhamento({ titulo: 'Freelancer Discos — Vitrine do Estoque' }),
+  ...compartilhamento({ titulo: 'Freelancer Discos — Discos de vinil, CDs e DVDs' }),
   appleWebApp: {
     title: 'Freelancer - Vitrine',
     statusBarStyle: 'black-translucent',

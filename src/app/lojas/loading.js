@@ -9,8 +9,8 @@ export default function LojasLoading() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
           <div style={{ minWidth: 0 }}>
-            <h1 className="headerTitle">Lojas</h1>
-            <p className="headerSubtitle">Escolha uma loja para ver as caixas</p>
+            <p className="headerTitle">Caixas</p>
+            <p className="headerSubtitle">Escolha a loja e a caixa</p>
           </div>
         </div>
 

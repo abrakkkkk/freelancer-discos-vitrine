@@ -2,6 +2,7 @@
 // O Next junta os metadados das páginas de forma rasa: quem declara openGraph substitui o do
 // layout inteiro. Por isso cada página monta o seu por aqui, com todos os campos.
 export const SITE_NOME = 'Freelancer Discos';
+export const TITULO_INICIO = 'Freelancer Discos — Discos de vinil, CDs e DVDs';
 export const DESCRICAO_PADRAO =
   'Vitrine do estoque da Freelancer Discos: discos de vinil, CDs, DVDs e fitas VHS nas lojas 1 e 2. Monte a sacola e peça pelo WhatsApp.';
 const IMAGEM_PADRAO = {
@@ -14,6 +15,7 @@ const IMAGEM_PADRAO = {
 export function compartilhamento({ titulo, descricao = DESCRICAO_PADRAO, caminho = '/', imagem = null }) {
   const imagens = [imagem || IMAGEM_PADRAO];
   return {
+    description: descricao,
     openGraph: {
       type: 'website',
       locale: 'pt_BR',

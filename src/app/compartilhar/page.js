@@ -5,7 +5,11 @@ import { compartilhamento } from '@/utils/seo';
 export const metadata = {
   title: 'Compartilhar',
   alternates: { canonical: '/compartilhar' },
-  ...compartilhamento({ titulo: 'Freelancer Discos — Vitrine do Estoque', caminho: '/compartilhar' }),
+  ...compartilhamento({
+    titulo: 'Freelancer Discos — Discos de vinil, CDs e DVDs',
+    descricao: 'QR code e link da vitrine da Freelancer Discos, para mandar no WhatsApp ou mostrar na loja.',
+    caminho: '/compartilhar',
+  }),
 };
 
 export default function CompartilharEditorialPage() {

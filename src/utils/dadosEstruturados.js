@@ -33,7 +33,7 @@ export function dadosDoSite() {
       {
         '@type': 'WebSite',
         '@id': `${SITE}/#site`,
-        name: 'Freelancer Discos — Vitrine do Estoque',
+        name: 'Freelancer Discos — Discos de vinil, CDs e DVDs',
         url: SITE,
         inLanguage: 'pt-BR',
         publisher: { '@id': ORG_ID },
