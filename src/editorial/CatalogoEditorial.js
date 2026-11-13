@@ -24,7 +24,7 @@ function buildCatalogCacheKey({ categoria, pagina, loja, caixa, busca, ordenacao
   return `${categoria}|${pagina}|${loja}|${caixa}|${busca}|${ordenacao}`;
 }
 
-// Contagem no nome do formato da aba ("12.861 discos"), sem número de páginas.
+// Contagem no nome do formato da aba ("12.861 discos").
 const NOME_CONTAGEM = {
   discos: ['disco', 'discos'],
   cds: ['CD', 'CDs'],
@@ -33,7 +33,6 @@ const NOME_CONTAGEM = {
 };
 
 // useSearchParams exige um Suspense: no build a página é estática e a URL só existe no navegador.
-// Catálogo no estilo editorial (lista agrupada por caixa).
 export default function CatalogoEditorialPage() {
   return (
     <Suspense fallback={<CatalogoCarregando />}>
@@ -168,7 +167,7 @@ function Catalogo() {
   const [detailItem, setDetailItem] = useState(null);
   const { estaNaSacola, adicionar: adicionarNaSacola } = useCart();
 
-  // Persiste o estado (retorno instantâneo ao clicar em Catálogo) e o espelha na URL.
+  // Guarda o estado na sessão e o espelha na URL.
   // replaceState: trocar filtro não cria uma entrada nova no "voltar" do navegador.
   useEffect(() => {
     savedViewState = {
@@ -187,8 +186,8 @@ function Catalogo() {
     }
   }, [categoria, debouncedBusca, loja, caixa, ordenacao, pagina]);
 
-  // A página volta para 1 só quando a busca efetiva muda (após o debounce). Antes, cada
-  // tecla zerava a página na hora e disparava uma consulta extra com o termo antigo.
+  // A página volta para 1 só quando a busca efetiva muda (após o debounce),
+  // para não disparar uma consulta extra com o termo antigo.
   const ultimaBuscaRef = useRef(estadoInicial.busca);
   useEffect(() => {
     const aplicar = () => {
@@ -209,7 +208,6 @@ function Catalogo() {
     adicionarNaSacola({ ...item, categoria: item.categoria || categoria });
   };
 
-  // Carrega caixas disponíveis de acordo com a loja (com cache em memória)
   useEffect(() => {
     const cachedCaixas = clientCaixasCache.get(loja);
     if (cachedCaixas) {
@@ -243,7 +241,6 @@ function Catalogo() {
   const consultaRef = useRef(null);
   useEffect(() => () => consultaRef.current?.abort(), []);
 
-  // Carrega dados do catálogo (instantâneo se já estiver em cache)
   const loadCatalogo = useCallback(
     async (forceRefresh = false) => {
       consultaRef.current?.abort();
@@ -398,7 +395,6 @@ function Catalogo() {
 
   return (
     <div className="pageContainer">
-      {/* Cabeçalho */}
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
@@ -411,8 +407,8 @@ function Catalogo() {
         <NavDesktopEditorial />
       </header>
 
-      {/* No computador: coluna de filtros + área principal. No celular os dois contêineres
-          usam display: contents e não mudam nada na disposição. */}
+      {/* No celular estes dois contêineres usam display: contents e não afetam
+          a disposição. */}
       <div className="edCatalogo">
       <FiltrosLaterais
         loja={loja}
@@ -428,12 +424,10 @@ function Catalogo() {
       />
       <div className="edCatalogoPrincipal">
 
-      {/* Abas de Categoria */}
       <div className="edAbasCatalogo" style={{ marginBottom: '12px' }}>
         <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
       </div>
 
-      {/* Filtros e Busca */}
       <div style={{ marginBottom: '14px' }}>
         <CatalogFilters
           busca={busca}
@@ -449,11 +443,10 @@ function Catalogo() {
         />
       </div>
 
-      {/* Contagem de resultados (linha de texto simples) */}
       <p
         className="tabularNums"
         aria-live="polite"
-        style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '10px', padding: '0 2px' }}
+        style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '10px', padding: '0 2px' }}
       >
         {loading ? (
           'Carregando…'
@@ -471,7 +464,6 @@ function Catalogo() {
         <OutrosFormatos formatos={outrosFormatos} onEscolher={handleTabChange} />
       )}
 
-      {/* Erro */}
       {erro && (
         <div
           style={{
@@ -505,7 +497,7 @@ function Catalogo() {
         </div>
       )}
 
-      {/* Grade de Produtos (com erro, só o aviso acima: nada de "Nenhum item encontrado") */}
+      {/* Com erro, só o aviso acima, sem "Nenhum item encontrado". */}
       {erro && !loading ? null : loading ? (
         <ListaCarregando />
       ) : itens.length === 0 ? (
@@ -533,7 +525,6 @@ function Catalogo() {
         />
       )}
 
-      {/* Paginação */}
       {!loading && !erro && (
         <CatalogPagination
           pagina={pagina}
@@ -544,7 +535,6 @@ function Catalogo() {
       </div>
       </div>
 
-      {/* Bottom Sheet com Detalhes */}
       <ProductDetailSheet
         item={detailItem}
         isOpen={Boolean(detailItem)}
@@ -558,7 +548,6 @@ function Catalogo() {
         tipo={detailItem?.categoria || categoria}
       />
 
-      {/* Barra de Navegação Móvel Inferior */}
       <BarraEditorial />
     </div>
   );

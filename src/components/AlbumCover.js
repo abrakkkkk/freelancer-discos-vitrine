@@ -42,7 +42,7 @@ export default function AlbumCover({
     const q = `${artista || ''} ${titulo || ''}`.trim();
     const qWithAno = `${q} ${cleanAno}`.trim();
     const qKey = qWithAno.toLowerCase();
-    // v2: invalida capas guardadas na sessão pelo algoritmo antigo, que não conferia o disco.
+    // O prefixo v2 descarta capas em cache que não conferiam o disco.
     const cacheKey = `v2_${tipo}_${qKey}`;
 
     if (!q) {
@@ -109,7 +109,7 @@ export default function AlbumCover({
     ? {
         width: '100%',
         aspectRatio: '1 / 1',
-        borderRadius: '8px',
+        borderRadius: 'var(--radius-capa)',
         overflow: 'hidden',
         backgroundColor: '#1c1c21',
         display: 'flex',
@@ -124,7 +124,7 @@ export default function AlbumCover({
         minWidth: `${size}px`,
         minHeight: `${size}px`,
         aspectRatio: '1 / 1',
-        borderRadius: '8px',
+        borderRadius: 'var(--radius-capa)',
         overflow: 'hidden',
         backgroundColor: '#111114',
         border: '1px solid #26262e',
@@ -155,7 +155,6 @@ export default function AlbumCover({
   if (resolvedUrl && !error) {
     return (
       <div style={containerStyle}>
-        {/* Ícone do formato por baixo enquanto a capa carrega: um só visual para "sem imagem ainda". */}
         {renderIcon()}
         <img
           src={resolvedUrl}
@@ -184,8 +183,8 @@ export default function AlbumCover({
             position: 'absolute',
             bottom: '6px',
             right: '6px',
-            padding: '1px 5px',
-            borderRadius: '4px',
+            padding: '2px 4px',
+            borderRadius: 'var(--radius-etiqueta)',
             backgroundColor: '#3f3f46',
             fontSize: '12px',
             fontWeight: 700,

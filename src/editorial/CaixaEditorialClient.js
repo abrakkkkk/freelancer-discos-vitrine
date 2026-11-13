@@ -8,8 +8,7 @@ import { useCart } from '@/components/CartProvider';
 import ListaEditorial, { agruparPorLetra, idLetra } from './ListaEditorial';
 import { BarraEditorial } from './NavEditorial';
 
-// Itens de uma caixa no estilo editorial, com busca dentro da caixa.
-// Caixa anterior e próxima da mesma loja, como folhear os caixotes.
+// Caixa anterior e próxima da mesma loja.
 function VizinhasCaixa({ anterior, proxima }) {
   if (!anterior && !proxima) return null;
   return (
@@ -45,13 +44,10 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
     );
   }, [itens, busca]);
 
-  // Letras presentes na caixa, para a coluna do computador.
   const letras = useMemo(() => agruparPorLetra(itens).map((g) => g.letra), [itens]);
 
   return (
     <div className="edCaixaPagina">
-      {/* Computador: busca, índice de letras e caixas vizinhas fixos à esquerda.
-          Escondida no celular, que usa a faixa de letras e os botões de sempre. */}
       <aside className="edCaixaLateral" aria-label={`Navegar na ${rotuloCaixa}`}>
         {itens.length > 6 && (
           <div className="edCaixaLatBusca">
@@ -130,7 +126,7 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
             )}
           </div>
           {busca && (
-            <p className="tabularNums" style={{ fontSize: '13px', color: 'var(--text-muted)', marginTop: '8px' }}>
+            <p className="tabularNums" style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '8px' }}>
               {filtrados.length.toLocaleString('pt-BR')} de {itens.length.toLocaleString('pt-BR')} itens
             </p>
           )}

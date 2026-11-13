@@ -25,7 +25,7 @@ export default function ProductDetailSheet({
   tipo = 'discos',
   // Na página da própria caixa, o bloco de localização não leva a lugar nenhum.
   linkCaixa = true,
-  // Prefixo dos links internos (páginas de teste vivem em outra pasta).
+  // Prefixo dos links internos.
   basePath = '',
 }) {
   const dialogRef = useRef(null);
@@ -49,7 +49,6 @@ export default function ProductDetailSheet({
   const caminhoCaixa = linkCaixa ? hrefDaCaixa(item.loja, item.caixa, { doCatalogo: true }) : null;
   const caixaHref = caminhoCaixa ? `${basePath}${caminhoCaixa}` : null;
   const temCaixa = rotuloCaixa !== '—';
-  // Mesmo bloco de localização do card e da sacola, maior: caixa e loja com o mesmo peso.
   const localConteudo = (
     <>
       <span style={{ display: 'flex', minWidth: 0, flex: 1 }}>
@@ -61,13 +60,11 @@ export default function ProductDetailSheet({
 
   return (
     <div className="productDetailBackdrop">
-      {/* Overlay 100% Sólido e Opaco (#050506) */}
       <div
         onClick={onClose}
         style={{ position: 'fixed', inset: 0, backgroundColor: '#050506', zIndex: 1 }}
       />
 
-      {/* Folha Inferior / Modal Centralizado Sólido */}
       <div
         ref={dialogRef}
         tabIndex={-1}
@@ -84,7 +81,6 @@ export default function ProductDetailSheet({
             position: 'absolute',
             top: '10px',
             right: '10px',
-            // Fica sobre a capa, que agora ocupa o topo da folha.
             zIndex: 2,
             width: '44px',
             height: '44px',
@@ -101,7 +97,6 @@ export default function ProductDetailSheet({
           <FiX size={19} />
         </button>
 
-        {/* Capa grande primeiro: é o momento em que o cliente se interessou pelo disco. */}
         <div className="sheetCapa">
           <AlbumCover
             id={item.id}
@@ -114,7 +109,6 @@ export default function ProductDetailSheet({
           />
         </div>
 
-        {/* Títulos + Preço */}
         <div style={{ marginTop: '14px' }}>
           <div style={{ minWidth: 0 }}>
             {item.artista && (
@@ -151,7 +145,6 @@ export default function ProductDetailSheet({
           </div>
         </div>
 
-        {/* Onde está: logo abaixo do preço e maior que a ficha, porque é o que o cliente procura. */}
         {caixaHref ? (
           <Link
             href={caixaHref}
@@ -170,7 +163,6 @@ export default function ProductDetailSheet({
           <p className="sheetLocal tabularNums">{localConteudo}</p>
         )}
 
-        {/* Ficha técnica: linhas com divisória, sem caixas aninhadas */}
         <dl className="specList tabularNums">
           <div className="specRow">
             <dt>Formato</dt>
@@ -196,7 +188,7 @@ export default function ProductDetailSheet({
           )}
         </dl>
 
-        {/* O botão fica preso no fim da folha: com a capa grande, a ficha pode precisar rolar. */}
+        {/* Botão preso no fim da folha porque a ficha pode precisar rolar. */}
         <div className="sheetAcao">
         <button
           type="button"
@@ -205,12 +197,12 @@ export default function ProductDetailSheet({
           }}
           style={{
             width: '100%',
-            minHeight: '48px',
-            borderRadius: '10px',
+            minHeight: '52px',
+            borderRadius: 'var(--radius-md)',
             backgroundColor: isInCart ? '#1f5f3a' : '#8b1e1e',
             border: 'none',
             color: '#ffffff',
-            fontSize: '15px',
+            fontSize: '16px',
             fontWeight: 700,
             display: 'flex',
             alignItems: 'center',

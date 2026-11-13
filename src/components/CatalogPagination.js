@@ -61,7 +61,7 @@ export default function CatalogPagination({ pagina, totalPaginas, onPageChange }
         return (
           <div key={p} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {showEllipsis && (
-              <span aria-hidden="true" style={{ color: '#52525b', fontSize: '13px' }}>
+              <span aria-hidden="true" style={{ color: '#52525b', fontSize: '14px' }}>
                 …
               </span>
             )}
@@ -78,7 +78,7 @@ export default function CatalogPagination({ pagina, totalPaginas, onPageChange }
                 backgroundColor: isCurrent ? '#8b1e1e' : '#151518',
                 border: isCurrent ? '1px solid #8b1e1e' : '1px solid #232328',
                 color: isCurrent ? '#ffffff' : '#a1a1aa',
-                fontSize: '13.5px',
+                fontSize: '14px',
                 fontWeight: 700,
                 cursor: isCurrent ? 'default' : 'pointer',
               }}

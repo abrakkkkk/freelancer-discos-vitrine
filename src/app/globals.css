@@ -6,11 +6,10 @@
 
 :root {
   color-scheme: dark;
-  --font-title: var(--font-outfit), 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-title: var(--font-editorial), 'Barlow Condensed', system-ui, -apple-system, sans-serif;
   --font-body: var(--font-figtree), 'Figtree', system-ui, -apple-system, sans-serif;
   --bottom-nav-height: 64px;
 
-  /* Cores 100% Sólidas e Opacas - Zero Glassmorphism */
   --bg: #09090b;
   --bg-card: #151518;
   --bg-card-hover: #18181c;
@@ -30,21 +29,23 @@
   --text-muted: #a1a1aa;
   --text-dim: #8a8a93;
 
-  /* Etiquetas: fundo sólido + texto branco (nunca texto colorido sobre fundo tingido) */
   --badge-neutral: #3f3f46;
   --badge-label: #4c3d63;
   --badge-success: #1f5f3a;
 
-  /* Identidade de cada loja (etiquetas, barras e cards) */
   --loja-1: #8b1e1e;
   --loja-2: #1d4ed8;
   --loja-anexo: #15803d;
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  /* Quanto mais acima na pilha o elemento, maior o raio; a capa fica quase quadrada. */
+  --radius-etiqueta: 2px; /* selo de estado/formato sobre a capa */
+  --radius-capa: 4px;     /* capas de disco */
+  --radius-sm: 4px;       /* controle dentro de outro controle */
+  --radius-md: 8px;       /* botões, abas, campos */
+  --radius-lg: 12px;      /* painéis na página */
+  --radius-xl: 16px;      /* gaveta e janela por cima da página */
+  --radius-pill: 999px;   /* contadores e filtros ativos removíveis */
 
-  /* Sombras permitidas */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -66,7 +67,7 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: #27272a;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   border: 2px solid #09090b;
 }
 
@@ -86,7 +87,15 @@ html {
   background-color: var(--bg);
 }
 
-/* Fundo de discos: só esta camada é translúcida. Fica fixa porque background-attachment: fixed falha no iOS. */
+/* Botões e campos não herdam a fonte do site por padrão. */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* position: fixed em vez de background-attachment: fixed, que falha no iOS. */
 body::before {
   content: '';
   position: fixed;
@@ -125,13 +134,12 @@ select:focus-visible,
   padding-bottom: calc(var(--bottom-nav-height) + 32px);
 }
 
-/* Cabeçalho: alinhado no topo e na base entre logo e texto */
 .storeHeader {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 16px;
-  padding: 6px 2px 14px;
+  padding: 6px 2px 16px;
   border-bottom: 1px solid var(--border);
 }
 
@@ -170,13 +178,12 @@ select:focus-visible,
 }
 
 .headerSubtitle {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   line-height: 1.15;
   margin-top: 4px;
 }
 
-/* Abas de Categoria: botões soltos, sem moldura envolvendo */
 .categoryTabsBar {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -185,12 +192,12 @@ select:focus-visible,
 
 .categoryTabBtn {
   min-height: 44px;
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: var(--radius-md);
   background-color: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-muted);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -217,7 +224,6 @@ select:focus-visible,
   color: #ffffff;
 }
 
-/* Campos de formulário sólidos */
 .fieldInput,
 .fieldSelect {
   width: 100%;
@@ -239,7 +245,7 @@ select:focus-visible,
 }
 
 .fieldSelect {
-  padding: 0 10px;
+  padding: 0 12px;
   font-size: 14px;
   cursor: pointer;
 }
@@ -270,19 +276,18 @@ select:focus-visible,
   inset: -6px;
 }
 
-/* Esconde o "x" nativo do Chrome/Safari: já existe o .inputClearBtn */
+/* Esconde o "x" nativo do Chrome/Safari; o .inputClearBtn já faz esse papel. */
 input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;
   display: none;
 }
 
-/* Etiquetas sólidas: fundo opaco + texto branco */
 .badge {
   display: inline-flex;
   align-items: center;
   max-width: 100%;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-etiqueta);
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
@@ -305,7 +310,6 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: var(--accent);
 }
 
-/* Localização no card: caixa em destaque e loja ao lado, sem parecer botão. */
 .cardLocal {
   display: flex;
   align-items: center;
@@ -314,7 +318,7 @@ input[type='search']::-webkit-search-cancel-button {
   margin-top: 6px;
   color: var(--text);
   text-decoration: none;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.3;
 }
 
@@ -326,8 +330,8 @@ input[type='search']::-webkit-search-cancel-button {
 .cardLocalLoja {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 12.5px;
+  gap: 4px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
@@ -352,7 +356,7 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .cardLocalLink:focus-visible {
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 @media (hover: hover) {
@@ -376,7 +380,7 @@ input[type='search']::-webkit-search-cancel-button {
   color: #ffffff;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -386,8 +390,8 @@ input[type='search']::-webkit-search-cancel-button {
 
 .filtrosBtnContagem {
   min-width: 20px;
-  padding: 1px 6px;
-  border-radius: 10px;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
   background-color: var(--accent);
   font-size: 12px;
   font-weight: 700;
@@ -422,7 +426,7 @@ input[type='search']::-webkit-search-cancel-button {
   gap: 6px 8px;
   margin: -2px 0 12px;
   padding: 0 2px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -470,8 +474,8 @@ input[type='search']::-webkit-search-cancel-button {
   max-width: 480px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 8px 8px 14px;
+  gap: 12px;
+  padding: 8px 8px 8px 16px;
   border-radius: var(--radius-md);
   background-color: var(--badge-success);
   color: #ffffff;
@@ -484,7 +488,7 @@ input[type='search']::-webkit-search-cancel-button {
   flex-direction: column;
   min-width: 0;
   flex: 1;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.3;
 }
 
@@ -492,7 +496,7 @@ input[type='search']::-webkit-search-cancel-button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 12.5px;
+  font-size: 12px;
   color: #d9f2e2;
 }
 
@@ -505,8 +509,8 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: #154229;
   color: #ffffff;
   font-family: var(--font-body);
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -540,20 +544,20 @@ input[type='search']::-webkit-search-cancel-button {
   flex-direction: column;
   gap: 4px;
   min-width: 0;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
-/* Avisos da sacola: sólidos, ficam até o cliente agir ou fechar. */
+/* Avisos da sacola */
 .cartAviso {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 12px;
-  padding: 8px 8px 8px 14px;
+  padding: 8px 8px 8px 16px;
   border-radius: var(--radius-md);
   color: #ffffff;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.4;
 }
 
@@ -564,7 +568,7 @@ input[type='search']::-webkit-search-cancel-button {
 .cartAvisoVendido {
   align-items: flex-start;
   background-color: #7c4a12;
-  padding-top: 10px;
+  padding-top: 12px;
 }
 
 .cartAvisoBtn {
@@ -579,8 +583,8 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: #3f3f46;
   color: #ffffff;
   font-family: var(--font-body);
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -598,17 +602,16 @@ input[type='search']::-webkit-search-cancel-button {
   justify-content: center;
 }
 
-/* Capa do detalhe: o maior elemento da folha, sem passar de metade da tela. */
 .sheetCapa {
   width: min(100%, 44dvh, 360px);
   margin: 0 auto;
 }
 
 .sheetCapa > div {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-capa);
 }
 
-/* Botão de adicionar preso no fim da folha, com o mesmo fundo dela. */
+/* O fundo repete o da folha para cobrir o conteúdo que rola por baixo. */
 .sheetAcao {
   position: sticky;
   bottom: calc(-1 * (env(safe-area-inset-bottom, 16px) + 16px));
@@ -619,13 +622,12 @@ input[type='search']::-webkit-search-cancel-button {
   border-top: 1px solid var(--border);
 }
 
-/* Localização no detalhe: a primeira informação depois do preço. */
 .sheetLocal {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: 16px;
-  padding: 14px 0;
+  padding: 16px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   color: var(--text);
@@ -642,11 +644,11 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .sheetLocalLoja {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
-/* Faixa lateral com a cor da loja (cards de /lojas) */
+/* Cards de /lojas */
 .productCard.lojaCardLoja1 {
   border-left: 4px solid var(--loja-1);
 }
@@ -655,20 +657,19 @@ input[type='search']::-webkit-search-cancel-button {
   border-left: 4px solid var(--loja-2);
 }
 
-/* Pílulas de filtro ativo */
 .filterChip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   position: relative;
   min-height: 36px;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
   background-color: var(--badge-neutral);
   border: none;
   color: #ffffff;
-  font-size: 12.5px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   max-width: 100%;
 }
@@ -685,16 +686,15 @@ input[type='search']::-webkit-search-cancel-button {
   white-space: nowrap;
 }
 
-/* Botão secundário sólido (sem fundo transparente) */
 .textBtn {
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: var(--radius-md);
   background-color: var(--badge-neutral);
   border: none;
   color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -707,14 +707,12 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: #52525b;
 }
 
-/* Grade de Produtos Responsiva (2 colunas reais no mobile) */
 .catalogGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
   gap: 12px;
 }
 
-/* Card de Produto Sólido */
 .productCard {
   background-color: var(--bg-card);
   border: 1px solid var(--border-light);
@@ -722,7 +720,7 @@ input[type='search']::-webkit-search-cancel-button {
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
   cursor: pointer;
   transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   position: relative;
@@ -767,7 +765,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .productCardActionBtn {
   min-height: 44px;
-  padding: 6px 11px;
+  padding: 6px 12px;
   border-radius: var(--radius-md);
   background-color: var(--accent);
   border: none;
@@ -775,10 +773,10 @@ input[type='search']::-webkit-search-cancel-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
   transition: background-color 0.15s ease, transform 0.1s ease;
@@ -797,7 +795,6 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: var(--badge-success);
 }
 
-/* Lista sem caixas aninhadas (linhas com divisória) */
 .specList {
   display: flex;
   flex-direction: column;
@@ -808,7 +805,7 @@ input[type='search']::-webkit-search-cancel-button {
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--border);
   font-size: 14px;
 }
@@ -824,7 +821,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .specRow dd {
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 500;
   text-align: right;
 }
 
@@ -841,10 +838,10 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: #151518;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 10px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .skeletonBlock {
@@ -865,7 +862,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 @media (max-width: 640px) {
   .pageContainer {
-    padding: 12px 10px;
+    padding: 12px 12px;
     padding-bottom: calc(var(--bottom-nav-height) + 24px);
   }
 
@@ -876,32 +873,30 @@ input[type='search']::-webkit-search-cancel-button {
 
   .catalogGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    gap: 12px;
   }
 
   .productCard {
-    padding: 11px;
+    padding: 12px;
     gap: 8px;
   }
 
   .productCardActionBtn {
     min-height: 44px;
-    padding: 5px 9px;
+    padding: 4px 8px;
     font-size: 12px;
     gap: 4px;
   }
 
   .categoryTabBtn {
     padding: 8px 4px;
-    font-size: 12.5px;
-    gap: 5px;
+    font-size: 12px;
+    gap: 4px;
   }
 }
 
 
-/* ==========================================================================
-   Modais e Drawer (Base Móvel)
-   ========================================================================== */
+/* Detalhe e sacola */
 .productDetailBackdrop {
   position: fixed;
   inset: 0;
@@ -922,8 +917,8 @@ input[type='search']::-webkit-search-cancel-button {
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
   border-right: 1px solid #2d2d35;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -951,8 +946,8 @@ input[type='search']::-webkit-search-cancel-button {
   border-top: 1px solid #2d2d35;
   border-left: 1px solid #2d2d35;
   border-right: 1px solid #2d2d35;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.9);
@@ -968,16 +963,14 @@ input[type='search']::-webkit-search-cancel-button {
 .lojasGridContainer {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .desktopHeaderNav {
   display: none;
 }
 
-/* ==========================================================================
-   Desktop Puro (min-width: 769px) — Mobile 100% Preservado
-   ========================================================================== */
+/* Desktop */
 @media (min-width: 769px) {
   .bottomNavMobile {
     display: none !important;
@@ -997,7 +990,6 @@ input[type='search']::-webkit-search-cancel-button {
     padding-bottom: 16px;
   }
 
-  /* Menu de Navegação Desktop */
   .desktopHeaderNav {
     display: flex;
     align-items: center;
@@ -1008,13 +1000,13 @@ input[type='search']::-webkit-search-cancel-button {
   .desktopNavLink {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 8px 14px;
+    gap: 8px;
+    padding: 8px 16px;
     border-radius: var(--radius-md);
     background-color: var(--bg-card);
     border: 1px solid var(--border);
     color: var(--text-muted);
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 600;
     text-decoration: none;
     transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -1042,7 +1034,7 @@ input[type='search']::-webkit-search-cancel-button {
     background-color: var(--accent);
     border: 1px solid var(--accent);
     color: #ffffff;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.15s ease, transform 0.1s ease;
@@ -1062,23 +1054,22 @@ input[type='search']::-webkit-search-cancel-button {
     justify-content: center;
     background-color: #ffffff;
     color: #8b1e1e;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 9px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: var(--radius-pill);
   }
 
-  /* Grade e Cards no Desktop */
   .catalogGrid {
     grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     gap: 16px;
   }
 
   .productCard {
-    padding: 14px;
-    gap: 10px;
+    padding: 16px;
+    gap: 12px;
   }
 
   /* Abas na mesma largura da busca e dos filtros. */
@@ -1088,7 +1079,7 @@ input[type='search']::-webkit-search-cancel-button {
 
   .categoryTabBtn {
     min-height: 40px;
-    font-size: 13.5px;
+    font-size: 14px;
   }
 
   .lojasGridContainer {
@@ -1097,7 +1088,6 @@ input[type='search']::-webkit-search-cancel-button {
     gap: 16px;
   }
 
-  /* Modal de Detalhes Centralizado no Desktop */
   .productDetailBackdrop {
     align-items: center;
     padding: 24px;
@@ -1108,7 +1098,7 @@ input[type='search']::-webkit-search-cancel-button {
     max-height: calc(100vh - 64px);
     max-height: calc(100dvh - 64px);
     border: 1px solid #2d2d35;
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     padding: 24px;
     padding-bottom: 24px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
@@ -1120,7 +1110,6 @@ input[type='search']::-webkit-search-cancel-button {
     padding-bottom: 24px;
   }
 
-  /* Drawer da Sacola Lateral Direita no Desktop */
   .cartDrawerBackdrop {
     align-items: stretch;
     justify-content: flex-end;
@@ -1137,7 +1126,7 @@ input[type='search']::-webkit-search-cancel-button {
     border: none;
     border-left: 1px solid #2d2d35;
     border-radius: 0;
-    padding: 22px 24px 24px;
+    padding: 24px 24px 24px;
     box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85);
   }
 }

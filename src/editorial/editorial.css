@@ -1,6 +1,3 @@
-/* Estilo editorial: catálogo impresso de loja de discos, organizado por caixa.
-   Mesmas cores, logo e fundo; muda a fonte dos títulos e o agrupamento por caixa. */
-
 .edPagina .headerTitle {
   font-family: var(--font-editorial), var(--font-title);
   font-size: 26px;
@@ -15,19 +12,16 @@
   gap: 28px;
 }
 
-/* Cabeçalho da caixa: só texto sobre o fundo de discos, com fio fino embaixo. */
 .edCaixaCab {
   position: relative;
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 14px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-light);
 }
 
-/* Só tipografia sobre o fundo de discos: um traço vermelho curto marca o número. */
-/* Traço vermelho na largura do número, sobre o fio do cabeçalho (como o sublinhado da aba ativa). */
 .edCaixaNum::after {
   content: '';
   position: absolute;
@@ -62,12 +56,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
 .edCaixaTrecho {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -81,8 +75,8 @@
   gap: 2px;
   padding: 0 2px;
   color: var(--text-muted);
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   text-decoration: none;
 }
 
@@ -90,7 +84,6 @@
   color: var(--text);
 }
 
-/* Divisória por letra na página da caixa: discreta, uma letra pequena sobre um fio fino. */
 .edLetra {
   margin-bottom: 10px;
   padding-bottom: 4px;
@@ -102,8 +95,7 @@
   color: #ffffff;
 }
 
-/* Atalho de letras: texto simples numa linha que rola de lado, sem caixinhas.
-   O alvo de toque continua com 44px de altura. */
+/* Altura mínima de 44px para o alvo de toque. */
 .edLetras {
   display: flex;
   margin: -6px 0 10px;
@@ -145,7 +137,6 @@
   scroll-margin-top: 8px;
 }
 
-/* Caixa anterior e próxima. */
 .edVizinhas {
   display: flex;
   justify-content: space-between;
@@ -193,7 +184,6 @@
   flex-shrink: 0;
 }
 
-/* Discos em pé, em grade: capa em cima e ficha embaixo, como na vitrine atual. */
 .edLista {
   list-style: none;
   display: grid;
@@ -204,8 +194,8 @@
 .edLinha {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 8px; /* 12px de canto - 8px de padding = 4px na capa (cantos concêntricos) */
   background-color: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-lg);
@@ -228,7 +218,7 @@
 
 .edArtista {
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: 0.02em;
@@ -244,9 +234,9 @@
   cursor: pointer;
   user-select: text;
   -webkit-user-select: text;
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
   color: #ffffff;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -262,13 +252,12 @@
 .edMeta {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px 10px;
+  gap: 2px 12px;
   margin-top: 4px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
-/* Localização no card (busca e listas sem agrupamento): tão legível quanto o preço. */
 .edLocal {
   display: flex;
   align-items: center;
@@ -301,12 +290,15 @@
   color: var(--text);
 }
 
-/* Detalhe do disco: o mesmo bloco, maior; caixa e loja com o mesmo peso. */
 .edLocal-detalhe {
   margin-top: 0;
   gap: 8px;
   font-size: 26px;
   flex-wrap: wrap;
+}
+
+.edDiscoVizinhos .edCaixaNum {
+  font-size: 20px;
 }
 
 .edLocal-detalhe .edPonto {
@@ -319,15 +311,13 @@
   color: var(--text-muted);
 }
 
-/* Sacola: o mesmo bloco, compacto. */
 .edLocal-sacola {
   margin-top: 0;
-  gap: 5px;
+  gap: 4px;
   font-size: 14px;
   min-width: 0;
 }
 
-/* Preço e botão no pé do card, separados da ficha por um fio fino. */
 .edAcao {
   display: flex;
   align-items: center;
@@ -340,7 +330,7 @@
 
 .edPreco {
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: #ffffff;
@@ -370,8 +360,7 @@
   background-color: var(--badge-success);
 }
 
-/* Lojas: só tipografia, no idioma do cabeçalho de caixa do catálogo. Sem card; o traço
-   sob o nome tem a cor da loja (vermelho na 1, azul na 2). */
+/* O traço sob o nome usa a cor da loja (vermelho na 1, azul na 2). */
 .edLojas {
   display: grid;
   gap: 28px;
@@ -390,7 +379,7 @@
   display: flex;
   align-items: flex-end;
   gap: 12px;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -423,8 +412,8 @@
   align-items: center;
   gap: 2px;
   color: var(--text-muted);
-  font-size: 13.5px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
@@ -446,7 +435,6 @@
   }
 }
 
-/* Fileira de capas da loja: 5 capas quadradas, lado a lado, sem moldura. */
 .edLojaCapas {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -458,7 +446,7 @@
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius-sm, 4px);
+  border-radius: var(--radius-capa);
   background-color: var(--bg-card);
 }
 
@@ -467,8 +455,6 @@
   outline-offset: 4px;
 }
 
-/* Índice de caixas da loja: grade de números, como a parede de caixotes numerados.
-   Quadrinhos só com borda fina, sem fundo nem faixa; a cor da loja fica no título. */
 .edCaixas {
   list-style: none;
   display: grid;
@@ -482,7 +468,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   padding: 8px 4px;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
@@ -499,7 +485,7 @@
 }
 
 .edCaixaItens {
-  font-size: 11.5px;
+  font-size: 12px;
   line-height: 1;
   color: var(--text-muted);
 }
@@ -524,7 +510,6 @@
   outline-offset: 2px;
 }
 
-/* Título da página da loja com o traço na cor da loja, como na página Caixas. */
 .edTituloLoja {
   position: relative;
   display: inline-block;
@@ -540,7 +525,6 @@
   background-color: var(--cor-loja, var(--accent));
 }
 
-/* Barra de baixo: ícones da mesma família, rótulos condensados, fio vermelho no ativo. */
 .edBarra {
   position: fixed;
   left: 0;
@@ -567,7 +551,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 4px;
   border: none;
   background-color: transparent;
   color: var(--text-muted);
@@ -584,10 +568,10 @@
   color: #ffffff;
 }
 
-/* Com cinco itens, "Compartilhar" precisa de letra menor nos celulares estreitos. */
+/* Com cinco itens, "Compartilhar" só cabe com letra menor nos celulares estreitos. */
 @media (max-width: 389px) {
   .edBarraItem {
-    font-size: 12.5px;
+    font-size: 12px;
     letter-spacing: 0.02em;
   }
 }
@@ -612,18 +596,18 @@
   top: -6px;
   right: -12px;
   min-width: 18px;
-  padding: 1px 5px;
-  border-radius: 10px;
+  padding: 2px 4px;
+  border-radius: var(--radius-pill);
   background-color: var(--accent);
   color: #ffffff;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0;
   text-align: center;
 }
 
-/* Detalhe do disco e sacola (montados fora da página): mesma voz nos títulos. */
+/* Detalhe do disco e sacola são montados fora de .edPagina, por isso o body:has(). */
 body:has(.edPagina) .productDetailDialog h2,
 body:has(.edPagina) .sheetLocalCaixa,
 body:has(.edPagina) .cartDrawerPanel h2,
@@ -637,7 +621,7 @@ body:has(.edPagina) .productDetailDialog h2 {
   line-height: 1.05 !important;
 }
 
-/* Só o título do disco fica em caixa alta; "Sua Sacola" fica como está escrito. */
+/* Só o título do disco em caixa alta; "Sua Sacola" mantém a grafia. */
 body:has(.edPagina) .productDetailDialog h2 {
   text-transform: uppercase;
 }
@@ -674,17 +658,15 @@ body:has(.edPagina) .sheetLocal {
   }
 }
 
-/* Com o detalhe aberto, o próprio botão já vira "Na sacola": o aviso não cobre a ficha. */
+/* Com o detalhe aberto, o botão já mostra "Na sacola"; o aviso cobriria a ficha. */
 body:has(.productDetailDialog) .sacolaAviso {
   display: none;
 }
 
-/* Abas de formato no estilo editorial: texto na fonte dos títulos (sem caixa alta, para manter "CDs" e "DVDs") sobre um fio fino,
-   com o ícone de cada formato ao lado. A ativa fica branca, com ícone e sublinhado
-   vermelhos (o mesmo traço do cabeçalho da caixa). */
+/* Sem caixa alta para manter a grafia de "CDs" e "DVDs". */
 .edPagina .categoryTabsBar {
   display: flex;
-  gap: 18px;
+  gap: 20px;
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -725,7 +707,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   outline-offset: 2px;
 }
 
-/* Abas em caixa alta, como o cabeçalho da caixa, e ícones maiores. */
 .edPagina .categoryTabBtn {
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -736,9 +717,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   height: 22px;
 }
 
-/* Compartilhar: o QR, o endereço na fonte dos títulos e uma ação principal. */
-/* A página ocupa a altura da tela: o bloco do QR fica no meio da área livre e o
-   crédito do fundo, no pé. */
 .edPaginaCompartilhar {
   display: flex;
   flex-direction: column;
@@ -768,7 +746,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edQr {
   width: min(240px, 64vw);
   aspect-ratio: 1 / 1;
-  padding: 14px;
+  padding: 16px;
   border-radius: var(--radius-lg);
   background-color: #ffffff;
 }
@@ -785,7 +763,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .edQrDica {
   margin-top: 4px;
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -800,7 +778,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .edBotaoPrincipal {
   width: 100%;
-  min-height: 48px;
+  min-height: 52px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -809,8 +787,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   border-radius: var(--radius-md);
   background-color: var(--accent);
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -830,7 +808,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   background: none;
   color: var(--text-muted);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -849,15 +827,15 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edCompartilharAviso {
   min-height: 18px;
   margin-top: 6px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
-/* Crédito do ícone do fundo (exigido pela licença), discreto no pé da página. */
+/* Crédito do ícone do fundo, exigido pela licença. */
 .edCredito {
   margin-top: 24px;
   font-size: 12px;
-  /* Mais apagado que o resto, no limite de leitura (4,5:1 sobre o fundo). */
+  /* Contraste de 4,5:1 sobre o fundo, o mínimo para leitura. */
   color: #777781;
 }
 
@@ -866,8 +844,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   text-underline-offset: 2px;
 }
 
-/* Contato: endereço, horário, WhatsApp e Instagram em blocos separados por fio; o mapa
-   entra logo depois do endereço no celular e ocupa a coluna da direita no computador. */
 .edContato {
   display: flex;
   flex-direction: column;
@@ -893,7 +869,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edContatoRotulo {
   margin: 0 0 6px;
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -912,7 +888,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .edContatoNota {
   margin: 6px 0 0;
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.45;
   color: var(--text-muted);
 }
@@ -924,8 +900,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: center;
   gap: 8px;
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   text-decoration: underline;
   text-decoration-color: var(--accent-hover);
   text-decoration-thickness: 2px;
@@ -962,7 +938,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 .edContatoHorarios dt {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--text);
 }
 
@@ -974,7 +950,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   color: #ffffff;
 }
 
-/* O mapa do Google vem claro; o filtro o escurece para não acender a página preta. */
+/* O mapa do Google é claro; o filtro o escurece para não destoar da página escura. */
 .edContatoMapa {
   order: 2;
   margin: 8px 0 12px;
@@ -993,11 +969,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   filter: invert(0.9) hue-rotate(180deg) saturate(0.7);
 }
 
-/* ==========================================================================
-   COMPUTADOR (1024px ou mais)
-   Regra da casa: abaixo de 1024px nada muda. As peças novas ficam escondidas e os
-   contêineres novos usam display: contents (não geram caixa nem mexem na disposição).
-   ========================================================================== */
+/* Computador (1024px ou mais). Abaixo disso nada muda: as peças extras ficam escondidas
+   e os contêineres extras usam display: contents. */
 .edCatalogo,
 .edCatalogoPrincipal {
   display: contents;
@@ -1009,7 +982,6 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 @media (min-width: 1024px) {
-  /* Contato: dados à esquerda, mapa alto e fixo à direita. */
   .edContato {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
@@ -1034,7 +1006,6 @@ body:has(.productDetailDialog) .sacolaAviso {
     height: min(560px, calc(100dvh - 140px));
   }
 
-  /* Catálogo: coluna de filtros fixa à esquerda + discos à direita. */
   .edCatalogo {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
@@ -1047,14 +1018,12 @@ body:has(.productDetailDialog) .sacolaAviso {
     min-width: 0;
   }
 
-  /* As listas de loja/caixa/ordem passam para a coluna lateral; as abas de formato,
-     com ícones, ficam no topo da área de discos. */
   .edCatalogo .filtrosBtn,
   .edCatalogo .filtrosPainel {
     display: none;
   }
 
-  /* As etiquetas de filtro têm display escrito no próprio elemento: precisa do !important. */
+  /* .filtrosAtivos recebe display por style inline (CatalogFilters.js); só !important sobrepõe. */
   .edCatalogo .filtrosAtivos {
     display: none !important;
   }
@@ -1066,14 +1035,14 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edLateral {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 24px;
     padding-top: 2px;
   }
 
   .edLatTitulo {
     margin: 0 0 6px 10px;
     font-family: var(--font-editorial), var(--font-title);
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -1087,9 +1056,9 @@ body:has(.productDetailDialog) .sacolaAviso {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding: 0 10px;
+    padding: 0 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: none;
     color: var(--text-muted);
     font-size: 14px;
@@ -1123,8 +1092,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 
   .edLatDica {
-    padding: 0 10px;
-    font-size: 13px;
+    padding: 0 12px;
+    font-size: 14px;
     color: var(--text-muted);
   }
 
@@ -1140,7 +1109,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     height: 30px;
     padding: 0;
     border: 1px solid var(--border-light);
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     background: none;
     color: #ffffff;
     font-family: var(--font-editorial), var(--font-title);
@@ -1176,17 +1145,14 @@ body:has(.productDetailDialog) .sacolaAviso {
     outline-offset: 1px;
   }
 
-  /* Indicação do atalho "/" dentro da busca (só com mouse, ver regra abaixo). */
 }
 
-/* Telas largas: um pouco mais de área útil, 6 colunas de discos ao lado da coluna. */
 @media (min-width: 1280px) {
   .pageContainer {
     max-width: 1320px;
   }
 }
 
-/* Atalho "/" da busca: visível só em tela grande com mouse e com a busca vazia. */
 @media (min-width: 1024px) and (pointer: fine) {
   .atalhoBusca {
     position: absolute;
@@ -1198,16 +1164,16 @@ body:has(.productDetailDialog) .sacolaAviso {
     height: 22px;
     padding: 0 6px;
     border: 1px solid var(--border-light);
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     font-family: var(--font-editorial), var(--font-title);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text-muted);
     pointer-events: none;
   }
 }
 
-/* Link sobre a capa do card: só no computador (abre a página do disco, aceita nova aba). */
+/* Link sobre a capa só no computador: abre a página do disco e aceita nova aba. */
 .edCapaLink {
   display: none;
 }
@@ -1225,14 +1191,11 @@ body:has(.productDetailDialog) .sacolaAviso {
     right: 10px;
     aspect-ratio: 1 / 1;
     z-index: 1;
-    border-radius: 8px;
+    border-radius: var(--radius-capa);
   }
 }
 
-/* ==========================================================================
-   Página do disco (/disco/...). Página nova: uma coluna no celular (link
-   compartilhado), capa e ficha lado a lado no computador.
-   ========================================================================== */
+/* Página do disco (/disco/...) */
 .edDiscoTrilha {
   display: flex;
   align-items: center;
@@ -1252,7 +1215,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   background: none;
   color: var(--text);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -1261,7 +1224,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 
@@ -1281,7 +1244,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 .edDiscoCapa > div {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-capa);
 }
 
 .edDiscoArtista {
@@ -1314,18 +1277,18 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .edDiscoSacola {
   width: 100%;
-  min-height: 48px;
+  min-height: 52px;
   margin-top: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background-color: var(--accent);
   color: #ffffff;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
 
@@ -1394,10 +1357,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 }
 
-/* ==========================================================================
-   Página da caixa no computador: busca, letras e caixas vizinhas fixas à esquerda.
-   No celular os contêineres não geram caixa e a coluna fica escondida.
-   ========================================================================== */
+/* Página da caixa */
 .edCaixaPagina,
 .edCaixaPrincipal {
   display: contents;
@@ -1420,7 +1380,6 @@ body:has(.productDetailDialog) .sacolaAviso {
     min-width: 0;
   }
 
-  /* A busca, as letras e a caixa anterior/próxima de cima passam para a coluna. */
   .edCaixaPrincipal > .edVizinhas:first-child,
   .edCaixaBuscaCelular,
   .edCaixaPrincipal .edLetras {
@@ -1430,7 +1389,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edCaixaLateral {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 24px;
     position: sticky;
     top: 16px;
     padding-top: 2px;
@@ -1451,7 +1410,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edCaixaLatContagem {
     margin-top: -12px;
     padding: 0 2px;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
   }
 
@@ -1467,7 +1426,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     font-family: var(--font-editorial), var(--font-title);
     font-size: 16px;
     font-weight: 700;
@@ -1496,9 +1455,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 }
 
-/* ==========================================================================
-   Lojas e Compartilhar no computador.
-   ========================================================================== */
+/* Lojas e Compartilhar */
 .edLojaBloco {
   display: contents;
 }
@@ -1512,11 +1469,10 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 @media (min-width: 1024px) {
-  /* Lojas: cada loja com os números das caixas logo abaixo das capas. */
   .edLojaBloco {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
     min-width: 0;
   }
 
@@ -1528,12 +1484,11 @@ body:has(.productDetailDialog) .sacolaAviso {
     text-decoration: none;
   }
 
-  /* Compartilhar: o QR é a capa e um vinil sai dela; o conjunto fica centralizado. */
   .edQrCapa {
     --capa: 300px;
     position: relative;
     display: block;
-    /* capa + parte do vinil que sai: a largura do conjunto centraliza capa e disco juntos */
+    /* Capa + parte do vinil que sai: a largura do conjunto centraliza os dois. */
     width: calc(var(--capa) * 1.38);
     height: var(--capa);
   }
@@ -1575,24 +1530,20 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 }
 
-/* ==========================================================================
-   Computador: coluna de filtros mais clara e menu do topo no estilo editorial.
-   ========================================================================== */
 @media (min-width: 1024px) {
   .edLateral {
     gap: 0;
   }
 
-  /* Grupos separados por fio fino; títulos discretos, em cinza. */
   .edLatGrupo + .edLatGrupo {
     margin-top: 18px;
-    padding-top: 18px;
+    padding-top: 20px;
     border-top: 1px solid var(--border);
   }
 
   .edLatTitulo {
     margin: 0 0 10px;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 0.08em;
     color: var(--text-muted);
   }
@@ -1608,7 +1559,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     border: none;
     background: none;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 14px;
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
@@ -1622,7 +1573,6 @@ body:has(.productDetailDialog) .sacolaAviso {
     padding: 0;
   }
 
-  /* Escolhas (loja e ordem): botões; a ativa em vermelho cheio. */
   .edLatEscolhas {
     display: flex;
     flex-wrap: wrap;
@@ -1633,14 +1583,14 @@ body:has(.productDetailDialog) .sacolaAviso {
     min-height: 34px;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     padding: 0 12px;
     border: 1px solid var(--border-light);
     border-radius: var(--radius-md);
     background: none;
     color: var(--text);
-    font-size: 13.5px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
   }
 
@@ -1656,12 +1606,10 @@ body:has(.productDetailDialog) .sacolaAviso {
     color: #ffffff;
   }
 
-  /* Na opção escolhida, o ponto da loja fica branco sobre o vermelho. */
   .edLatEscolhaAtiva .edPonto {
     background-color: #ffffff !important;
   }
 
-  /* Loja: as três opções numa linha, do mesmo tamanho. Ordem: duas colunas. */
   .edLatGrupo:first-child .edLatEscolhas {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1695,8 +1643,6 @@ body:has(.productDetailDialog) .sacolaAviso {
     color: #ffffff;
   }
 
-  /* Menu do topo: textos na fonte dos títulos, sem caixas; a página atual em branco
-     com o traço vermelho (como as abas de formato). A sacola fica em vermelho cheio. */
   .edNavDesktop {
     gap: 26px;
   }
@@ -1756,8 +1702,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     outline-offset: 4px;
   }
 
-  /* Redundâncias: a caixa anterior/próxima já está na coluna; o "Ver caixa" do disco
-     repete o bloco de localização. */
+  /* Ocultos no computador: as vizinhas já estão na coluna e "Ver caixa" repete a localização. */
   .edCaixaPrincipal > .edVizinhas:last-child,
   .edDiscoVizinhos .edCaixaLink {
     display: none;
@@ -1765,7 +1710,6 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 @media (min-width: 1024px) {
-  /* Página da caixa: caixa anterior e próxima como os botões da coluna do catálogo. */
   .edCaixaLatVizinhas {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1782,16 +1726,11 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 }
 
-/* ==========================================================================
-   Computador: o vermelho da marca como identidade (linhas, traços, borda ao passar
-   o mouse, seleção e foco), sem disputar com as ações, que seguem em vermelho cheio.
-   ========================================================================== */
 @media (min-width: 1024px) {
   .edPagina {
     --border-focus: #c23a3a;
   }
 
-  /* Títulos da coluna com o traço vermelho curto, como o "CAIXA 1". */
   .edLatTitulo {
     position: relative;
     display: inline-block;
@@ -1815,15 +1754,12 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 @media (min-width: 1024px) and (hover: hover) {
-  /* Disco com o mouse em cima: borda vermelha. */
   .edLinha:hover {
     border-color: var(--accent);
   }
 }
 
-/* ---------- Sacola (celular e computador) ----------
-   Mesma voz do catálogo: títulos na fonte editorial em caixa alta, traço vermelho,
-   preço grande. O site fica visível por trás, desfocado. */
+/* Sacola */
 .cartFundo {
   position: fixed;
   inset: 0;
@@ -1838,11 +1774,10 @@ body:has(.productDetailDialog) .sacolaAviso {
   from { opacity: 0; }
 }
 
-/* Limpar no mesmo traço dos botões de ícone. */
 .cartTopo .textBtn {
   min-height: 44px;
-  padding: 0 14px;
-  border-radius: 8px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
   border: 1px solid #2d2d35;
   background-color: transparent;
   color: #ffffff;
@@ -1852,7 +1787,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   .cartTopo .textBtn:hover { border-color: var(--accent); background-color: #1f1f24; }
 }
 
-/* Sem suporte a desfoque ou com transparência reduzida: volta ao fundo sólido. */
+/* Sem backdrop-filter, o fundo fica sólido para manter a leitura. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .cartFundo { background-color: #050506; }
 }
@@ -1874,14 +1809,14 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 14px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #232328;
 }
 
 .cartTopoTitulo {
   display: flex;
   align-items: baseline;
-  gap: 10px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -1909,7 +1844,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .cartContagem {
   font-family: var(--font-editorial), var(--font-title);
-  font-size: 15px;
+  font-size: 16px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1922,7 +1857,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid #2d2d35;
   background-color: transparent;
   color: #ffffff;
@@ -1951,8 +1886,8 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 .cartItemArtista {
-  font-size: 11.5px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -1986,7 +1921,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.4;
   color: #e4e4e7;
 }
@@ -2000,7 +1935,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 12px;
   border-top: 1px solid #232328;
 }
 
@@ -2020,10 +1955,8 @@ body:has(.productDetailDialog) .sacolaAviso {
   color: #ffffff;
 }
 
-/* ---------- Celular e tablet: vermelho nas escolhas ----------
-   Mesma marca do computador: escolha ativa em vermelho cheio. */
 @media (max-width: 1023px) {
-  /* Ordenar fica um pouco mais largo para "Menor preço" caber inteiro. */
+  /* Coluna de ordenar mais larga para "Menor preço" caber inteiro. */
   .filtrosPainel {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr);
   }
@@ -2042,7 +1975,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     display: none;
   }
 
-  /* Tablet: os seletores ficam sempre à mostra, então as etiquetas também sobram. */
+  /* No tablet os seletores ficam sempre visíveis, então as etiquetas de filtro sobram. */
   @media (min-width: 769px) {
     .filtrosAtivos .filterChip {
       display: none;
@@ -2051,8 +1984,8 @@ body:has(.productDetailDialog) .sacolaAviso {
 
   .filtrosAtivos .filterChip {
     min-height: 32px;
-    padding: 0 8px 0 10px;
-    border-radius: var(--radius-md);
+    padding: 0 8px 0 12px;
+    border-radius: var(--radius-pill);
     background-color: var(--accent);
     color: #ffffff;
     font-weight: 700;
@@ -2067,7 +2000,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     border-radius: 0;
     background-color: transparent;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 3px;
   }

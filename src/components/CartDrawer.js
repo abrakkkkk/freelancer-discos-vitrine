@@ -28,12 +28,12 @@ export default function CartDrawer({
   const [bairro, setBairro] = useState('');
   const [validando, setValidando] = useState(false);
   const [feedback, setFeedback] = useState(null);
-  // Última remoção feita pelo cliente, com a sacola de antes, para o botão "Desfazer".
+  // Última remoção, com a sacola anterior, para o botão "Desfazer".
   const [desfazer, setDesfazer] = useState(null);
   const panelRef = useRef(null);
   useModalDialog(isOpen, onClose, panelRef);
 
-  // Avisos valem só para a sacola aberta: ao reabrir, começa sem eles.
+  // Avisos valem só enquanto a sacola está aberta.
   useEffect(() => {
     if (!isOpen) {
       setDesfazer(null);
@@ -72,8 +72,8 @@ export default function CartDrawer({
     currency: 'BRL',
   });
 
-  // Depois do await da validação, o Safari do iPhone pode bloquear a nova aba.
-  // Se for bloqueada, abre o WhatsApp na própria aba (a sacola continua salva).
+  // Depois do await, o Safari do iPhone pode bloquear a nova aba;
+  // nesse caso abre o WhatsApp na mesma aba (a sacola continua salva).
   const abrirWhatsApp = (urlWa) => {
     const janela = window.open(urlWa, '_blank');
     if (janela) {
@@ -144,10 +144,8 @@ export default function CartDrawer({
 
   return (
     <div className="cartDrawerBackdrop">
-      {/* Fundo: o site continua por trás, desfocado e escurecido. */}
       <div onClick={onClose} className="cartFundo" />
 
-      {/* Painel da Sacola */}
       <div
         ref={panelRef}
         tabIndex={-1}
@@ -156,7 +154,6 @@ export default function CartDrawer({
         aria-label="Sua Sacola"
         className="cartDrawerPanel"
       >
-        {/* Cabeçalho */}
         <div className="cartTopo">
           <div className="cartTopoTitulo">
             <h2>Sua sacola</h2>
@@ -187,7 +184,6 @@ export default function CartDrawer({
           </div>
         </div>
 
-        {/* Avisos: remoção com desfazer e itens que já foram vendidos */}
         <div role="status" aria-live="polite">
           {desfazer && (
             <div className="cartAviso cartAvisoDesfazer">
@@ -223,7 +219,6 @@ export default function CartDrawer({
           )}
         </div>
 
-        {/* Lista de Itens */}
         <div
           style={{
             flex: 1,
@@ -270,10 +265,9 @@ export default function CartDrawer({
                   <div style={{ flex: 1, minWidth: 0 }}>
                     {item.artista && <p className="cartItemArtista">{item.artista}</p>}
                     <h3 className="cartItemTitulo">{item.titulo}</h3>
-                    {/* Na sacola a localização vira lista de separação: mesmo bloco do card. */}
                     <span style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '3px', minWidth: 0 }}>
                       <Localizacao caixa={item.caixa} loja={item.loja} tamanho="sacola" />
-                      <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>{fmtTag}</span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-dim)' }}>{fmtTag}</span>
                     </span>
                   </div>
 
@@ -295,7 +289,6 @@ export default function CartDrawer({
           )}
         </div>
 
-        {/* Rodapé: Inputs Opcionais e CTA */}
         {itens.length > 0 && (
           <div
             style={{
@@ -303,10 +296,10 @@ export default function CartDrawer({
               borderTop: '1px solid #232328',
               display: 'flex',
               flexDirection: 'column',
-              gap: '10px',
+              gap: '12px',
             }}
           >
-            {/* Rótulos visíveis: o texto de exemplo some quando o cliente começa a digitar. */}
+            {/* Rótulos visíveis porque o placeholder some quando o cliente digita. */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               <label className="cartCampo">
                 <span>Seu nome (opcional)</span>
@@ -332,13 +325,11 @@ export default function CartDrawer({
               </label>
             </div>
 
-            {/* Disponibilidade: o estoque é físico, a loja confirma na conversa. */}
             <p role="note" className="cartNota">
               <FiInfo size={14} aria-hidden="true" />
               A loja confirma a disponibilidade no WhatsApp.
             </p>
 
-            {/* Total e Botão WhatsApp */}
             <div className="tabularNums cartTotal">
               <span>Total</span>
               <strong>{totalFmt}</strong>
@@ -352,8 +343,7 @@ export default function CartDrawer({
               style={{
                 width: '100%',
                 minHeight: '52px',
-                borderRadius: '10px',
-                // Estado "verificando" com verde mais escuro e sólido (sem opacidade)
+                borderRadius: 'var(--radius-md)',
                 backgroundColor: validando ? '#1a9e4f' : '#25D366',
                 border: 'none',
                 color: '#050506',
