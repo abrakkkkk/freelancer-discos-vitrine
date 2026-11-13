@@ -45,7 +45,6 @@ export default function ContatoPage() {
 
       <div className="edContato">
         <div className="edContatoInfo">
-          {/* Endereço: a rua em destaque, o resto em uma linha só. */}
           <section className="edContatoBloco" aria-labelledby="contato-endereco">
             <h2 id="contato-endereco" className="edContatoRotulo">Endereço</h2>
             <p className="edContatoValor">{LOJA.rua}</p>

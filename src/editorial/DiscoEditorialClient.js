@@ -17,9 +17,8 @@ function precoBRL(valor) {
 }
 
 /**
- * Página própria de um disco: endereço que dá para compartilhar, abrir em outra aba e
- * voltar com o navegador. No computador, capa à esquerda e ficha à direita; no celular,
- * uma coluna (quem chega aqui pelo celular veio de um link compartilhado).
+ * Página própria de um disco, com endereço para compartilhar. No celular a lista
+ * abre o detalhe, então aqui só chega quem veio por link compartilhado.
  */
 export default function DiscoEditorialClient({ item, vizinhos = [] }) {
   const router = useRouter();
@@ -78,7 +77,6 @@ export default function DiscoEditorialClient({ item, vizinhos = [] }) {
           <h1 className="edDiscoTitulo">{item.titulo}</h1>
           <p className="edDiscoPreco tabularNums">{precoBRL(item.preco)}</p>
 
-          {/* Onde está: o mesmo bloco do celular, logo abaixo do preço. */}
           {caixaHref ? (
             <Link href={caixaHref} className="sheetLocal tabularNums" aria-label={`${rotuloCaixa}, ${item.loja}. Ver tudo desta caixa`}>
               <span style={{ display: 'flex', minWidth: 0, flex: 1 }}>

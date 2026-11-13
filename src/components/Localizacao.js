@@ -2,8 +2,8 @@ import { formatCaixa } from '@/utils/stringUtils';
 
 const COR_LOJA = { 'Loja 1': 'var(--loja-1)', 'Loja 2': 'var(--loja-2)' };
 
-// Onde o item está: ponto na cor da loja, caixa e loja na fonte dos títulos.
-// Um só desenho no card, no detalhe e na sacola; muda apenas o tamanho.
+// Onde o item está (loja e caixa). Usado no card, no detalhe e na sacola;
+// muda só o tamanho.
 export default function Localizacao({ caixa, loja, tamanho = 'card', className = '' }) {
   const rotulo = formatCaixa(caixa, loja);
   const temCaixa = rotulo !== '—';

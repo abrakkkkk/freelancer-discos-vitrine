@@ -24,7 +24,7 @@ const ITENS = [
   { chave: 'compartilhar', href: ed('/compartilhar'), rotulo: 'Compartilhar', Icone: PiQrCodeBold },
 ];
 
-/** Barra de baixo do celular, no estilo do teste: ícones da mesma família e rótulos condensados. */
+/** Barra de navegação inferior do celular. */
 export function BarraEditorial() {
   const ativos = useAtivos();
   const { quantidade, abrir } = useCart();
@@ -60,7 +60,7 @@ export function BarraEditorial() {
   );
 }
 
-/** Menu do topo no computador, com os mesmos destinos e ícones da barra de baixo. */
+/** Menu do topo no computador. */
 export function NavDesktopEditorial() {
   const ativos = useAtivos();
   const { quantidade, abrir } = useCart();

@@ -41,8 +41,8 @@ export async function POST(request) {
       return falhaVerificacao('Banco de dados indisponível');
     }
 
-    // Agrupa por categoria válida (whitelist estrita). Ids não inteiros não existem
-    // no banco e ficam como indisponíveis, sem derrubar a consulta inteira.
+    // Só categorias da lista permitida. Ids não inteiros ficam como indisponíveis,
+    // sem derrubar a consulta inteira.
     const porCategoria = new Map();
     itens.forEach((item) => {
       const cat = item?.categoria || 'discos';

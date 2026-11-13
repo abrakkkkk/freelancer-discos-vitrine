@@ -1,5 +1,5 @@
 // Confere se uma capa encontrada (Discogs/iTunes) corresponde ao disco do acervo.
-// Regra de ouro: na dúvida, rejeita. Sem capa (ícone) é melhor que capa errada.
+// Na dúvida, rejeita: sem capa (ícone) é melhor que capa errada.
 
 const STOP_WORDS = new Set([
   'the', 'a', 'an', 'and', 'of', 'in', 'on', 'at', 'to', 'for', 'with',

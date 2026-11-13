@@ -10,8 +10,8 @@ import {
 import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
-// Colunas que o cliente pode usar para ordenar. Qualquer outra é ignorada (antes ia
-// direto para .order(), permitindo ordenar por colunas internas ou causar erro 500).
+// Colunas que o cliente pode usar para ordenar. Qualquer outra é ignorada, para não
+// ordenar por colunas internas nem causar erro 500 em .order().
 const COLUNAS_ORDENAVEIS = ['preco', 'artista', 'titulo'];
 const DIRECOES_ORDENACAO = ['asc', 'desc'];
 const CATALOG_CACHE_TTL_MS = 60 * 1000;
@@ -25,7 +25,6 @@ export function aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja = '') {
   if (!filtroCaixa) return query;
 
   // Sem loja escolhida, o formato da caixa diz a loja ("5" é da Loja 1, "Caixa 5B" da Loja 2).
-  // Antes, "Caixa 5" sem loja trazia também os itens da Caixa 5B da Loja 2.
   const loja = filtroLoja || lojaPelaCaixa(filtroCaixa);
   const chave = chaveCaixa(filtroCaixa, loja);
   let filtrada = query.in('caixa', variantesCaixa(chave, loja));
@@ -236,7 +235,6 @@ export const catalogService = {
       return resultado;
     }
 
-    // Regra Estrita: Somente itens ativos e não deletados
     let query = supabaseServer
       .from(category)
       .select(colunas, { count: 'exact' })
@@ -249,10 +247,9 @@ export const catalogService = {
 
     query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
 
-    // Ordenação
     if (ordenarColuna && ordenarDirecao) {
       const crescente = ordenarDirecao === 'asc';
-      // Se for DVD/VHS e tentou ordenar por artista, redireciona para título
+      // DVD/VHS não têm artista: ordena por título.
       const colunaReal = (isVideo && ordenarColuna === 'artista') ? 'titulo' : ordenarColuna;
       query = query.order(colunaReal, { ascending: crescente, nullsFirst: false });
     } else {
@@ -291,7 +288,6 @@ export const catalogService = {
 
     let itensFiltrados = dadosBrutos || [];
 
-    // Refinamento em memória
     if (busca && tokensBusca) {
       const { effectiveWords } = tokensBusca;
 
@@ -317,7 +313,6 @@ export const catalogService = {
       itensFiltrados = filtrarExato(itensFiltrados);
 
       // Nada exato: tenta de novo aceitando erro de digitação ("beatls" acha "beatles").
-      // Os resultados aparecem normalmente, sem aviso de correção.
       if (itensFiltrados.length === 0 && effectiveWords.some((p) => toleranciaDigitacao(p) > 0)) {
         itensFiltrados = await buscarComErroDeDigitacao(category, {
           effectiveWords,

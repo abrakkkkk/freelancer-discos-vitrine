@@ -1,3 +1,3 @@
-// Caminhos internos do site. Ficou como função para os componentes não repetirem a montagem.
+// Caminhos internos do site.
 export const BASE = '';
 export const ed = (caminho = '/') => caminho;

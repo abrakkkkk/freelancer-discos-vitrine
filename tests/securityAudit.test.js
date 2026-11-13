@@ -32,7 +32,7 @@ describe('Auditoria de Segurança de Bundle Cliente', () => {
       const content = fs.readFileSync(file, 'utf-8');
       expect(content).not.toContain('SUPABASE_SECRET_KEY');
       expect(content).not.toContain('SUPABASE_SERVICE_ROLE_KEY');
-      expect(content).not.toMatch(/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/); // Não deve conter JWTs de serviço
+      expect(content).not.toMatch(/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+/);
     });
   });
 });

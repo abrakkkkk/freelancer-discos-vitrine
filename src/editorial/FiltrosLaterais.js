@@ -10,7 +10,6 @@ const ORDENS = [
   { id: 'titulo_asc', label: 'Título A–Z' },
 ];
 
-// Botão de escolha: a opção ativa fica em vermelho cheio.
 function Escolha({ ativa, onClick, children }) {
   return (
     <button
@@ -24,10 +23,7 @@ function Escolha({ ativa, onClick, children }) {
   );
 }
 
-/**
- * Coluna de filtros do catálogo no computador (a partir de 1024px; escondida abaixo disso).
- * Loja, caixa e ordem sempre visíveis; o formato fica nas abas do topo.
- */
+/** Coluna de filtros do catálogo no computador (escondida abaixo de 1024px). */
 export default function FiltrosLaterais({
   loja,
   onLoja,

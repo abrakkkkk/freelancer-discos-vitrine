@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { FiAlertTriangle, FiRefreshCw } from 'react-icons/fi';
 import { BarraEditorial } from '@/editorial/NavEditorial';
 
-// Mostrado quando o banco falha ao carregar lojas/caixas. Antes, a falha aparecia
-// como "0 itens" ou "caixa vazia", o que parecia estoque zerado.
+// Falha do banco ao carregar lojas/caixas, para não aparecer como "0 itens" (estoque zerado).
 export default function LojasError({ error, retry }) {
   useEffect(() => {
     console.error(error);

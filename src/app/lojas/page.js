@@ -51,8 +51,6 @@ export default async function LojasEditorialPage() {
         <NavDesktopEditorial />
       </header>
 
-      {/* Cada loja como o cabeçalho de caixa do catálogo: nome grande com o traço na cor
-          da loja e o resumo numa linha. A linha inteira leva às caixas. */}
       <div className="edLojas">
         {lojas.map((lj) => (
           // No celular o bloco não gera caixa (display: contents): só o link da loja aparece.
@@ -73,7 +71,6 @@ export default async function LojasEditorialPage() {
               <strong>{lj.caixas}</strong> caixas · <strong>{lj.total.toLocaleString('pt-BR')}</strong>{' '}
               itens
             </p>
-            {/* Capas de discos famosos que estão nesta loja: o acervo dá a cor da página. */}
             {destaques[lj.nome]?.length > 0 && (
               <span className="edLojaCapas">
                 {destaques[lj.nome].map((d) => (

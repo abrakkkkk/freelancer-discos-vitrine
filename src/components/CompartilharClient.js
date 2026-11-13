@@ -47,10 +47,9 @@ export default function CompartilharClient() {
 
   return (
     <div className="edCompartilhar">
-      {/* QR, endereço e ações no meio da área livre; o crédito fica no pé. */}
       <div className="edCompartilharMeio">
-      {/* Computador: o QR é a capa e um vinil sai dela. No celular o contêiner não gera
-          caixa e o vinil fica escondido (editorial.css). */}
+      {/* No celular este contêiner não gera caixa (display: contents) e o vinil fica
+          escondido; regras no CSS. */}
       <div className="edQrCapa">
       <svg className="edQrVinil" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
         <circle cx="50" cy="50" r="49.5" fill="#1b1b20" stroke="var(--border-light)" strokeWidth="0.5" />
@@ -78,7 +77,7 @@ export default function CompartilharClient() {
       <p className="edQrEndereco">{endereco}</p>
       <p className="edQrDica">Aponte a câmera para abrir o catálogo.</p>
 
-      {/* No celular: o menu do sistema (WhatsApp, Instagram...). No computador: copiar. */}
+      {/* Celular: menu de compartilhar do sistema. Computador: copiar o endereço. */}
       <div className="edCompartilharAcoes">
         {podeCompartilhar ? (
           <>

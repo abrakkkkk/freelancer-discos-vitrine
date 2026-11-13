@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FiSearch, FiX } from 'react-icons/fi';
 import { ed } from './rotas';
 
-/** Índice de caixas da loja: o número da caixa em destaque, como a lombada de uma pasta. */
+/** Índice de caixas da loja. */
 export default function GradeCaixasEditorial({ caixas = [], lojaSlug, nomeLoja }) {
   const [busca, setBusca] = useState('');
 
@@ -48,7 +48,6 @@ export default function GradeCaixasEditorial({ caixas = [], lojaSlug, nomeLoja }
             const vazia = !cx.total;
             return (
               <li key={cx.caixa}>
-                {/* Só o número, como a numeração do caixote; o total em cinza embaixo. */}
                 <Link
                   href={ed(`/lojas/${lojaSlug}/${encodeURIComponent(cx.caixa)}`)}
                   className={`edCaixa tabularNums ${vazia ? 'edCaixaVazia' : ''}`}

@@ -9,8 +9,7 @@ import { normalizeText } from '@/utils/coverMatch';
 // buscada de novo. Para gravar, a rota lê os dados do item no banco pelo id: o que vem na
 // URL nunca decide o que é gravado. Sem id, só busca e não grava.
 
-// v2: chaves geradas pelo algoritmo com conferência de artista/título. O cache antigo
-// (src/data/covers_cache.json) foi gerado sem conferência e não é mais lido.
+// "v2" separa este cache, só com capas conferidas, do covers_cache.json antigo, sem conferência.
 const CACHE_FILE = path.resolve(process.cwd(), '.cache/covers_cache_v2.json');
 const CACHE_MAX_ENTRIES = 5000;
 const NEGATIVE_TTL_MS = 6 * 60 * 60 * 1000;

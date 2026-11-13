@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiSearch, FiSliders, FiX } from 'react-icons/fi';
 
-// Curto para caber ao lado do botão Filtros; o formato buscado é o da aba aberta.
+// Curto para caber ao lado do botão Filtros.
 const PLACEHOLDER_BUSCA = {
   discos: 'Artista ou álbum',
   cds: 'Artista ou álbum',
@@ -36,7 +36,6 @@ export default function CatalogFilters({
   const [aberto, setAberto] = useState(false);
   const campoBusca = useRef(null);
 
-  // Atalho de teclado (computador): "/" leva à busca, como em outros catálogos.
   useEffect(() => {
     const aoTeclar = (e) => {
       if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
@@ -78,7 +77,6 @@ export default function CatalogFilters({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {/* Busca e botão Filtros na mesma linha: no celular, loja, caixa e ordem ficam recolhidos. */}
       <div style={{ display: 'flex', gap: '6px' }}>
       <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
         <FiSearch
@@ -96,7 +94,7 @@ export default function CatalogFilters({
           aria-keyshortcuts="/"
           className="fieldInput"
         />
-        {/* Indicação do atalho: só aparece em tela grande com mouse (editorial.css). */}
+        {/* Visível só em tela grande com mouse (regra no CSS). */}
         {!busca && (
           <kbd className="atalhoBusca" aria-hidden="true">
             /
@@ -131,7 +129,6 @@ export default function CatalogFilters({
         </button>
       </div>
 
-      {/* Seletores: Loja, Caixa, Ordenação */}
       <div id="painel-filtros" className={`filtrosPainel ${aberto ? 'filtrosPainelAberto' : ''}`}>
         <select
           value={loja}
@@ -154,7 +151,6 @@ export default function CatalogFilters({
           className={`fieldSelect tabularNums ${caixa ? 'fieldSelectActive' : ''}`}
         >
           <option value="">Caixas</option>
-          {/* Sem loja escolhida, as caixas das duas lojas vêm separadas por loja. */}
           {gruposDeCaixas.map(({ loja: nomeLoja, lista }) => {
             const opcoes = lista.map((cx) => (
               <option key={cx.caixa} value={cx.caixa}>
@@ -188,9 +184,8 @@ export default function CatalogFilters({
         </select>
       </div>
 
-      {/* Filtros ativos: remoção em 1 toque */}
       {chipsCount > 0 && (
-        // Com o painel aberto, os seletores já mostram o que está escolhido: as etiquetas somem
+        // Com o painel aberto os seletores já mostram a escolha: as etiquetas somem
         // e fica só o "Limpar filtros".
         <div className={`filtrosAtivos ${aberto ? 'filtrosAtivosPainelAberto' : ''}`} style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
           {loja && (

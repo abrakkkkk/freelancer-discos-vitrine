@@ -30,7 +30,6 @@ async function buscarDisco(categoria, idParam) {
   if (error) throw new Error(`Erro ao buscar o disco: ${error.message}`);
   if (!data) return null;
 
-  // Outros itens da mesma caixa, para quem vai à loja buscar.
   let vizinhos = [];
   if (data.caixa) {
     let consulta = supabaseServer

@@ -82,7 +82,6 @@ export default async function CaixaDetalhePage({ params }) {
     todosItens = resultados.flat().sort((a, b) => comparador.compare(a.titulo || '', b.titulo || ''));
   }
 
-  // Caixas vizinhas da mesma loja, para ir de uma caixa à outra sem voltar ao índice.
   const chaveAtual = chaveCaixa(caixaDecodificada, nomeLoja);
   const caixasDaLoja = (await caixaService.getCaixasComContagem(nomeLoja)).filter((c) => c.loja === nomeLoja);
   const indiceAtual = caixasDaLoja.findIndex((c) => c.caixa === chaveAtual);

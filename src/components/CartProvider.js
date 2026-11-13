@@ -5,7 +5,7 @@ import { FiCheck } from 'react-icons/fi';
 import CartDrawer from './CartDrawer';
 import { getCartItemKey } from '@/utils/cartUtils';
 
-// Mesma chave de antes: sacolas já salvas nos navegadores continuam valendo.
+// Não renomear: sacolas já salvas nos navegadores usam esta chave.
 const CART_STORAGE_KEY = 'freelancer_vitrine_cart';
 
 const CartContext = createContext(null);
@@ -19,11 +19,7 @@ function lerSacolaSalva() {
   }
 }
 
-/**
- * Sacola única do site: um só estado e uma só gaveta, montados no layout.
- * Antes, cada página e cada barra de navegação tinham a sua cópia (e às vezes
- * duas gavetas montadas ao mesmo tempo).
- */
+/** Sacola única do site: um só estado e uma só gaveta, montados no layout. */
 export function CartProvider({ children }) {
   const [itens, setItens] = useState([]);
   const [aberta, setAberta] = useState(false);
@@ -54,7 +50,6 @@ export function CartProvider({ children }) {
   const abrir = useCallback(() => setAberta(true), []);
   const fechar = useCallback(() => setAberta(false), []);
 
-  // Confirmação curta de "adicionado": some sozinha depois de alguns segundos.
   const [aviso, setAviso] = useState(null);
   const timerAviso = useRef(null);
   useEffect(() => () => clearTimeout(timerAviso.current), []);

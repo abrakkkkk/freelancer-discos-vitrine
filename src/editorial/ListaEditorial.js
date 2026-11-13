@@ -17,7 +17,7 @@ function precoBRL(valor) {
   return Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// Itens seguidos da mesma loja e caixa formam um grupo, como uma página do catálogo.
+// Itens seguidos da mesma loja e caixa formam um grupo.
 function agrupar(itens) {
   const grupos = [];
   for (const item of itens) {
@@ -104,8 +104,8 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
 
   return (
     <li className="edLinha" onClick={abrirPelaLinha}>
-      {/* Link de verdade sobre a capa (computador): abrir em nova aba, copiar o endereço.
-          Escondido no celular; o título continua sendo o acesso pelo teclado. */}
+      {/* Link real sobre a capa no computador (nova aba, copiar endereço). Escondido no
+          celular; o título continua sendo o acesso pelo teclado. */}
       <Link href={hrefDisco} prefetch={false} className="edCapaLink" tabIndex={-1} aria-hidden="true" />
       <AlbumCover
         id={item.id}
@@ -134,7 +134,6 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         </span>
       </div>
 
-      {/* Onde está o disco: linha própria, na fonte dos títulos, logo acima do preço. */}
       {mostrarCaixa && rotuloCaixa !== '—' && <Localizacao caixa={item.caixa} loja={item.loja} />}
 
       <div className="edAcao">
@@ -156,7 +155,6 @@ export default function ListaEditorial({
   itens,
   categoria,
   agruparPorCaixa,
-  // Página da caixa: divide os títulos por letra, como as divisórias do caixote.
   dividirPorLetra = false,
   // Na página de uma caixa, todos os itens são dela: a caixa não se repete no card.
   mostrarCaixa = true,
@@ -181,7 +179,6 @@ export default function ListaEditorial({
 
     return (
       <>
-        {/* Atalho para as letras que existem na caixa: pula direto para a divisória. */}
         {grupos.length > 1 && (
           <nav className="edLetras" aria-label="Ir para a letra">
             {grupos.map((g) => (
