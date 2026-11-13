@@ -88,9 +88,15 @@ export default function VitrineLoja({ vitrine }) {
             estoque
           </h2>
           <p className="vlAberturaTexto">
-            O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
+            {/* No celular a frase é mais curta: "Atualizado a cada venda. Ver o catálogo completo." */}
+            <span className="vlSoDesktop">O acervo das lojas em um só lugar, atualizado a cada venda. </span>
+            <span className="vlSoCelular">Atualizado a cada venda. </span>
             <span className="vlAberturaLinha">
-              Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink" onClick={irParaEstoque}>catálogo completo</a>.
+              <span className="vlSoDesktop">Confira também nosso </span>
+              <a href="#todo-o-estoque" className="vlAberturaLink" onClick={irParaEstoque}>
+                <span className="vlSoCelular">Ver o </span>catálogo completo
+              </a>
+              .
             </span>
           </p>
         </div>

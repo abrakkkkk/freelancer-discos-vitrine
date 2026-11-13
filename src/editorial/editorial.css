@@ -2258,7 +2258,7 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edInicioMobile .vitrineMeio {
-    margin-top: 16px;
+    margin-top: 32px;
   }
 
   .edInicioMobile .vitrineMeio .vlVitrine {
@@ -2267,16 +2267,15 @@ a.vlFaixaItem:focus-visible {
 
   /* Hero compacto: texto à esquerda e a pilha menor à direita, inteira dentro da tela. */
   .edInicioMobile .vlAbertura {
-    position: relative;
-    display: block;
-    min-height: 176px;
+    grid-template-columns: minmax(0, 1fr) 40%;
+    align-items: center;
+    gap: 12px;
     margin-bottom: 0;
-    padding: 12px 0 20px;
+    padding: 12px 0 16px;
   }
 
   .edInicioMobile .vlAberturaTextos {
     gap: 8px;
-    max-width: 56%;
   }
 
   .edInicioMobile .vlAberturaTitulo {
@@ -2294,10 +2293,7 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edInicioMobile .vlPilha {
-    position: absolute;
-    top: 12px;
-    right: 6px;
-    width: 40%;
+    width: calc(100% - 6px);
   }
 
   .edInicioMobile .edLinha {
@@ -2327,8 +2323,14 @@ a.vlFaixaItem:focus-visible {
   }
 
   /* Com as prateleiras acima, a caixa desce um nível em relação aos títulos de seção. */
-  .edInicioMobile .edGrupos .edCaixaNum {
+  /* Escala do celular: abertura 28px, títulos de seção 24px, caixa 20px. */
+  .edInicioMobile .vlPrateleira .edCaixaNum,
+  .edInicioMobile [data-todo-o-estoque] .edCaixaNum {
     font-size: 24px;
+  }
+
+  .edInicioMobile .edGrupos .edCaixaNum {
+    font-size: 20px;
   }
 
   /* Duas capas e meia na tela: a terceira cortada mostra que a fileira arrasta. */
@@ -2348,4 +2350,19 @@ a.vlFaixaItem:focus-visible {
     grid-auto-columns: 52%;
   }
 
+}
+
+/* Trechos da abertura que mudam entre celular e computador. */
+.vlSoCelular {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .vlSoCelular {
+    display: inline;
+  }
+
+  .vlSoDesktop {
+    display: none;
+  }
 }
