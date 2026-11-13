@@ -4,6 +4,7 @@ import { aplicarFiltroCaixaNaQuery, isValidCategory } from '@/services/catalogSe
 import { formatCaixa } from '@/utils/stringUtils';
 import DiscoEditorialClient from '@/editorial/DiscoEditorialClient';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
+import { compartilhamento } from '@/utils/seo';
 
 export const revalidate = 60;
 
@@ -52,10 +53,23 @@ export async function generateMetadata({ params }) {
   if (!resultado) return {};
   const { item } = resultado;
   const nome = item.artista ? `${item.artista} · ${item.titulo}` : item.titulo;
+  const preco = Number(item.preco) > 0
+    ? Number(item.preco).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }).replace(/ /g, ' ')
+    : null;
+  const descricao = [preco, `${formatCaixa(item.caixa, item.loja)}, ${item.loja || 'Freelancer Discos'}`]
+    .filter(Boolean)
+    .join(' · ');
   return {
     title: nome,
-    description: `${nome}. ${formatCaixa(item.caixa, item.loja)}, ${item.loja || 'Freelancer Discos'}.`,
+    description: `${nome}. ${descricao}.`,
     alternates: { canonical: `/disco/${categoria}/${id}` },
+    // No WhatsApp o disco aparece com a própria capa, o preço e onde está.
+    ...compartilhamento({
+      titulo: nome,
+      descricao: `${descricao}. Freelancer Discos.`,
+      caminho: `/disco/${categoria}/${id}`,
+      imagem: item.capa_url ? { url: item.capa_url, alt: `Capa de ${nome}` } : null,
+    }),
   };
 }
 

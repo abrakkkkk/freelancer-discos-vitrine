@@ -4,12 +4,18 @@ import { caixaService } from '@/services/caixaService';
 import { getDestaquesPorLoja } from '@/services/destaquesService';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { ed } from '@/editorial/rotas';
+import { compartilhamento } from '@/utils/seo';
 
 export const revalidate = 60;
 
 export const metadata = {
   title: 'Lojas e caixas',
   alternates: { canonical: '/lojas' },
+  ...compartilhamento({
+    titulo: 'Lojas e caixas · Freelancer Discos',
+    descricao: 'Escolha a loja e a caixa: o estoque da Freelancer Discos organizado como nas prateleiras.',
+    caminho: '/lojas',
+  }),
 };
 
 const COR_LOJA = { 'loja-1': 'var(--loja-1)', 'loja-2': 'var(--loja-2)' };

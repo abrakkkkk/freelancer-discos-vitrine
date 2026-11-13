@@ -2,6 +2,7 @@ import { Outfit, Figtree, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import '@/editorial/editorial.css';
 import { CartProvider } from '@/components/CartProvider';
+import { compartilhamento, DESCRICAO_PADRAO } from '@/utils/seo';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -31,7 +32,8 @@ export const metadata = {
     // Páginas internas: "Caixa 5 · Loja 1 · Freelancer Discos"
     template: '%s · Freelancer Discos',
   },
-  description: 'Catálogo de discos de vinil, CDs, DVDs e fitas VHS da Freelancer Discos',
+  description: DESCRICAO_PADRAO,
+  ...compartilhamento({ titulo: 'Freelancer Discos — Vitrine do Estoque' }),
   appleWebApp: {
     title: 'Freelancer - Vitrine',
     statusBarStyle: 'black-translucent',

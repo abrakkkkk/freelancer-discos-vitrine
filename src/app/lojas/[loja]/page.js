@@ -6,6 +6,7 @@ import { nomeLojaPorSlug } from '@/utils/lojas';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { ed } from '@/editorial/rotas';
 import GradeCaixasEditorial from '@/editorial/GradeCaixasEditorial';
+import { compartilhamento } from '@/utils/seo';
 
 export const revalidate = 60;
 
@@ -13,7 +14,15 @@ export async function generateMetadata({ params }) {
   const { loja: lojaSlug } = await params;
   const nomeLoja = nomeLojaPorSlug(lojaSlug);
   return nomeLoja
-    ? { title: `${nomeLoja} · Caixas`, alternates: { canonical: `/lojas/${lojaSlug}` } }
+    ? {
+        title: `${nomeLoja} · Caixas`,
+        alternates: { canonical: `/lojas/${lojaSlug}` },
+        ...compartilhamento({
+          titulo: `${nomeLoja} · Freelancer Discos`,
+          descricao: `As caixas da ${nomeLoja} da Freelancer Discos, com o que tem em cada uma.`,
+          caminho: `/lojas/${lojaSlug}`,
+        }),
+      }
     : {};
 }
 

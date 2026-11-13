@@ -1,9 +1,11 @@
 import CompartilharClient from '@/components/CompartilharClient';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
+import { compartilhamento } from '@/utils/seo';
 
 export const metadata = {
   title: 'Compartilhar',
   alternates: { canonical: '/compartilhar' },
+  ...compartilhamento({ titulo: 'Freelancer Discos — Vitrine do Estoque', caminho: '/compartilhar' }),
 };
 
 export default function CompartilharEditorialPage() {

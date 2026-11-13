@@ -8,6 +8,7 @@ import { NavDesktopEditorial } from '@/editorial/NavEditorial';
 import VoltarDaCaixa from '@/components/VoltarDaCaixa';
 import { formatCaixa } from '@/utils/stringUtils';
 import { nomeLojaPorSlug, hrefDaCaixa } from '@/utils/lojas';
+import { compartilhamento } from '@/utils/seo';
 
 export const revalidate = 60;
 
@@ -24,9 +25,15 @@ export async function generateMetadata({ params }) {
   const nomeLoja = nomeLojaPorSlug(lojaSlug);
   const caixa = decodificarCaixa(caixaParam);
   if (!nomeLoja || !caixa) return {};
+  const nome = `${formatCaixa(caixa, nomeLoja)} · ${nomeLoja}`;
   return {
-    title: `${formatCaixa(caixa, nomeLoja)} · ${nomeLoja}`,
+    title: nome,
     alternates: { canonical: `/lojas/${lojaSlug}/${caixaParam}` },
+    ...compartilhamento({
+      titulo: `${nome} · Freelancer Discos`,
+      descricao: `Tudo o que está na ${formatCaixa(caixa, nomeLoja)} da ${nomeLoja}, Freelancer Discos.`,
+      caminho: `/lojas/${lojaSlug}/${caixaParam}`,
+    }),
   };
 }
 
