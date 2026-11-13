@@ -10,6 +10,7 @@ import { hrefDaCaixa } from '@/utils/lojas';
 import { chaveCaixa } from '@/utils/caixaUtils';
 import { FiCheck, FiChevronRight, FiPlus } from 'react-icons/fi';
 import { ed } from './rotas';
+import Botao from '@/components/Botao';
 
 const COR_LOJA = { 'Loja 1': 'var(--loja-1)', 'Loja 2': 'var(--loja-2)' };
 
@@ -138,14 +139,15 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
 
       <div className="edAcao">
         <span className="edPreco tabularNums">{precoBRL(item.preco)}</span>
-        <button
-          type="button"
-          className={`edAdicionar ${naSacola ? 'edAdicionarNaSacola' : ''}`}
+        <Botao
+          variante="primario"
+          icone
+          className={naSacola ? 'botao--feito' : ''}
           onClick={() => onAdicionar(item)}
           aria-label={naSacola ? 'Item já na sacola — abrir sacola' : `Adicionar ${item.titulo} à sacola`}
         >
           {naSacola ? <FiCheck size={18} strokeWidth={2.5} /> : <FiPlus size={18} strokeWidth={2.5} />}
-        </button>
+        </Botao>
       </div>
     </li>
   );

@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import Link from 'next/link';
 import { FiAlertTriangle, FiRefreshCw } from 'react-icons/fi';
 import { BarraEditorial } from '@/editorial/NavEditorial';
+import Botao from '@/components/Botao';
 
 // Falha do banco ao carregar lojas/caixas, para não aparecer como "0 itens" (estoque zerado).
 export default function LojasError({ error, retry }) {
@@ -33,18 +33,10 @@ export default function LojasError({ error, retry }) {
           Houve uma falha ao consultar o estoque. Tente de novo em alguns segundos.
         </p>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button
-            type="button"
-            onClick={() => retry()}
-            className="productCardActionBtn"
-            style={{ padding: '0 16px', fontSize: '14px' }}
-          >
-            <FiRefreshCw size={15} />
+          <Botao variante="primario" onClick={() => retry()} prefixo={<FiRefreshCw size={15} aria-hidden="true" />}>
             Tentar de novo
-          </button>
-          <Link href="/" className="textBtn" style={{ textDecoration: 'none' }}>
-            Ir para o catálogo
-          </Link>
+          </Botao>
+          <Botao href="/">Ir para o catálogo</Botao>
         </div>
       </div>
 

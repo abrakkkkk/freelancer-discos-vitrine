@@ -336,30 +336,6 @@
   color: #ffffff;
   white-space: nowrap;
 }
-
-.edAdicionar {
-  width: 44px;
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: none;
-  border-radius: var(--radius-md);
-  background-color: var(--accent);
-  color: #ffffff;
-  cursor: pointer;
-}
-
-.edAdicionar:hover {
-  background-color: var(--accent-hover);
-}
-
-.edAdicionarNaSacola,
-.edAdicionarNaSacola:hover {
-  background-color: var(--badge-success);
-}
-
 /* O traço sob o nome usa a cor da loja (vermelho na 1, azul na 2). */
 .edLojas {
   display: grid;
@@ -775,55 +751,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: center;
   gap: 4px;
 }
-
-.edBotaoPrincipal {
-  width: 100%;
-  min-height: 52px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  border-radius: var(--radius-md);
-  background-color: var(--accent);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .edBotaoPrincipal:hover {
-    background-color: var(--accent-hover);
-  }
-}
-
-.edBotaoTexto {
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 8px;
-  border: none;
-  background: none;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-@media (hover: hover) {
-  .edBotaoTexto:hover {
-    color: var(--text);
-  }
-}
-
-.edBotaoPrincipal:focus-visible,
-.edBotaoTexto:focus-visible {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
-}
-
 .edCompartilharAviso {
   min-height: 18px;
   margin-top: 6px;
@@ -1203,22 +1130,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   gap: 8px 16px;
   margin: 4px 0 18px;
 }
-
-.edDiscoVoltar {
-  min-height: 40px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 12px;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  background: none;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
 .edDiscoCaminho {
   display: flex;
   align-items: center;
@@ -1276,52 +1187,20 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 .edDiscoSacola {
-  width: 100%;
-  min-height: 52px;
-  margin-top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-  border-radius: var(--radius-md);
-  background-color: var(--accent);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
+  margin-top: 20px;
 }
-
-.edDiscoSacolaNa {
-  background-color: #1f5f3a;
-}
-
 .edDiscoVizinhos {
   margin-top: 40px;
 }
 
-.edDiscoVoltar:focus-visible,
-.edDiscoSacola:focus-visible,
 .edDiscoCaminho a:focus-visible {
   outline: 2px solid var(--border-focus);
   outline-offset: 2px;
 }
 
 @media (hover: hover) {
-  .edDiscoVoltar:hover {
-    background-color: var(--bg-card);
-  }
-
   .edDiscoCaminho a:hover {
     color: var(--text);
-  }
-
-  .edDiscoSacola:hover {
-    background-color: var(--accent-hover);
-  }
-
-  .edDiscoSacolaNa:hover {
-    background-color: #24703f;
   }
 }
 
@@ -1774,19 +1653,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   from { opacity: 0; }
 }
 
-.cartTopo .textBtn {
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid #2d2d35;
-  background-color: transparent;
-  color: #ffffff;
-}
-
-@media (hover: hover) {
-  .cartTopo .textBtn:hover { border-color: var(--accent); background-color: #1f1f24; }
-}
-
 /* Sem backdrop-filter, o fundo fica sólido para manter a leitura. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .cartFundo { background-color: #050506; }
@@ -1848,33 +1714,6 @@ body:has(.productDetailDialog) .sacolaAviso {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-muted);
-}
-
-.cartIconeBtn {
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  border: 1px solid #2d2d35;
-  background-color: transparent;
-  color: #ffffff;
-  cursor: pointer;
-  transition: border-color 160ms ease, background-color 160ms ease;
-}
-
-.cartIconeBtn:focus-visible {
-  outline: 2px solid #c23a3a;
-  outline-offset: 2px;
-}
-
-@media (hover: hover) {
-  .cartIconeBtn:hover {
-    border-color: var(--accent);
-    background-color: #1f1f24;
-  }
 }
 
 .cartItem {
@@ -1991,8 +1830,8 @@ body:has(.productDetailDialog) .sacolaAviso {
     font-weight: 700;
   }
 
-  .filtrosAtivos .textBtn,
-  .filtrosAtivos .textBtn:hover {
+  .filtrosAtivos .botao--terciario,
+  .filtrosAtivos .botao--terciario:hover {
     height: 32px;
     min-height: 32px;
     margin-left: auto;

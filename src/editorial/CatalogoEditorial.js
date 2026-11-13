@@ -12,6 +12,7 @@ import { BarraEditorial, NavDesktopEditorial } from './NavEditorial';
 import { useCart } from '@/components/CartProvider';
 import { getCartItemKey } from '@/utils/cartUtils';
 import { ESTADO_PADRAO, lerEstadoDaUrl, montarQueryDoEstado } from '@/utils/catalogUrl';
+import Botao from '@/components/Botao';
 
 const CLIENT_CACHE_TTL_MS = 60 * 1000;
 
@@ -91,14 +92,10 @@ function SemResultados({
       {(busca || temFiltros) && (
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
           {busca && (
-            <button type="button" className="textBtn" onClick={onLimparBusca}>
-              Limpar busca
-            </button>
+            <Botao onClick={onLimparBusca}>Limpar busca</Botao>
           )}
           {temFiltros && (
-            <button type="button" className="textBtn" onClick={onLimparFiltros}>
-              Limpar filtros
-            </button>
+            <Botao onClick={onLimparFiltros}>Limpar filtros</Botao>
           )}
         </div>
       )}

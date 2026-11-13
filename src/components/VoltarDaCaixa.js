@@ -1,15 +1,15 @@
 'use client';
 
 import { Suspense } from 'react';
-import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FiArrowLeft } from 'react-icons/fi';
+import Botao from './Botao';
 
 function SetaParaLoja({ lojaHref, nomeLoja }) {
   return (
-    <Link href={lojaHref} aria-label={`Voltar para ${nomeLoja}`} className="headerBackBtn">
+    <Botao href={lojaHref} icone aria-label={`Voltar para ${nomeLoja}`}>
       <FiArrowLeft size={19} />
-    </Link>
+    </Botao>
   );
 }
 
@@ -19,10 +19,10 @@ function Seta({ lojaHref, nomeLoja, catalogoHref = '/' }) {
   if (!doCatalogo) return <SetaParaLoja lojaHref={lojaHref} nomeLoja={nomeLoja} />;
 
   return (
-    <Link
+    <Botao
       href={catalogoHref}
+      icone
       aria-label="Voltar para a busca"
-      className="headerBackBtn"
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         // Sem histórico (link aberto direto), segue para o catálogo pelo href.
@@ -33,7 +33,7 @@ function Seta({ lojaHref, nomeLoja, catalogoHref = '/' }) {
       }}
     >
       <FiArrowLeft size={19} />
-    </Link>
+    </Botao>
   );
 }
 

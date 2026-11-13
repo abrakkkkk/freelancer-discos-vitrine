@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Botao from '@/components/Botao';
 import { useRouter } from 'next/navigation';
 import { FiArrowLeft, FiCheck, FiChevronRight, FiShoppingBag } from 'react-icons/fi';
 import AlbumCover from '@/components/AlbumCover';
@@ -42,10 +43,9 @@ export default function DiscoEditorialClient({ item, vizinhos = [] }) {
   return (
     <article className="edDisco">
       <nav className="edDiscoTrilha" aria-label="Você está em">
-        <button type="button" onClick={voltar} className="edDiscoVoltar">
-          <FiArrowLeft size={16} aria-hidden="true" />
+        <Botao onClick={voltar} prefixo={<FiArrowLeft size={16} aria-hidden="true" />}>
           Voltar
-        </button>
+        </Botao>
         <span className="edDiscoCaminho">
           <Link href="/">Catálogo</Link>
           {caixaHref && (
@@ -115,14 +115,16 @@ export default function DiscoEditorialClient({ item, vizinhos = [] }) {
             )}
           </dl>
 
-          <button
-            type="button"
+          <Botao
+            variante="primario"
+            tamanho="g"
+            bloco
+            className={`edDiscoSacola ${naSacola ? 'botao--feito' : ''}`}
+            prefixo={naSacola ? <FiCheck size={18} aria-hidden="true" /> : <FiShoppingBag size={18} aria-hidden="true" />}
             onClick={() => adicionar(item)}
-            className={`edDiscoSacola ${naSacola ? 'edDiscoSacolaNa' : ''}`}
           >
-            {naSacola ? <FiCheck size={18} aria-hidden="true" /> : <FiShoppingBag size={18} aria-hidden="true" />}
             {naSacola ? 'Na sacola · abrir sacola' : 'Adicionar à sacola'}
-          </button>
+          </Botao>
         </div>
       </div>
 

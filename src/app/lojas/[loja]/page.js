@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FiArrowLeft } from 'react-icons/fi';
 import { caixaService } from '@/services/caixaService';
@@ -8,6 +7,7 @@ import { ed } from '@/editorial/rotas';
 import GradeCaixasEditorial from '@/editorial/GradeCaixasEditorial';
 import { compartilhamento } from '@/utils/seo';
 import { JsonLd, trilha } from '@/utils/dadosEstruturados';
+import Botao from '@/components/Botao';
 
 export const revalidate = 60;
 
@@ -46,9 +46,9 @@ export default async function LojaEditorialPage({ params }) {
       />
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
-          <Link href={ed('/lojas')} aria-label="Voltar para Lojas" className="headerBackBtn">
+          <Botao href={ed('/lojas')} icone aria-label="Voltar para Lojas">
             <FiArrowLeft size={19} />
-          </Link>
+          </Botao>
           <div style={{ minWidth: 0 }}>
             <h1
               className="headerTitle edTituloLoja"

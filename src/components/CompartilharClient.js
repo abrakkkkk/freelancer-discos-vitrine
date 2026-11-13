@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useSyncExternalStore } from 'react';
+import Botao from './Botao';
 import { QRCodeSVG } from 'qrcode.react';
 import { FiCheck, FiCopy, FiShare2 } from 'react-icons/fi';
 
@@ -81,20 +82,17 @@ export default function CompartilharClient() {
       <div className="edCompartilharAcoes">
         {podeCompartilhar ? (
           <>
-            <button type="button" onClick={compartilhar} className="edBotaoPrincipal">
-              <FiShare2 size={18} aria-hidden="true" />
+            <Botao variante="primario" tamanho="g" bloco onClick={compartilhar} prefixo={<FiShare2 size={18} aria-hidden="true" />}>
               Compartilhar
-            </button>
-            <button type="button" onClick={copiar} className="edBotaoTexto">
-              {iconeCopiar}
+            </Botao>
+            <Botao variante="terciario" onClick={copiar} prefixo={iconeCopiar}>
               {copiado ? 'Link copiado' : 'Copiar link'}
-            </button>
+            </Botao>
           </>
         ) : (
-          <button type="button" onClick={copiar} className="edBotaoPrincipal">
-            {iconeCopiar}
+          <Botao variante="primario" tamanho="g" bloco onClick={copiar} prefixo={iconeCopiar}>
             {copiado ? 'Link copiado' : 'Copiar link'}
-          </button>
+          </Botao>
         )}
       </div>
 

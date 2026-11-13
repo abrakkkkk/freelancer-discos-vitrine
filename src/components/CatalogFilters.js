@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { FiSearch, FiSliders, FiX } from 'react-icons/fi';
+import Botao from './Botao';
 
 // Curto para caber ao lado do botão Filtros.
 const PLACEHOLDER_BUSCA = {
@@ -228,9 +229,9 @@ export default function CatalogFilters({
           )}
 
           {(chipsCount >= 2 || aberto) && (
-            <button type="button" className="textBtn" onClick={handleClearAll}>
+            <Botao variante="terciario" onClick={handleClearAll}>
               Limpar filtros
-            </button>
+            </Botao>
           )}
         </div>
       )}

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import AlbumCover from './AlbumCover';
 import { formatCaixa } from '@/utils/stringUtils';
 import Localizacao from './Localizacao';
+import Botao from './Botao';
 import { generateWhatsAppUrl, getCartItemKey } from '@/utils/cartUtils';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { FiX, FiTrash2, FiInfo, FiRotateCcw } from 'react-icons/fi';
@@ -164,23 +165,12 @@ export default function CartDrawer({
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {itens.length > 1 && onClearCart && (
-              <button
-                type="button"
-                onClick={handleLimpar}
-                className="textBtn"
-              >
-                Limpar
-              </button>
+              <Botao onClick={handleLimpar}>Limpar</Botao>
             )}
 
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Fechar sacola"
-              className="cartIconeBtn"
-            >
+            <Botao icone onClick={onClose} aria-label="Fechar sacola">
               <FiX size={19} />
-            </button>
+            </Botao>
           </div>
         </div>
 
@@ -274,14 +264,14 @@ export default function CartDrawer({
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                     <span className="tabularNums cartItemPreco">{precoFmt}</span>
 
-                    <button
-                      type="button"
+                    <Botao
+                      variante="perigo"
+                      icone
                       onClick={() => handleRemover(item, itemKey)}
                       aria-label={`Remover ${item.titulo} da sacola`}
-                      className="cartIconeBtn"
                     >
                       <FiTrash2 size={15} />
-                    </button>
+                    </Botao>
                   </div>
                 </div>
               );
@@ -335,33 +325,16 @@ export default function CartDrawer({
               <strong>{totalFmt}</strong>
             </div>
 
-            <button
-              type="button"
-              disabled={validando}
-              aria-busy={validando}
+            <Botao
+              variante="whatsapp"
+              tamanho="g"
+              bloco
+              carregando={validando}
+              prefixo={<FaWhatsapp size={20} />}
               onClick={handleFinalizarWhatsApp}
-              style={{
-                width: '100%',
-                minHeight: '52px',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: validando ? '#1a9e4f' : '#25D366',
-                border: 'none',
-                color: '#050506',
-                fontFamily: 'var(--font-editorial), var(--font-title)',
-                fontSize: '18px',
-                fontWeight: 700,
-                letterSpacing: '0.02em',
-                textTransform: 'uppercase',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                cursor: validando ? 'wait' : 'pointer',
-              }}
             >
-              <FaWhatsapp size={20} />
-              <span>{validando ? 'Verificando estoque...' : 'Enviar pedido no WhatsApp'}</span>
-            </button>
+              {validando ? 'Verificando estoque...' : 'Enviar pedido no WhatsApp'}
+            </Botao>
           </div>
         )}
       </div>

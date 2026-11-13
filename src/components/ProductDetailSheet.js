@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Botao from './Botao';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import Localizacao from './Localizacao';
@@ -73,29 +74,9 @@ export default function ProductDetailSheet({
         aria-label={`Detalhes de ${item.titulo}`}
         className="productDetailDialog"
       >
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Fechar detalhes"
-          style={{
-            position: 'absolute',
-            top: '10px',
-            right: '10px',
-            zIndex: 2,
-            width: '44px',
-            height: '44px',
-            borderRadius: '8px',
-            backgroundColor: '#27272a',
-            border: 'none',
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}
-        >
+        <Botao icone onClick={onClose} aria-label="Fechar detalhes" className="sheetFechar">
           <FiX size={19} />
-        </button>
+        </Botao>
 
         <div className="sheetCapa">
           <AlbumCover
@@ -190,30 +171,18 @@ export default function ProductDetailSheet({
 
         {/* Botão preso no fim da folha porque a ficha pode precisar rolar. */}
         <div className="sheetAcao">
-        <button
-          type="button"
+        <Botao
+          variante="primario"
+          tamanho="g"
+          bloco
+          className={isInCart ? 'botao--feito' : ''}
+          prefixo={isInCart ? <FiCheck size={18} aria-hidden="true" /> : <FiShoppingBag size={18} aria-hidden="true" />}
           onClick={() => {
             if (onAddToCart) onAddToCart(item);
           }}
-          style={{
-            width: '100%',
-            minHeight: '52px',
-            borderRadius: 'var(--radius-md)',
-            backgroundColor: isInCart ? '#1f5f3a' : '#8b1e1e',
-            border: 'none',
-            color: '#ffffff',
-            fontSize: '16px',
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            cursor: 'pointer',
-          }}
         >
-          {isInCart ? <FiCheck size={18} /> : <FiShoppingBag size={18} />}
-          <span>{isInCart ? 'Na sacola — abrir sacola' : 'Adicionar à sacola'}</span>
-        </button>
+          {isInCart ? 'Na sacola — abrir sacola' : 'Adicionar à sacola'}
+        </Botao>
         </div>
       </div>
     </div>

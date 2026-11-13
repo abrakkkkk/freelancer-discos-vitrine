@@ -150,26 +150,6 @@ select:focus-visible,
   display: block;
   object-fit: contain;
 }
-
-.headerBackBtn {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  flex-shrink: 0;
-  transition: background-color 0.15s ease;
-}
-
-.headerBackBtn:hover {
-  background-color: #202026;
-}
-
 .headerTitle {
   font-size: 20px;
   font-weight: 700;
@@ -685,28 +665,6 @@ input[type='search']::-webkit-search-cancel-button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.textBtn {
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: var(--radius-md);
-  background-color: var(--badge-neutral);
-  border: none;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  transition: background-color 0.15s ease;
-}
-
-.textBtn:hover {
-  background-color: #52525b;
-}
-
 .catalogGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
@@ -756,40 +714,6 @@ input[type='search']::-webkit-search-cancel-button {
   outline: 2px solid var(--border-focus);
   outline-offset: 2px;
 }
-
-/* O botão "Sacola" fica acima da área clicável do card */
-.productCard .productCardActionBtn {
-  position: relative;
-  z-index: 1;
-}
-
-.productCardActionBtn {
-  min-height: 44px;
-  padding: 6px 12px;
-  border-radius: var(--radius-md);
-  background-color: var(--accent);
-  border: none;
-  color: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background-color 0.15s ease, transform 0.1s ease;
-}
-
-.productCardActionBtn:hover {
-  background-color: var(--accent-hover);
-}
-
-.productCardActionBtn:active {
-  transform: translateY(1px);
-}
-
 .productCardActionBtnInCart,
 .productCardActionBtnInCart:hover {
   background-color: var(--badge-success);
@@ -880,21 +804,12 @@ input[type='search']::-webkit-search-cancel-button {
     padding: 12px;
     gap: 8px;
   }
-
-  .productCardActionBtn {
-    min-height: 44px;
-    padding: 4px 8px;
-    font-size: 12px;
-    gap: 4px;
-  }
-
   .categoryTabBtn {
     padding: 8px 4px;
     font-size: 12px;
     gap: 4px;
   }
 }
-
 
 /* Detalhe e sacola */
 .productDetailBackdrop {
@@ -1128,5 +1043,243 @@ input[type='search']::-webkit-search-cancel-button {
     border-radius: 0;
     padding: 24px 24px 24px;
     box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* Botão (src/components/Botao.js) */
+.botao {
+  min-height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.botao:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.botao:disabled {
+  cursor: not-allowed;
+}
+
+.botao[aria-busy='true'] {
+  cursor: wait;
+}
+
+.botao--p {
+  min-height: 36px;
+  padding: 0 12px;
+}
+
+.botao--g {
+  min-height: 52px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.botao--icone {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+.botao--icone.botao--p {
+  width: 36px;
+  height: 36px;
+}
+
+.botao--bloco {
+  width: 100%;
+}
+
+.botao--primario {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+.botao--primario:not(:disabled):hover {
+  background-color: var(--accent-hover);
+}
+
+.botao--secundario {
+  background-color: transparent;
+  border-color: var(--border-light);
+  color: #ffffff;
+}
+
+.botao--secundario:not(:disabled):hover {
+  background-color: #1f1f24;
+  border-color: #3f3f46;
+}
+
+.botao--terciario {
+  padding: 0 8px;
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.botao--terciario:not(:disabled):hover {
+  color: #ffffff;
+}
+
+.botao--whatsapp {
+  background-color: #25d366;
+  color: #050506;
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.botao--whatsapp:not(:disabled):hover {
+  background-color: #2ee070;
+}
+
+.botao--whatsapp[aria-busy='true'] {
+  background-color: #1a9e4f;
+}
+
+.botao--perigo {
+  background-color: transparent;
+  border-color: var(--border-light);
+  color: #ffffff;
+}
+
+.botao--perigo:not(:disabled):hover {
+  background-color: #3b1414;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+/* Item já na sacola: o mesmo botão em verde. */
+.botao--feito,
+.botao--feito:not(:disabled):hover {
+  background-color: var(--badge-success);
+}
+
+/* Fechar a folha de detalhe fica sobre a capa, então precisa de fundo próprio. */
+.sheetFechar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.botao--secundario.sheetFechar {
+  background-color: #27272a;
+  border-color: transparent;
+}
+
+.botao:disabled:not([aria-busy='true']) {
+  background-color: #27272a;
+  border-color: transparent;
+  color: #71717a;
+}
+
+.botaoGiro {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: botaoGiro 0.7s linear infinite;
+}
+
+@keyframes botaoGiro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botaoGiro {
+    animation-duration: 2s;
+  }
+}
+
+/* Paginação do catálogo */
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.paginacao .botao:disabled {
+  background-color: transparent;
+  border-color: var(--border);
+  color: #3f3f46;
+}
+
+.paginacaoResumo {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.paginacaoResumo strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.paginacaoNumeros {
+  display: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.paginacaoNumeros li {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.paginacaoNumero {
+  min-width: 44px;
+  padding: 0 8px;
+  font-weight: 600;
+}
+
+.paginacaoNumero[aria-current='page'] {
+  cursor: default;
+}
+
+.paginacaoPulo {
+  width: 16px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+@media (min-width: 768px) {
+  .paginacao {
+    gap: 8px;
+  }
+
+  .paginacaoResumo {
+    display: none;
+  }
+
+  .paginacaoNumeros {
+    display: flex;
   }
 }

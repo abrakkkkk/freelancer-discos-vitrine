@@ -1,11 +1,13 @@
 'use client';
 
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Botao from './Botao';
 
+// No celular só cabem as setas e "Página X de Y"; os números aparecem a partir de 768px.
 export default function CatalogPagination({ pagina, totalPaginas, onPageChange }) {
   if (totalPaginas <= 1) return null;
 
-  const handleGoTo = (novaPagina) => {
+  const irPara = (novaPagina) => {
     if (novaPagina < 1 || novaPagina > totalPaginas || novaPagina === pagina) return;
     onPageChange(novaPagina);
     if (typeof window !== 'undefined') {
@@ -13,91 +15,51 @@ export default function CatalogPagination({ pagina, totalPaginas, onPageChange }
     }
   };
 
-  const visiblePages = Array.from(new Set([1, pagina - 1, pagina, pagina + 1, totalPaginas]))
+  const paginas = Array.from(new Set([1, pagina - 1, pagina, pagina + 1, totalPaginas]))
     .filter((p) => p >= 1 && p <= totalPaginas)
     .sort((a, b) => a - b);
 
-  const navBtnStyle = (disabled) => ({
-    width: '44px',
-    height: '44px',
-    borderRadius: '8px',
-    backgroundColor: '#151518',
-    border: '1px solid #232328',
-    color: disabled ? '#3f3f46' : '#e4e4e7',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    flexShrink: 0,
-  });
+  const noInicio = pagina <= 1;
+  const noFim = pagina >= totalPaginas;
 
   return (
-    <nav
-      aria-label="Paginação do catálogo"
-      className="tabularNums"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '6px',
-        marginTop: '24px',
-      }}
-    >
-      <button
-        type="button"
-        disabled={pagina <= 1}
-        onClick={() => handleGoTo(pagina - 1)}
-        aria-label="Página anterior"
-        style={navBtnStyle(pagina <= 1)}
-      >
-        <FiChevronLeft size={18} />
-      </button>
+    <nav aria-label="Paginação do catálogo" className="paginacao tabularNums">
+      <Botao icone disabled={noInicio} onClick={() => irPara(pagina - 1)} aria-label="Página anterior">
+        <FiChevronLeft size={18} aria-hidden="true" />
+      </Botao>
 
-      {visiblePages.map((p, idx) => {
-        const prev = visiblePages[idx - 1];
-        const showEllipsis = prev && p - prev > 1;
-        const isCurrent = p === pagina;
+      <p className="paginacaoResumo" aria-live="polite">
+        Página <strong>{pagina}</strong> de {totalPaginas}
+      </p>
 
-        return (
-          <div key={p} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {showEllipsis && (
-              <span aria-hidden="true" style={{ color: '#52525b', fontSize: '14px' }}>
-                …
-              </span>
-            )}
-            <button
-              type="button"
-              onClick={() => handleGoTo(p)}
-              aria-current={isCurrent ? 'page' : undefined}
-              aria-label={`Página ${p}`}
-              style={{
-                minWidth: '44px',
-                height: '44px',
-                padding: '0 8px',
-                borderRadius: '8px',
-                backgroundColor: isCurrent ? '#8b1e1e' : '#151518',
-                border: isCurrent ? '1px solid #8b1e1e' : '1px solid #232328',
-                color: isCurrent ? '#ffffff' : '#a1a1aa',
-                fontSize: '14px',
-                fontWeight: 700,
-                cursor: isCurrent ? 'default' : 'pointer',
-              }}
-            >
-              {p}
-            </button>
-          </div>
-        );
-      })}
+      <ol className="paginacaoNumeros">
+        {paginas.map((p, i) => {
+          const pulo = i > 0 && p - paginas[i - 1] > 1;
+          const atual = p === pagina;
+          return (
+            <li key={p}>
+              {pulo && (
+                <span className="paginacaoPulo" aria-hidden="true">
+                  …
+                </span>
+              )}
+              <Botao
+                variante={atual ? 'primario' : 'terciario'}
+                className="paginacaoNumero"
+                aria-current={atual ? 'page' : undefined}
+                aria-label={`Página ${p}`}
+                onClick={() => irPara(p)}
+              >
+                {p}
+              </Botao>
+            </li>
+          );
+        })}
+      </ol>
 
-      <button
-        type="button"
-        disabled={pagina >= totalPaginas}
-        onClick={() => handleGoTo(pagina + 1)}
-        aria-label="Próxima página"
-        style={navBtnStyle(pagina >= totalPaginas)}
-      >
-        <FiChevronRight size={18} />
-      </button>
+      <Botao icone disabled={noFim} onClick={() => irPara(pagina + 1)} aria-label="Próxima página">
+        <FiChevronRight size={18} aria-hidden="true" />
+      </Botao>
     </nav>
   );
 }
