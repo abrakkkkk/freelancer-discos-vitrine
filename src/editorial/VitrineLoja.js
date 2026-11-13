@@ -63,7 +63,7 @@ export default function VitrineLoja({ vitrine }) {
       </section>
 
       <Prateleira titulo="Chegaram agora" itens={vitrine.chegaram} {...comuns} />
-      <Prateleira titulo="Os mais procurados" itens={vitrine.procurados} {...comuns} />
+      <Prateleira titulo="Em destaque" itens={vitrine.destaques} {...comuns} />
       <Prateleira titulo="Importados" itens={vitrine.importados} {...comuns} />
     </div>
   );
