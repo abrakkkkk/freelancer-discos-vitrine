@@ -2131,7 +2131,8 @@ a.vlFaixaItem:focus-visible {
   border-radius: var(--radius-etiqueta);
 }
 
-#todo-o-estoque {
+#todo-o-estoque,
+[data-todo-o-estoque] {
   scroll-margin-top: 24px;
 }
 
@@ -2215,4 +2216,136 @@ a.vlFaixaItem:focus-visible {
     grid-template-columns: minmax(0, 1fr) 400px;
     gap: 12px 40px;
   }
+}
+
+/* Página inicial no celular: faixa curta, abertura compacta, prateleiras depois da busca. */
+@media (min-width: 1024px) {
+  .vitrineMeio {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .vlFaixaMobile {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    min-height: 32px;
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .vlFaixaMobile .vlFaixaDivisor {
+    display: block;
+  }
+
+  .vlFaixaMobile .vlFaixaLongo {
+    display: none;
+  }
+
+  .edInicioMobile .vitrineTopo .vlVitrine,
+  .edInicioMobile .vitrineMeio .vlVitrine {
+    display: block;
+  }
+
+  .edInicioMobile .vitrineTopo .vlVitrine {
+    margin-bottom: 16px;
+  }
+
+  .edInicioMobile .vitrineTopo .vlPrateleira,
+  .edInicioMobile .vitrineMeio .vlAbertura {
+    display: none;
+  }
+
+  .edInicioMobile .vitrineMeio {
+    margin-top: 16px;
+  }
+
+  .edInicioMobile .vitrineMeio .vlVitrine {
+    margin-bottom: 0;
+  }
+
+  /* Hero compacto: texto à esquerda e a pilha menor à direita, inteira dentro da tela. */
+  .edInicioMobile .vlAbertura {
+    position: relative;
+    display: block;
+    min-height: 176px;
+    margin-bottom: 0;
+    padding: 12px 0 20px;
+  }
+
+  .edInicioMobile .vlAberturaTextos {
+    gap: 8px;
+    max-width: 56%;
+  }
+
+  .edInicioMobile .vlAberturaTitulo {
+    font-size: 28px;
+  }
+
+  /* No celular o título quebra pela largura da coluna. */
+  .edInicioMobile .vlAberturaTitulo br {
+    display: none;
+  }
+
+  .edInicioMobile .vlAberturaTexto {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .edInicioMobile .vlPilha {
+    position: absolute;
+    top: 12px;
+    right: 6px;
+    width: 40%;
+  }
+
+  .edInicioMobile .edLinha {
+    position: relative;
+  }
+
+  .edInicioMobile .edSeloCapa {
+    display: block;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 1;
+    padding: 2px 6px;
+    border-radius: var(--radius-etiqueta);
+    background-color: var(--badge-label);
+    color: #ffffff;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+
+  .edInicioMobile .edMetaImportado {
+    display: none;
+  }
+
+  /* Com as prateleiras acima, a caixa desce um nível em relação aos títulos de seção. */
+  .edInicioMobile .edGrupos .edCaixaNum {
+    font-size: 24px;
+  }
+
+  /* Duas capas e meia na tela: a terceira cortada mostra que a fileira arrasta. */
+  .edInicioMobile .vlPrateleira .edLista {
+    grid-auto-columns: 44%;
+  }
+
+  .edInicioMobile .vlPrateleira .edLocal {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+}
+
+/* Celular estreito: card da prateleira um pouco mais largo para preço e botão caberem. */
+@media (max-width: 359px) {
+  .edInicioMobile .vlPrateleira .edLista {
+    grid-auto-columns: 52%;
+  }
+
 }

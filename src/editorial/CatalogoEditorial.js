@@ -36,10 +36,11 @@ const NOME_CONTAGEM = {
 
 // useSearchParams exige um Suspense: no build a página é estática e a URL só existe no navegador.
 // `vitrine`: conteúdo mostrado acima do catálogo enquanto não há busca nem filtro.
-export default function CatalogoEditorialPage({ vitrine = null, className = '' }) {
+// `vitrineNoMeio`: no celular, a vitrine também aparece depois da busca (abertura em cima, prateleiras no meio).
+export default function CatalogoEditorialPage({ vitrine = null, vitrineNoMeio = false, className = '' }) {
   return (
     <Suspense fallback={<CatalogoCarregando />}>
-      <Catalogo vitrine={vitrine} className={className} />
+      <Catalogo vitrine={vitrine} vitrineNoMeio={vitrineNoMeio} className={className} />
     </Suspense>
   );
 }
@@ -124,7 +125,7 @@ function CatalogoCarregando() {
   );
 }
 
-function Catalogo({ vitrine = null, className = '' }) {
+function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
   const searchParams = useSearchParams();
   // Filtros da URL têm prioridade (link compartilhado, F5); sem eles, volta ao último estado.
   const [estadoInicial] = useState(() => lerEstadoDaUrl(searchParams) || savedViewState);
@@ -417,10 +418,10 @@ function Catalogo({ vitrine = null, className = '' }) {
         <NavDesktopEditorial />
       </header>
 
-      {vitrine && semFiltro && vitrine}
+      {vitrine && semFiltro && <div className="vitrineTopo">{vitrine}</div>}
 
       {vitrine && (
-        <div id="todo-o-estoque" className="edCaixaCab edEstoqueCab">
+        <div id="todo-o-estoque" className="edCaixaCab edEstoqueCab" data-todo-o-estoque>
           <h2 className="edCaixaNum">{debouncedBusca ? `Busca: “${debouncedBusca}”` : 'Todo o estoque'}</h2>
           <p className="edEstoqueContagem tabularNums" aria-live="polite">
             {loading ? 'Carregando…' : erro ? null : (
@@ -471,6 +472,15 @@ function Catalogo({ vitrine = null, className = '' }) {
           tipo={categoria}
         />
       </div>
+
+      {vitrine && vitrineNoMeio && semFiltro && (
+        <div className="vitrineMeio">
+          {vitrine}
+          <div className="edCaixaCab" data-todo-o-estoque>
+            <h2 className="edCaixaNum">Todo o estoque</h2>
+          </div>
+        </div>
+      )}
 
       <p
         className="tabularNums edContagem"

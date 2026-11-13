@@ -8,9 +8,9 @@ import { useCart } from '@/components/CartProvider';
 import { WHATSAPP_PHONE } from '@/utils/cartUtils';
 import ListaEditorial from './ListaEditorial';
 
-export function FaixaServico() {
+export function FaixaServico({ className = '' }) {
   return (
-    <div className="vlFaixa">
+    <div className={`vlFaixa ${className}`.trim()}>
       <p className="vlFaixaItem">
         <FiTruck size={15} aria-hidden="true" />
         Entregas para todo o Brasil
@@ -18,7 +18,7 @@ export function FaixaServico() {
       <span className="vlFaixaDivisor" aria-hidden="true" />
       <a className="vlFaixaItem" href={`https://wa.me/${WHATSAPP_PHONE}`} target="_blank" rel="noopener noreferrer">
         <FaWhatsapp size={15} aria-hidden="true" />
-        Também estamos disponíveis no WhatsApp
+        <span className="vlFaixaLongo">Também estamos disponíveis no </span>WhatsApp
       </a>
     </div>
   );
@@ -64,6 +64,14 @@ function Pilha({ hero }) {
   );
 }
 
+// Desce até o título "Todo o estoque" que estiver visível (no celular ele fica depois das prateleiras).
+function irParaEstoque(e) {
+  const alvo = [...document.querySelectorAll('[data-todo-o-estoque]')].find((el) => el.offsetParent);
+  if (!alvo) return;
+  e.preventDefault();
+  alvo.scrollIntoView({ block: 'start' });
+}
+
 export default function VitrineLoja({ vitrine }) {
   const router = useRouter();
   const { estaNaSacola, adicionar } = useCart();
@@ -76,13 +84,13 @@ export default function VitrineLoja({ vitrine }) {
         <div className="vlAberturaTextos">
           <h2 className="vlAberturaTitulo tabularNums">
             {vitrine.total ? `${vitrine.total.toLocaleString('pt-BR')} discos em` : 'Discos em'}
-            <br />
+            {' '}<br />
             estoque
           </h2>
           <p className="vlAberturaTexto">
             O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
             <span className="vlAberturaLinha">
-              Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink">catálogo completo</a>.
+              Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink" onClick={irParaEstoque}>catálogo completo</a>.
             </span>
           </p>
         </div>

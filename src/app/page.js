@@ -13,14 +13,15 @@ export const metadata = {
 // As prateleiras são atualizadas a cada 5 minutos.
 export const revalidate = 300;
 
-// No computador: faixa de serviço, abertura e prateleiras acima do catálogo. No celular, só o catálogo.
+// Computador: faixa de serviço, abertura e prateleiras acima do catálogo.
+// Celular: faixa curta e abertura compacta em cima; prateleiras depois da busca.
 export default async function Inicio() {
   const vitrine = await getVitrine();
   return (
     <>
       <JsonLd dados={dadosDoSite()} />
-      <FaixaServico />
-      <CatalogoEditorial className="edInicio" vitrine={<VitrineLoja vitrine={vitrine} />} />
+      <FaixaServico className="vlFaixaMobile" />
+      <CatalogoEditorial className="edInicio edInicioMobile" vitrineNoMeio vitrine={<VitrineLoja vitrine={vitrine} />} />
     </>
   );
 }
