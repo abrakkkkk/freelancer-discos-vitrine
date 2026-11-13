@@ -1554,11 +1554,13 @@ body:has(.productDetailDialog) .sacolaAviso {
     font-weight: 700;
   }
 
+  /* Traço só sob o texto: começa depois do ícone (18px + 8px de espaço) e desconta o espaçamento
+     entre letras que sobra no fim da palavra. */
   .edNavDesktop .desktopNavLinkActive::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 26px;
+    right: 0.02em;
     bottom: 2px;
     height: 3px;
     background-color: var(--accent);
