@@ -2121,3 +2121,38 @@ a.vlFaixaItem:focus-visible {
     font-size: 24px;
   }
 }
+
+/* Link "catálogo completo" na abertura: leva até a seção "Todo o estoque". */
+.vlAberturaLink {
+  color: var(--accent-texto);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.vlAberturaLink:hover {
+  color: #f08080;
+  text-decoration-color: currentColor;
+}
+
+.vlAberturaLink:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-etiqueta);
+}
+
+#todo-o-estoque {
+  scroll-margin-top: 24px;
+}
+
+/* Uma frase por linha na abertura. */
+@media (min-width: 1024px) {
+  .vlAberturaTexto {
+    max-width: none;
+  }
+
+  .vlAberturaLinha {
+    display: block;
+  }
+}

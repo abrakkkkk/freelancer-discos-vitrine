@@ -24,6 +24,7 @@
 
   --accent: #8b1e1e;
   --accent-hover: #a32424;
+  --accent-texto: #e05a5a; /* vermelho para texto e links no fundo escuro (contraste 5,5:1) */
 
   --text: #e4e4e7;
   --text-muted: #a1a1aa;

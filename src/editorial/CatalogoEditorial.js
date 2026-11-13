@@ -420,7 +420,7 @@ function Catalogo({ vitrine = null, className = '' }) {
       {vitrine && semFiltro && vitrine}
 
       {vitrine && (
-        <div className="edCaixaCab edEstoqueCab">
+        <div id="todo-o-estoque" className="edCaixaCab edEstoqueCab">
           <h2 className="edCaixaNum">{debouncedBusca ? `Busca: “${debouncedBusca}”` : 'Todo o estoque'}</h2>
           <p className="edEstoqueContagem tabularNums" aria-live="polite">
             {loading ? 'Carregando…' : erro ? null : (

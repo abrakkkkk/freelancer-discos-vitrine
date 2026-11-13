@@ -52,10 +52,13 @@ export default function VitrineLoja({ vitrine }) {
     <div className="vlVitrine">
       <section className="vlAbertura" aria-label="Freelancer Discos">
         <h2 className="vlAberturaTitulo tabularNums">
-          {vitrine.total.toLocaleString('pt-BR')} discos de vinil
+          {vitrine.total.toLocaleString('pt-BR')} discos em estoque
         </h2>
         <p className="vlAberturaTexto">
-          Nas duas lojas, cada disco com a caixa exata onde está. Monte a sacola e peça pelo WhatsApp.
+          O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
+          <span className="vlAberturaLinha">
+            Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink">catálogo completo</a>.
+          </span>
         </p>
       </section>
 
