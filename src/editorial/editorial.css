@@ -1962,9 +1962,11 @@ a.vlFaixaItem:focus-visible {
   }
 
   .vlAbertura {
-    grid-template-columns: minmax(0, 1fr) 480px;
+    /* Texto e pilha mais próximos: o conjunto tem até 1144px e fica centralizado. */
+    grid-template-columns: minmax(0, 600px) 480px;
+    justify-content: center;
     align-items: center;
-    gap: 12px 48px;
+    gap: 12px 64px;
     padding: 16px 0 24px;
     margin-bottom: 32px;
   }
@@ -2211,5 +2213,6 @@ a.vlFaixaItem:focus-visible {
 
   .vlAbertura {
     grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 12px 40px;
   }
 }
