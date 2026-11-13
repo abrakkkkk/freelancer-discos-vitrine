@@ -24,6 +24,8 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata = {
+  // Base dos endereços absolutos (canonical, Open Graph). Cada página declara o próprio canonical.
+  metadataBase: new URL('https://freelancerdiscos.com.br'),
   title: {
     default: 'Freelancer Discos — Vitrine do Estoque',
     // Páginas internas: "Caixa 5 · Loja 1 · Freelancer Discos"

@@ -9,6 +9,7 @@ export const revalidate = 60;
 
 export const metadata = {
   title: 'Lojas e caixas',
+  alternates: { canonical: '/lojas' },
 };
 
 const COR_LOJA = { 'loja-1': 'var(--loja-1)', 'loja-2': 'var(--loja-2)' };

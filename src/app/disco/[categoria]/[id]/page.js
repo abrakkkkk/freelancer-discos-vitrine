@@ -55,6 +55,7 @@ export async function generateMetadata({ params }) {
   return {
     title: nome,
     description: `${nome}. ${formatCaixa(item.caixa, item.loja)}, ${item.loja || 'Freelancer Discos'}.`,
+    alternates: { canonical: `/disco/${categoria}/${id}` },
   };
 }
 

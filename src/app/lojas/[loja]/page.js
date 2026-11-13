@@ -12,7 +12,9 @@ export const revalidate = 60;
 export async function generateMetadata({ params }) {
   const { loja: lojaSlug } = await params;
   const nomeLoja = nomeLojaPorSlug(lojaSlug);
-  return nomeLoja ? { title: `${nomeLoja} · Caixas` } : {};
+  return nomeLoja
+    ? { title: `${nomeLoja} · Caixas`, alternates: { canonical: `/lojas/${lojaSlug}` } }
+    : {};
 }
 
 export default async function LojaEditorialPage({ params }) {

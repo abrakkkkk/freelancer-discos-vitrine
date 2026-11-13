@@ -24,7 +24,10 @@ export async function generateMetadata({ params }) {
   const nomeLoja = nomeLojaPorSlug(lojaSlug);
   const caixa = decodificarCaixa(caixaParam);
   if (!nomeLoja || !caixa) return {};
-  return { title: `${formatCaixa(caixa, nomeLoja)} · ${nomeLoja}` };
+  return {
+    title: `${formatCaixa(caixa, nomeLoja)} · ${nomeLoja}`,
+    alternates: { canonical: `/lojas/${lojaSlug}/${caixaParam}` },
+  };
 }
 
 export default async function CaixaDetalhePage({ params }) {

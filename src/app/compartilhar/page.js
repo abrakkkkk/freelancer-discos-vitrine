@@ -3,6 +3,7 @@ import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 
 export const metadata = {
   title: 'Compartilhar',
+  alternates: { canonical: '/compartilhar' },
 };
 
 export default function CompartilharEditorialPage() {
