@@ -75,7 +75,9 @@ export default function VitrineLoja({ vitrine }) {
       <section className="vlAbertura" aria-label="Freelancer Discos">
         <div className="vlAberturaTextos">
           <h2 className="vlAberturaTitulo tabularNums">
-            {vitrine.total ? `${vitrine.total.toLocaleString('pt-BR')} discos em estoque` : 'Discos em estoque'}
+            {vitrine.total ? `${vitrine.total.toLocaleString('pt-BR')} discos em` : 'Discos em'}
+            <br />
+            estoque
           </h2>
           <p className="vlAberturaTexto">
             O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
