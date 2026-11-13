@@ -51,12 +51,28 @@ async function emDestaque() {
   return resultado;
 }
 
+// Capas da abertura: o disco da Ana Frango Elétrico por cima e quatro capas das caixas 50 e 51.
+// Se algum sair do estoque, entra o próximo da lista.
+const HERO = {
+  destaque: [22708, 20889, 26808], // Ana Frango Elétrico (Little Electric Chicken Heart; Me Chama De Gato...)
+  capas: [31018, 28158, 31016, 25127, 30209, 30220, 31020], // Marvin Gaye, Chico Science, Kraftwerk, Marina Sena, Grace Jones, Tom Zé, Green Day
+};
+
+async function capasDoHero() {
+  const { data, error } = await ativosComCapa().in('id', [...HERO.destaque, ...HERO.capas]);
+  if (error) throw error;
+  const emEstoque = new Map(data.map((d) => [d.id, d]));
+  const destaque = HERO.destaque.map((id) => emEstoque.get(id)).find(Boolean) || null;
+  const capas = HERO.capas.map((id) => emEstoque.get(id)).filter(Boolean).slice(0, 4);
+  return { destaque, capas };
+}
+
 /** Prateleiras da página inicial: só discos com capa. Se uma falhar, ela vem vazia. */
 export async function getVitrine() {
   if (cache && cache.expiresAt > Date.now()) return cache.data;
-  if (!supabaseServer) return { chegaram: [], destaques: [], importados: [], total: 0 };
+  if (!supabaseServer) return { chegaram: [], destaques: [], importados: [], total: 0, hero: { destaque: null, capas: [] } };
 
-  const [chegaram, destaques, importados, total] = await Promise.all([
+  const [chegaram, destaques, importados, total, hero] = await Promise.all([
     // As caixas 50 e 51 da Loja 1 recebem os discos que acabaram de chegar.
     ativosComCapa().eq('loja', 'Loja 1').in('caixa', ['50', '51'])
       .order('criado_em', { ascending: false }).limit(POR_PRATELEIRA)
@@ -66,10 +82,13 @@ export async function getVitrine() {
       .then(({ data, error }) => (error ? [] : data)),
     supabaseServer.from('discos').select('id', { count: 'exact', head: true })
       .eq('ativo', true).eq('deletado', false)
-      .then(({ count }) => count || 0),
+      .then(({ count, error }) => (error ? 0 : count || 0)),
+    capasDoHero().catch(() => ({ destaque: null, capas: [] })),
   ]);
 
-  const data = { chegaram, destaques, importados, total };
-  cache = { data, expiresAt: Date.now() + CACHE_TTL_MS };
+  // Contagem que falhou volta 0: usa a última boa e não guarda o resultado no cache.
+  const totalBom = total || cache?.data.total || 0;
+  const data = { chegaram, destaques, importados, total: totalBom, hero };
+  if (total) cache = { data, expiresAt: Date.now() + CACHE_TTL_MS };
   return data;
 }

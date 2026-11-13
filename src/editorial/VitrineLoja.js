@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaWhatsapp } from 'react-icons/fa';
 import { FiTruck } from 'react-icons/fi';
@@ -42,6 +43,27 @@ function Prateleira({ titulo, itens, estaNaSacola, adicionar, abrir }) {
   );
 }
 
+function CapaPilha({ disco, className }) {
+  return (
+    <Link href={`/disco/discos/${disco.id}`} className={`vlPilhaCapa ${className}`} title={`${disco.artista} — ${disco.titulo}`}>
+      <img src={disco.capa_url} alt={`${disco.artista} — ${disco.titulo}`} decoding="async" />
+    </Link>
+  );
+}
+
+// Capas soltas como na bancada da loja, a do destaque por cima.
+function Pilha({ hero }) {
+  if (!hero?.destaque && !hero?.capas?.length) return null;
+  return (
+    <div className="vlPilha">
+      {hero.capas.map((d, i) => (
+        <CapaPilha key={d.id} disco={d} className={`vlPilha${i + 1}`} />
+      ))}
+      {hero.destaque && <CapaPilha disco={hero.destaque} className="vlPilhaDestaque" />}
+    </div>
+  );
+}
+
 export default function VitrineLoja({ vitrine }) {
   const router = useRouter();
   const { estaNaSacola, adicionar } = useCart();
@@ -51,15 +73,18 @@ export default function VitrineLoja({ vitrine }) {
   return (
     <div className="vlVitrine">
       <section className="vlAbertura" aria-label="Freelancer Discos">
-        <h2 className="vlAberturaTitulo tabularNums">
-          {vitrine.total.toLocaleString('pt-BR')} discos em estoque
-        </h2>
-        <p className="vlAberturaTexto">
-          O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
-          <span className="vlAberturaLinha">
-            Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink">catálogo completo</a>.
-          </span>
-        </p>
+        <div className="vlAberturaTextos">
+          <h2 className="vlAberturaTitulo tabularNums">
+            {vitrine.total ? `${vitrine.total.toLocaleString('pt-BR')} discos em estoque` : 'Discos em estoque'}
+          </h2>
+          <p className="vlAberturaTexto">
+            O acervo das lojas em um só lugar, atualizado a cada venda.{' '}
+            <span className="vlAberturaLinha">
+              Confira também nosso <a href="#todo-o-estoque" className="vlAberturaLink">catálogo completo</a>.
+            </span>
+          </p>
+        </div>
+        <Pilha hero={vitrine.hero} />
       </section>
 
       <Prateleira titulo="Chegaram agora" itens={vitrine.chegaram} {...comuns} />
