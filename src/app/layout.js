@@ -3,6 +3,7 @@ import './globals.css';
 import '@/editorial/editorial.css';
 import { CartProvider } from '@/components/CartProvider';
 import { compartilhamento, DESCRICAO_PADRAO } from '@/utils/seo';
+import FaixaServico from '@/editorial/FaixaServico';
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -46,6 +47,7 @@ export default function RootLayout({ children }) {
     <html lang="pt-BR" className={`${figtree.variable} ${barlowCondensed.variable}`}>
       <body>
         <CartProvider>
+          <FaixaServico />
           <div className="edPagina">{children}</div>
         </CartProvider>
       </body>

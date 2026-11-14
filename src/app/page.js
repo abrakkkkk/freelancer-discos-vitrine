@@ -1,5 +1,5 @@
 import CatalogoEditorial from '@/editorial/CatalogoEditorial';
-import VitrineLoja, { FaixaServico } from '@/editorial/VitrineLoja';
+import VitrineLoja from '@/editorial/VitrineLoja';
 import { getVitrine } from '@/services/vitrineService';
 import { compartilhamento } from '@/utils/seo';
 import { dadosDoSite, JsonLd } from '@/utils/dadosEstruturados';
@@ -13,14 +13,13 @@ export const metadata = {
 // As prateleiras são atualizadas a cada 5 minutos.
 export const revalidate = 300;
 
-// Computador: faixa de serviço, abertura e prateleiras acima do catálogo.
-// Celular: faixa curta e abertura compacta em cima; prateleiras depois da busca.
+// Computador: abertura e prateleiras acima do catálogo.
+// Celular: abertura compacta em cima; prateleiras depois da busca. A faixa vem do layout.
 export default async function Inicio() {
   const vitrine = await getVitrine();
   return (
     <>
       <JsonLd dados={dadosDoSite()} />
-      <FaixaServico className="vlFaixaMobile" />
       <CatalogoEditorial className="edInicio edInicioMobile" vitrineNoMeio vitrine={<VitrineLoja vitrine={vitrine} />} />
     </>
   );

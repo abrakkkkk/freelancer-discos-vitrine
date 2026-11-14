@@ -2,27 +2,9 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FaWhatsapp } from 'react-icons/fa';
-import { FiArrowDown, FiTruck } from 'react-icons/fi';
+import { FiArrowDown } from 'react-icons/fi';
 import { useCart } from '@/components/CartProvider';
-import { WHATSAPP_PHONE } from '@/utils/cartUtils';
 import ListaEditorial from './ListaEditorial';
-
-export function FaixaServico({ className = '' }) {
-  return (
-    <div className={`vlFaixa ${className}`.trim()}>
-      <p className="vlFaixaItem">
-        <FiTruck size={15} aria-hidden="true" />
-        Entregas para todo o Brasil
-      </p>
-      <span className="vlFaixaDivisor" aria-hidden="true" />
-      <a className="vlFaixaItem" href={`https://wa.me/${WHATSAPP_PHONE}`} target="_blank" rel="noopener noreferrer">
-        <FaWhatsapp size={15} aria-hidden="true" />
-        <span className="vlFaixaLongo">Também estamos disponíveis no </span>WhatsApp
-      </a>
-    </div>
-  );
-}
 
 function Prateleira({ titulo, itens, estaNaSacola, adicionar, abrir }) {
   if (!itens?.length) return null;

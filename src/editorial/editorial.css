@@ -1851,14 +1851,15 @@ body:has(.productDetailDialog) .sacolaAviso {
   display: none;
 }
 
+/* Faixa de serviço: em todas as páginas. No iPhone instalado como app, começa abaixo do relógio. */
 .vlFaixa {
-  display: none;
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 4px 16px;
   min-height: 36px;
-  padding: 8px 16px;
+  padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px;
   background-color: var(--accent);
   color: #ffffff;
   font-size: 12px;
@@ -2226,20 +2227,20 @@ a.vlFaixaItem:focus-visible {
 }
 
 @media (max-width: 1023px) {
-  .vlFaixaMobile {
+  .vlFaixa {
     display: flex;
     flex-wrap: nowrap;
     gap: 12px;
     min-height: 32px;
-    padding: 8px 16px;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px;
     font-size: 12px;
   }
 
-  .vlFaixaMobile .vlFaixaDivisor {
+  .vlFaixa .vlFaixaDivisor {
     display: block;
   }
 
-  .vlFaixaMobile .vlFaixaLongo {
+  .vlFaixa .vlFaixaLongo {
     display: none;
   }
 

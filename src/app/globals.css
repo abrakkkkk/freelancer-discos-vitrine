@@ -130,8 +130,8 @@ select:focus-visible,
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
-  /* Instalado como app no iPhone, a página começa atrás do relógio e da câmera. */
-  padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+  /* A área do relógio no iPhone instalado como app fica com a faixa vermelha, acima. */
+  padding-top: 16px;
   padding-bottom: calc(var(--bottom-nav-height) + 32px);
 }
 
