@@ -14,6 +14,7 @@ import { getCartItemKey } from '@/utils/cartUtils';
 import { ESTADO_PADRAO, lerEstadoDaUrl, montarQueryDoEstado } from '@/utils/catalogUrl';
 import Botao from '@/components/Botao';
 import BuscaTopo from './BuscaTopo';
+import { TotalEstoqueContext } from './totalEstoque';
 
 const CLIENT_CACHE_TTL_MS = 60 * 1000;
 
@@ -393,16 +394,6 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
     if (topo > 12) window.scrollBy({ top: topo - 12, behavior: 'instant' });
   };
 
-  // Atalho de teclado (só aparece com Tab): desce até o catálogo e põe o foco no primeiro disco.
-  const irParaCatalogo = (e) => {
-    const alvo = [...document.querySelectorAll('[data-todo-o-estoque]')].find((el) => el.offsetParent) || buscaRef.current;
-    if (!alvo) return;
-    e.preventDefault();
-    alvo.scrollIntoView({ block: 'start' });
-    const primeiro = [...document.querySelectorAll('.edGrupos .edTitulo')].find((el) => el.offsetParent);
-    primeiro?.focus({ preventScroll: true });
-  };
-
   const handleLojaChange = (novaLoja) => {
     setLoja(novaLoja);
     setPagina(1);
@@ -430,12 +421,8 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
   }, [semFiltro, vitrineNoMeio]);
 
   return (
+    <TotalEstoqueContext.Provider value={semFiltro && !loading && !erro && total ? total : null}>
     <div className={`pageContainer ${className}`.trim()}>
-      {vitrine && (
-        <a href="#todo-o-estoque" className="pularParaCatalogo" onClick={irParaCatalogo}>
-          Ir para o catálogo
-        </a>
-      )}
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
@@ -457,6 +444,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         <NavDesktopEditorial />
       </header>
 
+      <main id="conteudo">
       {vitrine && semFiltro && <div className="vitrineTopo">{vitrine}</div>}
 
       {vitrine && (
@@ -612,6 +600,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
       )}
       </div>
       </div>
+      </main>
 
       <ProductDetailSheet
         item={detailItem}
@@ -628,5 +617,6 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
 
       <BarraEditorial />
     </div>
+    </TotalEstoqueContext.Provider>
   );
 }

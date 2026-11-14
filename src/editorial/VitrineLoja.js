@@ -1,10 +1,12 @@
 'use client';
 
+import { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FiArrowDown } from 'react-icons/fi';
 import { useCart } from '@/components/CartProvider';
 import ListaEditorial from './ListaEditorial';
+import { TotalEstoqueContext } from './totalEstoque';
 
 function Prateleira({ titulo, itens, estaNaSacola, adicionar, abrir }) {
   if (!itens?.length) return null;
@@ -38,10 +40,11 @@ function Pilha({ hero }) {
   if (!hero?.destaque && !hero?.capas?.length) return null;
   return (
     <div className="vlPilha">
+      {/* O destaque vem primeiro na ordem do Tab; o z-index o mantém por cima das outras. */}
+      {hero.destaque && <CapaPilha disco={hero.destaque} className="vlPilhaDestaque" />}
       {hero.capas.map((d, i) => (
         <CapaPilha key={d.id} disco={d} className={`vlPilha${i + 1}`} />
       ))}
-      {hero.destaque && <CapaPilha disco={hero.destaque} className="vlPilhaDestaque" />}
     </div>
   );
 }
@@ -59,6 +62,8 @@ export default function VitrineLoja({ vitrine }) {
   const { estaNaSacola, adicionar } = useCart();
   const abrir = (item) => router.push(`/disco/discos/${item.id}`);
   const comuns = { estaNaSacola, adicionar, abrir };
+  // Mesmo número de "Todo o estoque" quando o catálogo já contou; senão, o do servidor.
+  const total = useContext(TotalEstoqueContext) || vitrine.total;
 
   return (
     <div className="vlVitrine">
@@ -66,10 +71,8 @@ export default function VitrineLoja({ vitrine }) {
         <div className="vlAberturaTextos">
           <h2 className="vlAberturaTitulo tabularNums">
             {/* Celular: "12.700 / DISCOS EM / ESTOQUE". Computador: "12.700 DISCOS EM / ESTOQUE". */}
-            {vitrine.total > 0 && (
-              <span className="vlTituloNumero">{vitrine.total.toLocaleString('pt-BR')} </span>
-            )}
-            {vitrine.total > 0 ? 'discos em' : 'Discos em'}
+            {total > 0 && <span className="vlTituloNumero">{total.toLocaleString('pt-BR')} </span>}
+            {total > 0 ? 'discos em' : 'Discos em'}
             {' '}<br />
             estoque
           </h2>

@@ -4,6 +4,7 @@ import '@/editorial/editorial.css';
 import { CartProvider } from '@/components/CartProvider';
 import { compartilhamento, DESCRICAO_PADRAO } from '@/utils/seo';
 import FaixaServico from '@/editorial/FaixaServico';
+import PularParaCatalogo from '@/editorial/PularParaCatalogo';
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
     <html lang="pt-BR" className={`${figtree.variable} ${barlowCondensed.variable}`}>
       <body>
         <CartProvider>
+          <PularParaCatalogo />
           <FaixaServico />
           <div className="edPagina">{children}</div>
         </CartProvider>
