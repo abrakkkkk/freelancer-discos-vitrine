@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaWhatsapp } from 'react-icons/fa';
-import { FiTruck } from 'react-icons/fi';
+import { FiArrowDown, FiTruck } from 'react-icons/fi';
 import { useCart } from '@/components/CartProvider';
 import { WHATSAPP_PHONE } from '@/utils/cartUtils';
 import ListaEditorial from './ListaEditorial';
@@ -83,7 +83,11 @@ export default function VitrineLoja({ vitrine }) {
       <section className="vlAbertura" aria-label="Freelancer Discos">
         <div className="vlAberturaTextos">
           <h2 className="vlAberturaTitulo tabularNums">
-            {vitrine.total ? `${vitrine.total.toLocaleString('pt-BR')} discos em` : 'Discos em'}
+            {/* Celular: "12.700 / DISCOS EM / ESTOQUE". Computador: "12.700 DISCOS EM / ESTOQUE". */}
+            {vitrine.total > 0 && (
+              <span className="vlTituloNumero">{vitrine.total.toLocaleString('pt-BR')} </span>
+            )}
+            {vitrine.total > 0 ? 'discos em' : 'Discos em'}
             {' '}<br />
             estoque
           </h2>
@@ -94,9 +98,12 @@ export default function VitrineLoja({ vitrine }) {
             <span className="vlAberturaLinha">
               <span className="vlSoDesktop">Confira também nosso </span>
               <a href="#todo-o-estoque" className="vlAberturaLink" onClick={irParaEstoque}>
-                <span className="vlSoCelular">Ver o </span>catálogo completo
+                <span>
+                  <span className="vlSoCelular">Ver o </span>catálogo completo
+                </span>
+                <FiArrowDown size={14} className="vlSoCelular vlAberturaSeta" aria-hidden="true" />
               </a>
-              .
+              <span className="vlSoDesktop">.</span>
             </span>
           </p>
         </div>

@@ -2267,11 +2267,13 @@ a.vlFaixaItem:focus-visible {
 
   /* Hero compacto: texto à esquerda e a pilha menor à direita, inteira dentro da tela. */
   .edInicioMobile .vlAbertura {
-    grid-template-columns: minmax(0, 1fr) 40%;
+    grid-template-columns: minmax(0, 1fr) 46%;
     align-items: center;
     gap: 12px;
     margin-bottom: 0;
-    padding: 12px 0 16px;
+    padding: 16px 0 20px;
+    /* Sem divisória: logo abaixo vem a linha das abas. */
+    border-bottom: none;
   }
 
   .edInicioMobile .vlAberturaTextos {
@@ -2279,16 +2281,16 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edInicioMobile .vlAberturaTitulo {
-    font-size: 28px;
+    font-size: 32px;
   }
 
-  /* No celular o título quebra pela largura da coluna. */
-  .edInicioMobile .vlAberturaTitulo br {
-    display: none;
+  /* No celular o número fica sozinho na primeira linha. */
+  .edInicioMobile .vlTituloNumero {
+    display: block;
   }
 
   .edInicioMobile .vlAberturaTexto {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1.5;
   }
 
@@ -2323,7 +2325,7 @@ a.vlFaixaItem:focus-visible {
   }
 
   /* Com as prateleiras acima, a caixa desce um nível em relação aos títulos de seção. */
-  /* Escala do celular: abertura 28px, títulos de seção 24px, caixa 20px. */
+  /* Escala do celular: abertura 32px, títulos de seção 24px, caixa 20px. */
   .edInicioMobile .vlPrateleira .edCaixaNum,
   .edInicioMobile [data-todo-o-estoque] .edCaixaNum {
     font-size: 24px;
@@ -2364,5 +2366,32 @@ a.vlFaixaItem:focus-visible {
 
   .vlSoDesktop {
     display: none;
+  }
+}
+
+/* Link "Ver o catálogo completo" no celular: linha própria, sem sublinhado, seta para baixo
+   (o link desce até o catálogo). */
+@media (max-width: 1023px) {
+  .edInicioMobile .vlAberturaLinha {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .edInicioMobile .vlAberturaLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .edInicioMobile .vlAberturaSeta {
+    display: inline;
+    flex-shrink: 0;
+  }
+
+  .edInicioMobile .vlAberturaLink:active {
+    color: #f08080;
   }
 }
