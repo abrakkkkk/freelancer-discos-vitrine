@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { Suspense, useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CategoryTabs, { CATEGORIES } from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
@@ -374,8 +374,33 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
     setCaixa('');
   };
 
+  // Celular: a vitrine some ou volta acima da busca enquanto o cliente digita. Guardamos onde o
+  // campo estava para mantê-lo parado na tela (ver o efeito logo abaixo de semFiltro).
+  const buscaRef = useRef(null);
+  const buscaTopoAntes = useRef(null);
+
   const handleBuscaChange = (novaBusca) => {
+    if (buscaRef.current) buscaTopoAntes.current = buscaRef.current.getBoundingClientRect().top;
     setBusca(novaBusca);
+  };
+
+  // Ao tocar na busca com a vitrine aberta, a página rola até o campo. Assim, quando a vitrine
+  // acima some, dá para compensar a rolagem e o campo não pula.
+  const aoFocarBusca = () => {
+    const el = buscaRef.current;
+    if (!vitrineNoMeio || !el || !window.matchMedia('(max-width: 1023px)').matches) return;
+    const topo = el.getBoundingClientRect().top;
+    if (topo > 12) window.scrollBy({ top: topo - 12, behavior: 'instant' });
+  };
+
+  // Atalho de teclado (só aparece com Tab): desce até o catálogo e põe o foco no primeiro disco.
+  const irParaCatalogo = (e) => {
+    const alvo = [...document.querySelectorAll('[data-todo-o-estoque]')].find((el) => el.offsetParent) || buscaRef.current;
+    if (!alvo) return;
+    e.preventDefault();
+    alvo.scrollIntoView({ block: 'start' });
+    const primeiro = [...document.querySelectorAll('.edGrupos .edTitulo')].find((el) => el.offsetParent);
+    primeiro?.focus({ preventScroll: true });
   };
 
   const handleLojaChange = (novaLoja) => {
@@ -395,8 +420,22 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
 
   const semFiltro = categoria === 'discos' && !debouncedBusca && !loja && !caixa && ordenacao === 'padrao' && pagina === 1;
 
+  useLayoutEffect(() => {
+    const antes = buscaTopoAntes.current;
+    const el = buscaRef.current;
+    buscaTopoAntes.current = null;
+    if (antes == null || !el || !vitrineNoMeio) return;
+    const deslocou = el.getBoundingClientRect().top - antes;
+    if (Math.abs(deslocou) > 1) window.scrollBy({ top: deslocou, behavior: 'instant' });
+  }, [semFiltro, vitrineNoMeio]);
+
   return (
     <div className={`pageContainer ${className}`.trim()}>
+      {vitrine && (
+        <a href="#todo-o-estoque" className="pularParaCatalogo" onClick={irParaCatalogo}>
+          Ir para o catálogo
+        </a>
+      )}
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>
           <img src="/logo.png" alt="" className="headerLogo" />
@@ -458,7 +497,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         <CategoryTabs activeTab={categoria} onTabChange={handleTabChange} />
       </div>
 
-      <div className="edBuscaCatalogo" style={{ marginBottom: '14px' }}>
+      <div className="edBuscaCatalogo" ref={buscaRef} onFocus={aoFocarBusca} style={{ marginBottom: '14px' }}>
         <CatalogFilters
           busca={busca}
           onBuscaChange={handleBuscaChange}

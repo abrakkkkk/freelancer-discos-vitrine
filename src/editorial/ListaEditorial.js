@@ -121,14 +121,21 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
 
       <div className="edTexto">
         {item.artista && <span className="edArtista">{item.artista}</span>}
-        <button
-          type="button"
+        {/* Link de verdade (nova aba, copiar endereço); no celular o toque abre o detalhe. */}
+        <Link
+          href={hrefDisco}
+          prefetch={false}
           className="edTitulo"
-          onClick={abrir}
+          onClick={(e) => {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+            if (window.matchMedia('(min-width: 1024px)').matches) return;
+            e.preventDefault();
+            onAbrir(item);
+          }}
           aria-label={`Ver detalhes de ${item.artista ? `${item.artista} - ` : ''}${item.titulo}`}
         >
           {item.titulo}
-        </button>
+        </Link>
         <span className="edMeta tabularNums">
           {selo && <span>{selo}</span>}
           {ano && (!selo || !selo.includes(ano)) && <span>{ano}</span>}
@@ -146,7 +153,11 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
           icone
           className={naSacola ? 'botao--feito' : ''}
           onClick={() => onAdicionar(item)}
-          aria-label={naSacola ? 'Item já na sacola — abrir sacola' : `Adicionar ${item.titulo} à sacola`}
+          aria-label={
+            naSacola
+              ? 'Item já na sacola — abrir sacola'
+              : `Adicionar ${item.titulo}${item.artista ? ` de ${item.artista}` : ''}${rotuloCaixa !== '—' ? `, ${rotuloCaixa}` : ''} à sacola`
+          }
         >
           {naSacola ? <FiCheck size={18} strokeWidth={2.5} /> : <FiPlus size={18} strokeWidth={2.5} />}
           <span className="edAdicionarTexto">{naSacola ? 'Na sacola' : 'Adicionar'}</span>

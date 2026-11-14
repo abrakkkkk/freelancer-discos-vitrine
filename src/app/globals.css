@@ -1297,3 +1297,25 @@ input[type='search']::-webkit-search-cancel-button {
     display: flex;
   }
 }
+
+/* Atalho "Ir para o catálogo": fora da tela até receber foco pelo teclado. */
+.pularParaCatalogo {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  z-index: 100;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  color: #09090b;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.pularParaCatalogo:focus-visible {
+  transform: none;
+  outline: 2px solid var(--accent-texto);
+  outline-offset: 2px;
+}

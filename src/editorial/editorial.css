@@ -1875,6 +1875,14 @@ body:has(.productDetailDialog) .sacolaAviso {
   text-decoration: none;
 }
 
+/* Área de toque de 32px no link do WhatsApp sem aumentar a faixa: o preenchimento é
+   compensado pela margem negativa. */
+a.vlFaixaItem {
+  min-height: 32px;
+  margin: -8px 0;
+  padding: 0 4px;
+}
+
 a.vlFaixaItem:hover {
   text-decoration: underline;
   text-underline-offset: 3px;

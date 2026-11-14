@@ -67,6 +67,25 @@ async function capasDoHero() {
   return { destaque, capas };
 }
 
+// Candidatos a mais por prateleira, para sobrar depois de tirar repetidos.
+const CANDIDATOS = 40;
+
+// Uma prateleira com no máximo um disco por artista e sem discos já mostrados acima
+// (capas do hero e prateleiras anteriores).
+function semRepetir(itens, usados) {
+  const artistas = new Set();
+  const resultado = [];
+  for (const d of itens) {
+    if (resultado.length >= POR_PRATELEIRA) break;
+    const artista = String(d.artista || '').trim().toLowerCase();
+    if (usados.has(d.id) || (artista && artistas.has(artista))) continue;
+    if (artista) artistas.add(artista);
+    resultado.push(d);
+  }
+  resultado.forEach((d) => usados.add(d.id));
+  return resultado;
+}
+
 /** Prateleiras da página inicial: só discos com capa. Se uma falhar, ela vem vazia. */
 export async function getVitrine() {
   if (cache && cache.expiresAt > Date.now()) return cache.data;
@@ -75,10 +94,10 @@ export async function getVitrine() {
   const [chegaram, destaques, importados, total, hero] = await Promise.all([
     // As caixas 50 e 51 da Loja 1 recebem os discos que acabaram de chegar.
     ativosComCapa().eq('loja', 'Loja 1').in('caixa', ['50', '51'])
-      .order('criado_em', { ascending: false }).limit(POR_PRATELEIRA)
+      .order('criado_em', { ascending: false }).limit(CANDIDATOS)
       .then(({ data, error }) => (error ? [] : data)),
     emDestaque().catch(() => []),
-    ativosComCapa().ilike('observacao', '%importado%').order('criado_em', { ascending: false }).limit(POR_PRATELEIRA)
+    ativosComCapa().ilike('observacao', '%importado%').order('criado_em', { ascending: false }).limit(CANDIDATOS)
       .then(({ data, error }) => (error ? [] : data)),
     supabaseServer.from('discos').select('id', { count: 'exact', head: true })
       .eq('ativo', true).eq('deletado', false)
@@ -88,7 +107,16 @@ export async function getVitrine() {
 
   // Contagem que falhou volta 0: usa a última boa e não guarda o resultado no cache.
   const totalBom = total || cache?.data.total || 0;
-  const data = { chegaram, destaques, importados, total: totalBom, hero };
+  // A pilha do hero e "Em destaque" são escolhidas à mão (podem repetir disco entre si);
+  // "Chegaram agora" e "Importados" não repetem nenhum deles.
+  const usados = new Set([hero.destaque?.id, ...hero.capas.map((d) => d.id), ...destaques.map((d) => d.id)].filter(Boolean));
+  const data = {
+    chegaram: semRepetir(chegaram, usados),
+    destaques,
+    importados: semRepetir(importados, usados),
+    total: totalBom,
+    hero,
+  };
   if (total) cache = { data, expiresAt: Date.now() + CACHE_TTL_MS };
   return data;
 }
