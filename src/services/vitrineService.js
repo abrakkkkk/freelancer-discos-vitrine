@@ -86,19 +86,46 @@ function semRepetir(itens, usados) {
   return resultado;
 }
 
+// As caixas 50 e 51 da Loja 1 recebem os discos que acabaram de chegar. Da caixa 49 entram só os
+// prensados de 2018 em diante; os cadastrados antes de CORTE_49 ficam fora da página inicial.
+const CORTE_49 = '2026-11-16T14:45:00';
+const prensagemRecente = (d) => Number(d.ano) >= 2018;
+const daCaixa49Valido = (d) => String(d.caixa) !== '49' || prensagemRecente(d);
+const consultaChegaram = () =>
+  ativosComCapa()
+    .eq('loja', 'Loja 1')
+    .or(`caixa.in.(50,51),and(caixa.eq.49,criado_em.gte.${CORTE_49})`)
+    .order('criado_em', { ascending: false });
+const consultaImportados = () =>
+  ativosComCapa().ilike('observacao', '%importado%').order('criado_em', { ascending: false });
+
+// Lista completa de uma prateleira, para a página dela. Erro do banco vai para error.js.
+async function listaCompleta(consulta) {
+  if (!supabaseServer) return [];
+  const { data, error } = await consulta();
+  if (error) throw new Error(`Erro ao buscar a lista: ${error.message}`);
+  return (data || []).map((d) => ({ ...d, categoria: 'discos' }));
+}
+
+// Na página, depois dos que chegaram, os discos antigos da caixa 49 com prensagem recente.
+const consultaCaixa49Antiga = () =>
+  ativosComCapa().eq('loja', 'Loja 1').eq('caixa', '49').lt('criado_em', CORTE_49).order('criado_em', { ascending: false });
+
+export async function getChegaramAgora() {
+  const [novos, caixa49] = await Promise.all([listaCompleta(consultaChegaram), listaCompleta(consultaCaixa49Antiga)]);
+  return [...novos.filter(daCaixa49Valido), ...caixa49.filter(prensagemRecente)];
+}
+export const getImportados = () => listaCompleta(consultaImportados);
+
 /** Prateleiras da página inicial: só discos com capa. Se uma falhar, ela vem vazia. */
 export async function getVitrine() {
   if (cache && cache.expiresAt > Date.now()) return cache.data;
   if (!supabaseServer) return { chegaram: [], destaques: [], importados: [], total: 0, hero: { destaque: null, capas: [] } };
 
   const [chegaram, destaques, importados, total, hero] = await Promise.all([
-    // As caixas 50 e 51 da Loja 1 recebem os discos que acabaram de chegar.
-    ativosComCapa().eq('loja', 'Loja 1').in('caixa', ['50', '51'])
-      .order('criado_em', { ascending: false }).limit(CANDIDATOS)
-      .then(({ data, error }) => (error ? [] : data)),
+    consultaChegaram().limit(CANDIDATOS).then(({ data, error }) => (error ? [] : data.filter(daCaixa49Valido))),
     emDestaque().catch(() => []),
-    ativosComCapa().ilike('observacao', '%importado%').order('criado_em', { ascending: false }).limit(CANDIDATOS)
-      .then(({ data, error }) => (error ? [] : data)),
+    consultaImportados().limit(CANDIDATOS).then(({ data, error }) => (error ? [] : data)),
     supabaseServer.from('discos').select('id', { count: 'exact', head: true })
       .eq('ativo', true).eq('deletado', false)
       .then(({ count, error }) => (error ? 0 : count || 0)),

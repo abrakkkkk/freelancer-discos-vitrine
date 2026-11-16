@@ -3,17 +3,23 @@
 import { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FiArrowDown } from 'react-icons/fi';
+import { FiArrowDown, FiChevronRight } from 'react-icons/fi';
 import { useCart } from '@/components/CartProvider';
 import ListaEditorial from './ListaEditorial';
 import { TotalEstoqueContext } from './totalEstoque';
 
-function Prateleira({ titulo, itens, estaNaSacola, adicionar, abrir }) {
+function Prateleira({ titulo, href, itens, estaNaSacola, adicionar, abrir }) {
   if (!itens?.length) return null;
   return (
     <section className="vlPrateleira" aria-label={titulo}>
       <div className="edCaixaCab">
         <h2 className="edCaixaNum">{titulo}</h2>
+        {href && (
+          <Link href={href} className="edCaixaLink" aria-label={`Ver mais: ${titulo}`}>
+            Ver mais
+            <FiChevronRight size={16} aria-hidden="true" />
+          </Link>
+        )}
       </div>
       <ListaEditorial
         itens={itens}
@@ -95,9 +101,9 @@ export default function VitrineLoja({ vitrine }) {
         <Pilha hero={vitrine.hero} />
       </section>
 
-      <Prateleira titulo="Chegaram agora" itens={vitrine.chegaram} {...comuns} />
+      <Prateleira titulo="Chegaram agora" href="/chegaram-agora" itens={vitrine.chegaram} {...comuns} />
       <Prateleira titulo="Em destaque" itens={vitrine.destaques} {...comuns} />
-      <Prateleira titulo="Importados" itens={vitrine.importados} {...comuns} />
+      <Prateleira titulo="Importados" href="/importados" itens={vitrine.importados} {...comuns} />
     </div>
   );
 }

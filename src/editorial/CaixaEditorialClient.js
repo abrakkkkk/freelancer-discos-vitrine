@@ -29,7 +29,17 @@ function VizinhasCaixa({ anterior, proxima }) {
   );
 }
 
-export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja, anterior, proxima }) {
+// Também serve às listas da página inicial ("Chegaram agora", "Importados"): na ordem de chegada,
+// sem divisória de letra e com a caixa de cada disco.
+export default function CaixaEditorialClient({
+  itens = [],
+  nomeLoja,
+  anterior,
+  proxima,
+  porLetra = true,
+  mostrarCaixa = false,
+  ondeBusca = 'nesta caixa',
+}) {
   const [detailItem, setDetailItem] = useState(null);
   const [busca, setBusca] = useState('');
   const { estaNaSacola, adicionar } = useCart();
@@ -44,11 +54,11 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
     );
   }, [itens, busca]);
 
-  const letras = useMemo(() => agruparPorLetra(itens).map((g) => g.letra), [itens]);
+  const letras = useMemo(() => (porLetra ? agruparPorLetra(itens).map((g) => g.letra) : []), [itens, porLetra]);
 
   return (
     <div className="edCaixaPagina">
-      <aside className="edCaixaLateral" aria-label={`Navegar na ${rotuloCaixa}`}>
+      <aside className="edCaixaLateral" aria-label={`Navegar ${ondeBusca}`}>
         {itens.length > 6 && (
           <div className="edCaixaLatBusca">
             <FiSearch size={17} color="var(--text-muted)" aria-hidden="true" className="edCaixaLatBuscaIcone" />
@@ -56,8 +66,8 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar nesta caixa"
-              aria-label={`Buscar dentro da ${rotuloCaixa}`}
+              placeholder={`Buscar ${ondeBusca}`}
+              aria-label={`Buscar ${ondeBusca}`}
               className="fieldInput"
             />
             {busca && (
@@ -115,8 +125,8 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
               type="search"
               value={busca}
               onChange={(e) => setBusca(e.target.value)}
-              placeholder="Buscar nesta caixa"
-              aria-label={`Buscar dentro da ${rotuloCaixa}`}
+              placeholder={`Buscar ${ondeBusca}`}
+              aria-label={`Buscar ${ondeBusca}`}
               className="fieldInput"
             />
             {busca && (
@@ -136,10 +146,10 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
       {filtrados.length === 0 ? (
         <div className="semResultados">
           <p className="semResultadosTitulo">
-            {itens.length === 0 ? 'Esta caixa está vazia no momento' : 'Nenhum item corresponde à busca nesta caixa'}
+            {itens.length === 0 ? (nomeLoja ? 'Esta caixa está vazia no momento' : 'Nenhum disco aqui no momento') : `Nenhum item corresponde à busca ${ondeBusca}`}
           </p>
           <p className="semResultadosDica">
-            {itens.length === 0 ? `Nenhum item cadastrado nesta caixa para ${nomeLoja}.` : 'Tente limpar a busca acima.'}
+            {itens.length === 0 ? (nomeLoja ? `Nenhum item cadastrado nesta caixa para ${nomeLoja}.` : '') : 'Tente limpar a busca acima.'}
           </p>
         </div>
       ) : (
@@ -147,8 +157,8 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
           itens={filtrados}
           categoria="discos"
           agruparPorCaixa={false}
-          dividirPorLetra={!busca}
-          mostrarCaixa={false}
+          dividirPorLetra={porLetra && !busca}
+          mostrarCaixa={mostrarCaixa}
           estaNaSacola={estaNaSacola}
           onAdicionar={handleAdd}
           onAbrir={(i) => setDetailItem(i)}
@@ -165,7 +175,7 @@ export default function CaixaEditorialClient({ itens = [], rotuloCaixa, nomeLoja
         isInCart={detailItem ? estaNaSacola(detailItem) : false}
         onAddToCart={handleAdd}
         tipo={detailItem?.categoria || 'discos'}
-        linkCaixa={false}
+        linkCaixa={mostrarCaixa}
       />
 
       <BarraEditorial />

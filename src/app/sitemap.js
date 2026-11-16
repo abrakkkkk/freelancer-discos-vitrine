@@ -35,6 +35,8 @@ export default async function sitemap() {
     { url: `${SITE}/lojas/loja-2`, changeFrequency: 'daily', priority: 0.7 },
     { url: `${SITE}/contato`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${SITE}/compartilhar`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${SITE}/chegaram-agora`, changeFrequency: 'daily', priority: 0.7 },
+    { url: `${SITE}/importados`, changeFrequency: 'daily', priority: 0.6 },
   ].map((p) => ({ ...p, lastModified: agora }));
 
   if (!supabaseServer) return fixas;
