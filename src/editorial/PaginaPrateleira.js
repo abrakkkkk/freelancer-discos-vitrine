@@ -16,7 +16,7 @@ export function metadadosDaPrateleira({ titulo, descricao, caminho }) {
 // Página de uma prateleira da página inicial, com a lista completa.
 export default function PaginaPrateleira({ titulo, caminho, itens }) {
   return (
-    <div className="pageContainer">
+    <div className="pageContainer edPrateleiraPagina">
       <JsonLd dados={trilha([['Início', '/'], [titulo, caminho]])} />
       <header className="storeHeader">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0 }}>

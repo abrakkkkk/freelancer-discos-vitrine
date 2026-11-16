@@ -2307,11 +2307,13 @@ a.vlFaixaItem:focus-visible {
     width: calc(100% - 6px);
   }
 
-  .edInicioMobile .edLinha {
+  .edInicioMobile .edLinha,
+  .edPrateleiraPagina .edLinha {
     position: relative;
   }
 
-  .edInicioMobile .edSeloCapa {
+  .edInicioMobile .edSeloCapa,
+  .edPrateleiraPagina .edSeloCapa {
     display: block;
     position: absolute;
     top: 16px;
@@ -2329,7 +2331,8 @@ a.vlFaixaItem:focus-visible {
     pointer-events: none;
   }
 
-  .edInicioMobile .edMetaImportado {
+  .edInicioMobile .edMetaImportado,
+  .edPrateleiraPagina .edMetaImportado {
     display: none;
   }
 
