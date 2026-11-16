@@ -1047,6 +1047,21 @@ input[type='search']::-webkit-search-cancel-button {
   }
 }
 
+/* Entre 769 e 1023px o resto do site ainda está no layout de celular: menu de baixo, sem o do topo. */
+@media (min-width: 769px) and (max-width: 1023px) {
+  .desktopHeaderNav {
+    display: none;
+  }
+
+  .bottomNavMobile {
+    display: block !important;
+  }
+
+  .pageContainer {
+    padding-bottom: calc(var(--bottom-nav-height) + 32px);
+  }
+}
+
 /* Botão (src/components/Botao.js) */
 .botao {
   min-height: 44px;
