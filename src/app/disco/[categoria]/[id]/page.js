@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabaseServer';
 import { aplicarFiltroCaixaNaQuery, isValidCategory } from '@/services/catalogService';
@@ -7,11 +8,11 @@ import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { compartilhamento } from '@/utils/seo';
 import { dadosDoDisco, JsonLd } from '@/utils/dadosEstruturados';
 
-export const revalidate = 60;
+export const revalidate = 3600;
 
 const VIZINHOS = 12;
 
-async function buscarDisco(categoria, idParam) {
+const buscarDisco = cache(async (categoria, idParam) => {
   if (!supabaseServer || !isValidCategory(categoria)) return null;
   const id = Number(idParam);
   if (!Number.isInteger(id) || id <= 0) return null;
@@ -45,7 +46,7 @@ async function buscarDisco(categoria, idParam) {
   }
 
   return { item: { ...data, categoria }, vizinhos: vizinhos.map((v) => ({ ...v, categoria })) };
-}
+});
 
 export async function generateMetadata({ params }) {
   const { categoria, id } = await params;

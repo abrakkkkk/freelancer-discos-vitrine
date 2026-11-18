@@ -9,7 +9,7 @@ import { compartilhamento } from '@/utils/seo';
 import { JsonLd, trilha } from '@/utils/dadosEstruturados';
 import Botao from '@/components/Botao';
 
-export const revalidate = 60;
+export const revalidate = 600;
 
 export async function generateMetadata({ params }) {
   const { loja: lojaSlug } = await params;

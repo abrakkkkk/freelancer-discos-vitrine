@@ -6,7 +6,7 @@ import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { ed } from '@/editorial/rotas';
 import { compartilhamento } from '@/utils/seo';
 
-export const revalidate = 60;
+export const revalidate = 600;
 
 export const metadata = {
   title: 'Lojas e caixas',

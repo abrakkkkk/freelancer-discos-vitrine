@@ -37,12 +37,15 @@ export async function GET(request) {
 
     const totalPaginas = Math.max(1, Math.ceil(count / itensPorPagina));
 
-    return NextResponse.json({
-      itens,
-      total: count,
-      pagina,
-      totalPaginas,
-    });
+    return NextResponse.json(
+      {
+        itens,
+        total: count,
+        pagina,
+        totalPaginas,
+      },
+      { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
+    );
   } catch (error) {
     console.error('Erro no endpoint /api/catalogo:', error);
     return NextResponse.json(
