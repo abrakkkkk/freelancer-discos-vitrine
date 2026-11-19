@@ -3,6 +3,11 @@ const nextConfig = {
   // Não anuncia a versão do framework no header x-powered-by.
   poweredByHeader: false,
 
+  // Marca que a versão do Next foi atualizada por causa de um aviso de segurança.
+  experimental: {
+    agentUpgrade: 'security',
+  },
+
   // O endereço antigo da Vercel leva para o domínio da loja, no mesmo caminho
   // (ex.: freelancer-discos-vitrine.vercel.app/lojas -> freelancerdiscos.com.br/lojas).
   async redirects() {
