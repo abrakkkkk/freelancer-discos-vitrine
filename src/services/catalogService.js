@@ -6,6 +6,8 @@ import {
   accentInsensitivePattern,
   palavraParecida,
   toleranciaDigitacao,
+  ehAnoDaBusca,
+  bateAnoDoItem,
 } from '@/utils/stringUtils';
 import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
 
@@ -54,7 +56,8 @@ async function buscarComErroDeDigitacao(category, {
   ordenarColuna,
   ordenarDirecao,
 }) {
-  const palavrasLongas = effectiveWords.filter((p) => toleranciaDigitacao(p) > 0);
+  // O ano não aceita erro de digitação: entra como condição exata logo abaixo.
+  const palavrasLongas = effectiveWords.filter((p) => toleranciaDigitacao(p) > 0 && !ehAnoDaBusca(p));
   const campos = isVideo ? ['titulo'] : ['titulo', 'artista'];
   let query = supabaseServer
     .from(category)
@@ -67,6 +70,9 @@ async function buscarComErroDeDigitacao(category, {
       campos.map((campo) => `${campo}.ilike.%${pedaco}%`)
     );
     query = query.or(condicoes.join(','));
+  });
+  effectiveWords.filter(ehAnoDaBusca).forEach((ano) => {
+    query = query.or([...campos.map((campo) => `${campo}.ilike.%${ano}%`), `ano.ilike.%${ano}%`].join(','));
   });
   if (filtroLoja) query = query.eq('loja', filtroLoja);
   query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
@@ -84,7 +90,7 @@ async function buscarComErroDeDigitacao(category, {
 
   return (data || []).filter((item) => {
     const texto = removeAcentos(`${isVideo ? '' : item.artista || ''} ${item.titulo || ''}`);
-    return effectiveWords.every((palavra) => palavraParecida(palavra, texto));
+    return effectiveWords.every((palavra) => bateAnoDoItem(palavra, item) || palavraParecida(palavra, texto));
   });
 }
 
@@ -269,10 +275,12 @@ export const catalogService = {
 
       effectiveWords.forEach((palavra) => {
         const padrao = accentInsensitivePattern(palavra);
+        // Um ano na busca ("roberto carlos 1980") também procura no ano de lançamento.
+        const noAno = ehAnoDaBusca(palavra) ? `,ano.imatch."${palavra}"` : '';
         if (isVideo) {
-          query = query.filter('titulo', 'imatch', padrao);
+          query = noAno ? query.or(`titulo.imatch."${padrao}"${noAno}`) : query.filter('titulo', 'imatch', padrao);
         } else {
-          query = query.or(`titulo.imatch."${padrao}",artista.imatch."${padrao}",caixa.imatch."${padrao}"`);
+          query = query.or(`titulo.imatch."${padrao}",artista.imatch."${padrao}",caixa.imatch."${padrao}"${noAno}`);
         }
       });
       query = query.limit(3000);
@@ -299,6 +307,7 @@ export const catalogService = {
 
         return effectiveWords.every((palavra) => {
           const palavraSemEspaco = palavra.replace(/\s+/g, '');
+          if (bateAnoDoItem(palavra, item)) return true;
           if (isVideo) {
             return tituloSemAcento.includes(palavra);
           }
