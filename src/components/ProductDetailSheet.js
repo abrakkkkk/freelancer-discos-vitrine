@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Botao from './Botao';
+import ListaFaixas from './ListaFaixas';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import Localizacao from './Localizacao';
@@ -32,7 +33,21 @@ export default function ProductDetailSheet({
   const dialogRef = useRef(null);
   const fecharENavegar = useModalDialog(isOpen && Boolean(item), onClose, dialogRef);
 
+  // As faixas chegam depois da folha aberta; guardadas com o id para não mostrar as do disco anterior.
+  const [faixas, setFaixas] = useState(null);
+  const buscarFaixas = isOpen && Boolean(item) && tipo === 'discos';
+  useEffect(() => {
+    if (!buscarFaixas) return;
+    const controle = new AbortController();
+    fetch(`/api/faixas?id=${item.id}`, { signal: controle.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((dados) => dados?.faixas?.length && setFaixas({ id: item.id, ...dados }))
+      .catch(() => {});
+    return () => controle.abort();
+  }, [buscarFaixas, item?.id]);
+
   if (!isOpen || !item) return null;
+  const faixasDoItem = faixas?.id === item.id ? faixas : null;
 
   const precoFormatado = Number(item.preco || 0).toLocaleString('pt-BR', {
     style: 'currency',
@@ -168,6 +183,10 @@ export default function ProductDetailSheet({
             </div>
           )}
         </dl>
+
+        {faixasDoItem && (
+          <ListaFaixas faixas={faixasDoItem.faixas} fonte={faixasDoItem.fonte} className="sheetFaixas" />
+        )}
 
         {/* Botão preso no fim da folha porque a ficha pode precisar rolar. */}
         <div className="sheetAcao">

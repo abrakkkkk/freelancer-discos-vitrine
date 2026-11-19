@@ -7,6 +7,7 @@ import DiscoEditorialClient from '@/editorial/DiscoEditorialClient';
 import { BarraEditorial, NavDesktopEditorial } from '@/editorial/NavEditorial';
 import { compartilhamento } from '@/utils/seo';
 import { dadosDoDisco, JsonLd } from '@/utils/dadosEstruturados';
+import { faixasDoItem } from '@/utils/faixas';
 
 export const revalidate = 3600;
 
@@ -21,7 +22,8 @@ const buscarDisco = cache(async (categoria, idParam) => {
   const colunas = `id, titulo, preco, loja, caixa, ano, capa_url, observacao${temArtista ? ', artista' : ''}`;
   const { data, error } = await supabaseServer
     .from(categoria)
-    .select(colunas)
+    // Só o disco aberto traz as faixas; os vizinhos não precisam delas.
+    .select(categoria === 'discos' ? `${colunas}, faixas` : colunas)
     .eq('id', id)
     .eq('deletado', false)
     .eq('ativo', true)
@@ -79,6 +81,7 @@ export default async function DiscoPage({ params }) {
   const { categoria, id } = await params;
   const resultado = await buscarDisco(categoria, id);
   if (!resultado) notFound();
+  const faixas = faixasDoItem(resultado.item);
 
   return (
     <div className="pageContainer">
@@ -94,7 +97,7 @@ export default async function DiscoPage({ params }) {
         <NavDesktopEditorial />
       </header>
 
-      <DiscoEditorialClient item={resultado.item} vizinhos={resultado.vizinhos} />
+      <DiscoEditorialClient item={resultado.item} vizinhos={resultado.vizinhos} faixas={faixas} />
 
       <BarraEditorial />
     </div>

@@ -1334,3 +1334,185 @@ input[type='search']::-webkit-search-cancel-button {
   outline: 2px solid var(--accent-texto);
   outline-offset: 2px;
 }
+
+/* Lista de faixas (folha do celular e página do disco). */
+.faixas {
+  margin-top: 24px;
+}
+
+.faixasTitulo {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.faixasLado {
+  margin-top: 12px;
+}
+
+.faixasLados > .faixasLado + .faixasLado {
+  margin-top: 20px;
+}
+
+.faixasLadoNome {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.faixasLista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.faixa {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  column-gap: 12px;
+  align-items: baseline;
+  padding: 8px 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.faixaNumero,
+.faixaDuracao {
+  color: var(--text-dim);
+}
+
+.faixaNumero {
+  text-align: right;
+}
+
+.faixaNome {
+  color: #ffffff;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.faixasFonte {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.faixasFonte a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.faixasFonte a:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) {
+  .faixasFonte a:hover {
+    color: var(--text);
+  }
+}
+
+.sheetFaixas {
+  margin-top: 20px;
+}
+
+.edDiscoFaixas {
+  margin-top: 12px;
+}
+
+/* De 1024 a 1279px: linha própria abaixo da capa e da ficha, com os lados lado a lado. */
+@media (min-width: 1024px) {
+  .edDiscoFaixas {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .edDiscoFaixas .faixasTitulo {
+    font-size: 20px;
+  }
+
+  .edDiscoFaixas .faixasLados {
+    max-width: 560px;
+  }
+
+  .edDiscoFaixas .faixasLados-varios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 48px;
+    row-gap: 24px;
+    max-width: none;
+  }
+
+  .edDiscoFaixas .faixasLados-varios > .faixasLado + .faixasLado {
+    margin-top: 12px;
+  }
+}
+
+/* A partir de 1280px: terceira coluna, na altura da capa; capa, ficha e faixas ocupam a largura toda. */
+@media (min-width: 1280px) {
+  .edDiscoCorpo:has(> .edDiscoFaixas) {
+    grid-template-columns: minmax(0, 440px) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .edDiscoCorpo:has(> .edDiscoFaixas) .edDiscoFicha {
+    max-width: none;
+  }
+
+  .edDiscoFaixas {
+    grid-column: auto;
+    margin-top: 0;
+    padding-top: 6px;
+    border-top: none;
+  }
+
+  .edDiscoFaixas .faixasLados-varios {
+    display: block;
+  }
+
+  .edDiscoFaixas .faixasLados-varios > .faixasLado + .faixasLado {
+    margin-top: 20px;
+  }
+}
+
+/* Na coluna do meio, o botão vai de ponta a ponta, alinhado com os fios da ficha. */
+@media (min-width: 1280px) {
+  .edDiscoCorpo:has(> .edDiscoFaixas) .edDiscoSacola {
+    max-width: none;
+  }
+}
+
+/* Página do disco no celular: o botão da sacola fica preso embaixo, acima da barra de navegação,
+   depois das faixas, igual à folha de detalhe. No computador ele fica na ficha. */
+.edDiscoAcaoMovel {
+  position: sticky;
+  bottom: calc(65px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  margin: 4px -12px 0;
+  padding: 12px;
+  background-color: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 1023px) {
+  .edDiscoFicha .edDiscoSacola {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .edDiscoAcaoMovel {
+    display: none;
+  }
+}

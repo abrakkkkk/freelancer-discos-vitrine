@@ -10,6 +10,7 @@ import { useCart } from '@/components/CartProvider';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
 import ListaEditorial from './ListaEditorial';
+import ListaFaixas from '@/components/ListaFaixas';
 
 const FORMATO = { discos: 'Vinil (LP)', cds: 'CD', dvds: 'DVD', vhs: 'VHS' };
 
@@ -21,7 +22,7 @@ function precoBRL(valor) {
  * Página própria de um disco, com endereço para compartilhar. No celular a lista
  * abre o detalhe, então aqui só chega quem veio por link compartilhado.
  */
-export default function DiscoEditorialClient({ item, vizinhos = [] }) {
+export default function DiscoEditorialClient({ item, vizinhos = [], faixas = null }) {
   const router = useRouter();
   const { estaNaSacola, adicionar } = useCart();
   const naSacola = estaNaSacola(item);
@@ -33,6 +34,19 @@ export default function DiscoEditorialClient({ item, vizinhos = [] }) {
   const ano = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
   const mostrarAno = Boolean(ano) && (!selo || !selo.includes(ano));
   const observacao = item.observacao ? String(item.observacao).replace(/\[[^\]]+\]/g, '').trim() : '';
+
+  const botaoSacola = (classe = '') => (
+    <Botao
+      variante="primario"
+      tamanho="g"
+      bloco
+      className={`${classe} ${naSacola ? 'botao--feito' : ''}`}
+      prefixo={naSacola ? <FiCheck size={18} aria-hidden="true" /> : <FiShoppingBag size={18} aria-hidden="true" />}
+      onClick={() => adicionar(item)}
+    >
+      {naSacola ? 'Na sacola · abrir sacola' : 'Adicionar à sacola'}
+    </Botao>
+  );
 
   // Volta para onde o cliente estava; se abriu o link direto, vai para o catálogo.
   const voltar = () => {
@@ -115,17 +129,13 @@ export default function DiscoEditorialClient({ item, vizinhos = [] }) {
             )}
           </dl>
 
-          <Botao
-            variante="primario"
-            tamanho="g"
-            bloco
-            className={`edDiscoSacola ${naSacola ? 'botao--feito' : ''}`}
-            prefixo={naSacola ? <FiCheck size={18} aria-hidden="true" /> : <FiShoppingBag size={18} aria-hidden="true" />}
-            onClick={() => adicionar(item)}
-          >
-            {naSacola ? 'Na sacola · abrir sacola' : 'Adicionar à sacola'}
-          </Botao>
+          {botaoSacola('edDiscoSacola')}
         </div>
+
+        {faixas && <ListaFaixas faixas={faixas.faixas} fonte={faixas.fonte} className="edDiscoFaixas" />}
+
+        {/* No celular o botão fica preso embaixo, depois das faixas, como na folha de detalhe. */}
+        <div className="edDiscoAcaoMovel">{botaoSacola()}</div>
       </div>
 
       {vizinhos.length > 0 && (
