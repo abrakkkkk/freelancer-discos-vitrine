@@ -387,7 +387,10 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
 
   // Ao tocar na busca com a vitrine aberta, a página rola até o campo. Assim, quando a vitrine
   // acima some, dá para compensar a rolagem e o campo não pula.
-  const aoFocarBusca = () => {
+  // Só o campo de texto: o botão Filtros fica no mesmo bloco, e rolar a página no meio do
+  // toque nele cancelava o clique (era preciso tocar duas vezes).
+  const aoFocarBusca = (e) => {
+    if (e.target.tagName !== 'INPUT') return;
     const el = buscaRef.current;
     if (!vitrineNoMeio || !el || !window.matchMedia('(max-width: 1023px)').matches) return;
     const topo = el.getBoundingClientRect().top;
