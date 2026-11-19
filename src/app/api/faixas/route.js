@@ -18,8 +18,14 @@ export async function GET(request) {
 
   if (error) return Response.json(SEM_FAIXAS, { status: 503, headers: { 'Cache-Control': 'no-store' } });
 
-  const faixas = data?.faixas?.faixas?.length ? { faixas: data.faixas.faixas, fonte: data.faixas.fonte || null } : SEM_FAIXAS;
+  const temLista = Boolean(data?.faixas?.faixas?.length);
+  const faixas = temLista ? { faixas: data.faixas.faixas, fonte: data.faixas.fonte || null } : SEM_FAIXAS;
+  // Sem lista, o cache é curto: disco recém-cadastrado ganha as faixas segundos depois.
   return Response.json(faixas, {
-    headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400' },
+    headers: {
+      'Cache-Control': temLista
+        ? 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400'
+        : 'public, max-age=60, s-maxage=60',
+    },
   });
 }

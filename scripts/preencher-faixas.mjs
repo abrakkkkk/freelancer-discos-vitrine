@@ -1,4 +1,6 @@
-// Preenche discos.faixas com a lista de faixas do Discogs.
+// Preenche discos.faixas com a lista de faixas do Discogs, em lote (caixas inteiras).
+// Disco novo ou editado no estoque já é preenchido sozinho pela vitrine (/api/revalidar);
+// este script é para caixas antigas.
 //
 // 1. Capa vinda do Discogs: o endereço da imagem traz o código do lançamento, então a lista é a dele.
 // 2. Outras capas: busca por artista e título no Discogs, com a mesma conferência das capas.
@@ -10,13 +12,7 @@
 //   node --env-file=.env.local scripts/preencher-faixas.mjs --loja "Loja 1" --caixas 49,50,51 --gravar
 
 import { createClient } from '@supabase/supabase-js';
-import {
-  discogsRefFromImageUrl,
-  isVariousArtist,
-  cleanTitle,
-  parseDiscogsTitle,
-  scoreCandidate,
-} from '../src/utils/coverMatch.js';
+import { buscarFaixasDoDisco, headersDiscogs, valorParaGravar } from '../src/utils/faixasDiscogs.js';
 
 const args = process.argv.slice(2);
 const valorArg = (nome) => {
@@ -34,85 +30,12 @@ if (!LOJA || CAIXAS.length === 0) {
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!supabaseUrl || !supabaseKey || !process.env.DISCOGS_KEY || !process.env.DISCOGS_SECRET) {
+const headers = headersDiscogs();
+if (!supabaseUrl || !supabaseKey || !headers) {
   console.error('Defina SUPABASE_URL, SUPABASE_SECRET_KEY, DISCOGS_KEY e DISCOGS_SECRET (use --env-file=.env.local).');
   process.exit(1);
 }
 const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
-
-const HEADERS = {
-  Authorization: `Discogs key=${process.env.DISCOGS_KEY}, secret=${process.env.DISCOGS_SECRET}`,
-  'User-Agent': 'FreelancerDiscosVitrine/1.0',
-};
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const hoje = new Date().toISOString().slice(0, 10);
-
-// Respeita o limite do Discogs (60 consultas por minuto) e tenta de novo quando ele recusa.
-async function discogs(url) {
-  for (let tentativa = 1; tentativa <= 5; tentativa++) {
-    const res = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(15000) }).catch(() => null);
-    if (res?.ok) {
-      const restante = Number(res.headers.get('x-discogs-ratelimit-remaining'));
-      if (Number.isFinite(restante) && restante < 5) await sleep(3000);
-      return res.json();
-    }
-    if (res && res.status === 404) return null;
-    await sleep(res?.status === 429 ? 30000 : 5000 * tentativa);
-  }
-  throw new Error(`Discogs não respondeu: ${url}`);
-}
-
-function faixasDe(dados) {
-  // Faixas agrupadas (suíte, medley) vêm como "index" com as partes em sub_tracks.
-  const faixas = (dados?.tracklist || [])
-    .flatMap((f) => (f.type_ === 'index' && f.sub_tracks?.length ? f.sub_tracks : [f]))
-    .filter((f) => (f.type_ || 'track') === 'track' && f.title)
-    .map((f) => ({ posicao: f.position || '', titulo: f.title.trim(), duracao: f.duration || '' }));
-  return soPrimeiraMidia(faixas);
-}
-
-// LP que vem com CD de brinde: o Discogs lista as duas mídias ("LP-A1", "CDr-1").
-// Fica só a primeira, que é o disco, sem o prefixo.
-function soPrimeiraMidia(faixas) {
-  const midia = (p) => p.match(/^([A-Za-z]+)-(.+)$/);
-  const comPrefixo = faixas.filter((f) => midia(f.posicao));
-  if (!comPrefixo.length) return faixas;
-  // Vinil com lados normais (A1, B1) e o CD de brinde à parte ("CD-1"): sai o CD.
-  if (comPrefixo.length < faixas.length) return faixas.filter((f) => !midia(f.posicao));
-  const primeira = midia(faixas[0].posicao)[1];
-  return faixas
-    .filter((f) => midia(f.posicao)[1] === primeira)
-    .map((f) => ({ ...f, posicao: midia(f.posicao)[2] }));
-}
-
-async function porCapa(capaUrl) {
-  const ref = discogsRefFromImageUrl(capaUrl);
-  if (!ref) return null;
-  const dados = await discogs(`https://api.discogs.com/${ref.tipo === 'master' ? 'masters' : 'releases'}/${ref.id}`);
-  const faixas = faixasDe(dados);
-  return faixas.length ? { faixas, fonte: `https://www.discogs.com/${ref.tipo}/${ref.id}`, origem: 'capa' } : null;
-}
-
-async function porBusca(item) {
-  const artista = isVariousArtist(item.artista) ? 'Various' : item.artista;
-  const titulo = cleanTitle(item.titulo).replace(/\s+/g, ' ').trim();
-  const params = new URLSearchParams({ type: 'release', per_page: '15', artist: artista, release_title: titulo, format: 'Vinyl' });
-  const busca = await discogs(`https://api.discogs.com/database/search?${params}`);
-
-  let melhor = null;
-  for (const r of busca?.results || []) {
-    const cand = { ...parseDiscogsTitle(r.title), ano: r.year || '' };
-    const nota = scoreCandidate(item, cand);
-    if (!nota.aceito) continue;
-    const score = nota.score + (r.country === 'Brazil' ? 0.02 : 0);
-    if (!melhor || score > melhor.score) melhor = { id: r.id, score };
-  }
-  if (!melhor) return null;
-
-  const dados = await discogs(`https://api.discogs.com/releases/${melhor.id}`);
-  const faixas = faixasDe(dados);
-  return faixas.length ? { faixas, fonte: `https://www.discogs.com/release/${melhor.id}`, origem: 'busca' } : null;
-}
 
 const { data: discos, error } = await supabase
   .from('discos')
@@ -134,7 +57,7 @@ const conta = { capa: 0, busca: 0, nada: 0, erro: 0 };
 for (const [i, item] of fila.entries()) {
   let resultado = null;
   try {
-    resultado = (await porCapa(item.capa_url)) || (await porBusca(item));
+    resultado = await buscarFaixasDoDisco(item, { headers });
   } catch (err) {
     conta.erro++;
     console.log(`[${i + 1}/${fila.length}] ERRO ${item.artista} - ${item.titulo}: ${err.message}`);
@@ -148,8 +71,11 @@ for (const [i, item] of fila.entries()) {
   );
 
   if (!GRAVAR) continue;
-  const valor = resultado ? { faixas: resultado.faixas, fonte: resultado.fonte, em: hoje } : { faixas: [], em: hoje };
-  const { error: erroGravar } = await supabase.from('discos').update({ faixas: valor }).eq('id', item.id).is('faixas', null);
+  const { error: erroGravar } = await supabase
+    .from('discos')
+    .update({ faixas: valorParaGravar(resultado) })
+    .eq('id', item.id)
+    .is('faixas', null);
   if (erroGravar) {
     console.error('Erro ao gravar:', erroGravar.message);
     process.exit(1);

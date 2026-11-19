@@ -1,8 +1,13 @@
 import { timingSafeEqual } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
+import { after } from 'next/server';
 import { isValidCategory } from '@/services/catalogService';
+import { preencherFaixasDosDiscos } from '@/services/faixasService';
 
 const MAX_IDS = 500;
+
+// A busca das faixas roda depois da resposta; dá tempo para alguns discos no Discogs.
+export const maxDuration = 60;
 
 function chaveValida(recebida) {
   const esperada = process.env.REVALIDATE_SECRET;
@@ -29,6 +34,9 @@ export async function POST(request) {
 
   ids.forEach((id) => revalidatePath(`/disco/${categoria}/${id}`));
   revalidatePath('/lojas', 'layout');
+
+  // Disco cadastrado ou editado no estoque já ganha a lista de faixas, sem atrasar o estoque.
+  if (categoria === 'discos') after(() => preencherFaixasDosDiscos(ids));
 
   return Response.json({ revalidados: ids.length });
 }

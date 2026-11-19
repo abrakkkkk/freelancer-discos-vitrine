@@ -12,8 +12,8 @@ export default function ListaFaixas({ faixas = [], fonte, className = '' }) {
       </h2>
       <div className={`faixasLados${grupos.length > 1 ? ' faixasLados-varios' : ''}`}>
       {grupos.map((g, i) => (
-        <div key={`${g.lado}-${i}`} className="faixasLado">
-          {g.lado && <h3 className="faixasLadoNome">Lado {g.lado}</h3>}
+        <div key={`${g.chave}-${i}`} className="faixasLado">
+          {g.nome && <h3 className="faixasLadoNome">{g.nome}</h3>}
           <ol className="faixasLista tabularNums">
             {g.faixas.map((f, j) => (
               <li key={`${f.posicao}-${j}`} className="faixa">

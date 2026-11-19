@@ -1,32 +1,39 @@
 import { describe, expect, it } from 'vitest';
 import { agruparPorLado, faixasDoItem } from '@/utils/faixas';
 
+const f = (posicao) => ({ posicao, titulo: posicao });
+const nomes = (grupos) => grupos.map((g) => g.nome);
+
 describe('agruparPorLado', () => {
-  it('separa Lado A e Lado B e numera dentro de cada lado', () => {
-    const grupos = agruparPorLado([
-      { posicao: 'A1', titulo: 'Um' },
-      { posicao: 'A2', titulo: 'Dois' },
-      { posicao: 'B1', titulo: 'Três' },
-    ]);
-    expect(grupos.map((g) => g.lado)).toEqual(['A', 'B']);
+  it('vinil: separa Lado A e Lado B e numera dentro de cada lado', () => {
+    const grupos = agruparPorLado([f('A1'), f('A2'), f('B1')]);
+    expect(nomes(grupos)).toEqual(['Lado A', 'Lado B']);
     expect(grupos[1].faixas[0].numero).toBe('1');
+  });
+
+  it('LP duplo: quatro lados', () => {
+    expect(nomes(agruparPorLado([f('A1'), f('B1'), f('C1'), f('D1')]))).toEqual(['Lado A', 'Lado B', 'Lado C', 'Lado D']);
   });
 
   it('lado sem número na posição ("B") recebe o número pela ordem', () => {
-    const grupos = agruparPorLado([
-      { posicao: 'A1', titulo: 'Um' },
-      { posicao: 'B', titulo: 'Dois' },
-    ]);
+    const grupos = agruparPorLado([f('A1'), f('B')]);
     expect(grupos[1].faixas[0].numero).toBe('1');
   });
 
-  it('CD sem lados vira um grupo só, sem nome', () => {
-    const grupos = agruparPorLado([
-      { posicao: '1', titulo: 'Um' },
-      { posicao: '2', titulo: 'Dois' },
-    ]);
-    expect(grupos).toHaveLength(1);
-    expect(grupos[0].lado).toBe('');
+  it('CD: um grupo só, sem nome', () => {
+    const grupos = agruparPorLado([f('1'), f('2'), f('3')]);
+    expect(nomes(grupos)).toEqual(['']);
+    expect(grupos[0].faixas.map((x) => x.numero)).toEqual(['1', '2', '3']);
+  });
+
+  it('CD duplo: Disco 1 e Disco 2, numerando dentro de cada um', () => {
+    const grupos = agruparPorLado([f('1-1'), f('1-2'), f('2-1')]);
+    expect(nomes(grupos)).toEqual(['Disco 1', 'Disco 2']);
+    expect(grupos[1].faixas[0].numero).toBe('1');
+  });
+
+  it('vinil de um lado só: sem título', () => {
+    expect(nomes(agruparPorLado([f('A1'), f('A2')]))).toEqual(['']);
   });
 });
 
