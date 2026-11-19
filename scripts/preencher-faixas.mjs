@@ -64,10 +64,25 @@ async function discogs(url) {
 
 function faixasDe(dados) {
   // Faixas agrupadas (suíte, medley) vêm como "index" com as partes em sub_tracks.
-  return (dados?.tracklist || [])
+  const faixas = (dados?.tracklist || [])
     .flatMap((f) => (f.type_ === 'index' && f.sub_tracks?.length ? f.sub_tracks : [f]))
     .filter((f) => (f.type_ || 'track') === 'track' && f.title)
     .map((f) => ({ posicao: f.position || '', titulo: f.title.trim(), duracao: f.duration || '' }));
+  return soPrimeiraMidia(faixas);
+}
+
+// LP que vem com CD de brinde: o Discogs lista as duas mídias ("LP-A1", "CDr-1").
+// Fica só a primeira, que é o disco, sem o prefixo.
+function soPrimeiraMidia(faixas) {
+  const midia = (p) => p.match(/^([A-Za-z]+)-(.+)$/);
+  const comPrefixo = faixas.filter((f) => midia(f.posicao));
+  if (!comPrefixo.length) return faixas;
+  // Vinil com lados normais (A1, B1) e o CD de brinde à parte ("CD-1"): sai o CD.
+  if (comPrefixo.length < faixas.length) return faixas.filter((f) => !midia(f.posicao));
+  const primeira = midia(faixas[0].posicao)[1];
+  return faixas
+    .filter((f) => midia(f.posicao)[1] === primeira)
+    .map((f) => ({ ...f, posicao: midia(f.posicao)[2] }));
 }
 
 async function porCapa(capaUrl) {
