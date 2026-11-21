@@ -36,7 +36,7 @@ export const GENEROS = [
     id: 'pop',
     nome: 'Pop',
     descricao:
-      'Música feita para o rádio e para as pistas, do Brasil e de fora, com refrões que todo mundo canta junto: de ABBA e Michael Jackson a Madonna e às trilhas das rádios FM.',
+      'Música feita para o rádio e para as pistas, do Brasil e de fora, com refrões que todo mundo canta junto: de ABBA e Michael Jackson a Madonna, Rita Lee e Kid Abelha.',
   },
   {
     id: 'romantica-brega',
