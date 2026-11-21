@@ -11,6 +11,8 @@ import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
 import ListaEditorial from './ListaEditorial';
 import ListaFaixas from '@/components/ListaFaixas';
+import SobreGenero, { LinhaFichaGenero } from '@/components/SobreGenero';
+import { generosDoItem } from '@/utils/generos';
 
 const FORMATO = { discos: 'Vinil (LP)', cds: 'CD', dvds: 'DVD', vhs: 'VHS' };
 
@@ -28,6 +30,7 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
   const naSacola = estaNaSacola(item);
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
+  const generos = generosDoItem(item);
   const temCaixa = rotuloCaixa !== '—';
   const caixaHref = temCaixa ? hrefDaCaixa(item.loja, item.caixa) : null;
   const selo = extractRecordLabel(item.observacao);
@@ -109,6 +112,7 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
               <dt>Formato</dt>
               <dd>{FORMATO[item.categoria] || 'Disco'}</dd>
             </div>
+            <LinhaFichaGenero generos={generos} />
             {selo && (
               <div className="specRow">
                 <dt>Selo</dt>
@@ -132,7 +136,13 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
           {botaoSacola('edDiscoSacola')}
         </div>
 
-        {faixas && <ListaFaixas faixas={faixas.faixas} fonte={faixas.fonte} className="edDiscoFaixas" />}
+        {/* Faixas e gênero dividem a mesma coluna (terceira coluna a partir de 1280px). */}
+        {(faixas || generos.length > 0) && (
+          <div className="edDiscoFaixas">
+            {faixas && <ListaFaixas faixas={faixas.faixas} fonte={faixas.fonte} />}
+            <SobreGenero genero={generos[0]} />
+          </div>
+        )}
 
         {/* No celular o botão fica preso embaixo, depois das faixas, como na folha de detalhe. */}
         <div className="edDiscoAcaoMovel">{botaoSacola()}</div>

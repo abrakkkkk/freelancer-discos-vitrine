@@ -1489,12 +1489,12 @@ body:has(.productDetailDialog) .sacolaAviso {
     background-color: #ffffff !important;
   }
 
-  .edLatGrupo:first-child .edLatEscolhas {
+  .edLatGrupoLoja .edLatEscolhas {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .edLatGrupo:last-child .edLatEscolhas {
+  .edLatGrupoOrdem .edLatEscolhas {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2405,5 +2405,203 @@ a.vlFaixaItem:focus-visible {
 
   .edInicioMobile .vlAberturaLink:active {
     color: #f08080;
+  }
+}
+
+/* Gêneros no celular: linha que rola para o lado, abaixo da busca. No computador ficam nos filtros laterais. */
+.edGeneros {
+  margin: -2px -16px 14px;
+}
+
+.edGenerosLinha {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 16px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.edGenerosLinha::-webkit-scrollbar {
+  display: none;
+}
+
+.edGenero {
+  position: relative;
+  flex: none;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Área de toque de 44px sem aumentar o desenho. */
+.edGenero::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+.edGeneroAtivo {
+  border-color: var(--accent);
+  background-color: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.edGeneroTodos {
+  border-color: transparent;
+  background: none;
+  color: var(--text-muted);
+  padding-right: 4px;
+}
+
+.edGenero:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+  .edGeneros {
+    display: none;
+  }
+
+  .edLatGeneros {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .edLatMais {
+    margin-top: 8px;
+  }
+}
+
+/* Página /generos: lista de gêneros com a contagem e três capas de cada um. */
+.edGenerosLista {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.edGenerosLista li {
+  border-bottom: 1px solid var(--border);
+}
+
+.edGeneroItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 88px;
+  padding: 12px 0;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.edGeneroItemTexto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.edGeneroItemNome {
+  font-family: var(--font-editorial), var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-wrap: balance;
+}
+
+.edGeneroItemTotal {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.edGeneroItemTotal strong {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Capas sobrepostas, como discos encostados na caixa. */
+.edGeneroItemCapas {
+  display: flex;
+  flex: none;
+}
+
+.edGeneroItemCapas img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-capa);
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.5);
+  background-color: var(--bg-card);
+}
+
+.edGeneroItemCapas img + img {
+  margin-left: -28px;
+}
+
+.edGeneroItemSeta {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.edGeneroItem:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.edGenerosVazio {
+  padding: 24px 0;
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .edGeneroItem:hover .edGeneroItemSeta {
+    color: #ffffff;
+  }
+}
+
+@media (min-width: 1024px) {
+  .edGenerosLista {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 32px;
+    margin-top: 24px;
+    border-top: none;
+  }
+
+  .edGenerosLista li:nth-child(-n + 3) {
+    border-top: 1px solid var(--border);
+  }
+
+  .edGeneroItem {
+    min-height: 104px;
+  }
+
+  .edGeneroItemCapas img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .edGeneroItemCapas img + img {
+    margin-left: -36px;
   }
 }

@@ -10,8 +10,15 @@ describe('filtros do catálogo na URL', () => {
   });
 
   it('ida e volta preserva o estado', () => {
-    const estado = { categoria: 'cds', busca: 'chico buarque', loja: 'Loja 2', caixa: 'Caixa 5B', ordenacao: 'preco_desc', pagina: 3 };
+    const estado = { categoria: 'cds', busca: 'chico buarque', loja: 'Loja 2', caixa: 'Caixa 5B', genero: '', ordenacao: 'preco_desc', pagina: 3 };
     expect(ler(montarQueryDoEstado(estado))).toEqual(estado);
+  });
+
+  it('gênero vai na URL e só vale para LPs', () => {
+    expect(montarQueryDoEstado({ ...ESTADO_PADRAO, genero: 'mpb' })).toBe('genero=mpb');
+    expect(ler('genero=mpb').genero).toBe('mpb');
+    expect(ler('genero=xyz').genero).toBe('');
+    expect(ler('categoria=cds&genero=mpb').genero).toBe('');
   });
 
   it('estado padrão gera URL limpa', () => {

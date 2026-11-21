@@ -39,7 +39,7 @@ export async function POST(request) {
   revalidatePath('/chegaram-agora');
   revalidatePath('/importados');
 
-  // Disco cadastrado ou editado no estoque já ganha a lista de faixas, sem atrasar o estoque.
+  // Disco cadastrado ou editado no estoque já ganha a lista de faixas e os gêneros, sem atrasar o estoque.
   if (categoria === 'discos') after(() => preencherFaixasDosDiscos(ids));
 
   return Response.json({ revalidados: ids.length });

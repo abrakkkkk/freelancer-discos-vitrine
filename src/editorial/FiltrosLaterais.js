@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 const COR_LOJA = { 'Loja 1': 'var(--loja-1)', 'Loja 2': 'var(--loja-2)' };
 
 const ORDENS = [
@@ -9,6 +11,9 @@ const ORDENS = [
   { id: 'artista_asc', label: 'Artista A–Z' },
   { id: 'titulo_asc', label: 'Título A–Z' },
 ];
+
+// Gêneros visíveis antes de "Ver todos": os maiores, que cobrem quase todo o estoque.
+const GENEROS_VISIVEIS = 8;
 
 function Escolha({ ativa, onClick, children }) {
   return (
@@ -32,7 +37,15 @@ export default function FiltrosLaterais({
   caixas = [],
   ordenacao,
   onOrdenacao,
+  // [{ id, nome, total }] já na ordem de exibição; vazio esconde o grupo.
+  generos = [],
+  genero = '',
+  onGenero,
 }) {
+  const [todosGeneros, setTodosGeneros] = useState(false);
+  const ativoEscondido = generos.findIndex((g) => g.id === genero) >= GENEROS_VISIVEIS;
+  const generosVisiveis = todosGeneros || ativoEscondido ? generos : generos.slice(0, GENEROS_VISIVEIS);
+
   // Caixas com nome (como "Painel 2") não cabem no quadradinho: vão para o fim, em duas colunas.
   const comNome = (cx) => /\s/.test(String(cx.label).replace(/^caixa\s*/i, ''));
   const caixasDaLoja = loja
@@ -43,7 +56,42 @@ export default function FiltrosLaterais({
 
   return (
     <aside className="edLateral" aria-label="Filtros do catálogo">
-      <section className="edLatGrupo">
+      {generos.length > 0 && (
+        <section className="edLatGrupo">
+          <div className="edLatTituloLinha">
+            <h2 className="edLatTitulo">Gênero</h2>
+            {genero && (
+              <button type="button" className="edLatLimpar" onClick={() => onGenero('')}>
+                Limpar
+              </button>
+            )}
+          </div>
+          <div className="edLatGeneros">
+            {generosVisiveis.map((g) => {
+              const ativo = genero === g.id;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  className={`edLatOpcao ${ativo ? 'edLatOpcaoAtiva' : ''}`}
+                  aria-pressed={ativo}
+                  onClick={() => onGenero(ativo ? '' : g.id)}
+                >
+                  <span className="edLatOpcaoNome">{g.nome}</span>
+                  <span className="edLatOpcaoExtra tabularNums">{g.total.toLocaleString('pt-BR')}</span>
+                </button>
+              );
+            })}
+          </div>
+          {generos.length > GENEROS_VISIVEIS && !ativoEscondido && (
+            <button type="button" className="edLatLimpar edLatMais" onClick={() => setTodosGeneros((v) => !v)}>
+              {todosGeneros ? 'Ver menos' : `Ver todos os ${generos.length}`}
+            </button>
+          )}
+        </section>
+      )}
+
+      <section className="edLatGrupo edLatGrupoLoja">
         <h2 className="edLatTitulo">Loja</h2>
         <div className="edLatEscolhas">
           <Escolha ativa={!loja} onClick={() => onLoja('')}>
@@ -91,7 +139,7 @@ export default function FiltrosLaterais({
         )}
       </section>
 
-      <section className="edLatGrupo">
+      <section className="edLatGrupo edLatGrupoOrdem">
         <h2 className="edLatTitulo">Ordenar</h2>
         <div className="edLatEscolhas">
           {ORDENS.map((o) => (

@@ -6,6 +6,8 @@ import ListaFaixas from './ListaFaixas';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import Localizacao from './Localizacao';
+import SobreGenero, { LinhaFichaGenero } from './SobreGenero';
+import { generosDoItem } from '@/utils/generos';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
@@ -29,6 +31,8 @@ export default function ProductDetailSheet({
   linkCaixa = true,
   // Prefixo dos links internos.
   basePath = '',
+  // Troca o filtro do catálogo por trás; sem ele, o gênero vira link para o catálogo.
+  onGenero,
 }) {
   const dialogRef = useRef(null);
   const fecharENavegar = useModalDialog(isOpen && Boolean(item), onClose, dialogRef);
@@ -55,6 +59,7 @@ export default function ProductDetailSheet({
   });
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
+  const generos = tipo === 'discos' ? generosDoItem(item) : [];
   const recordLabel = extractRecordLabel(item.observacao);
   const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
   const showAno = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
@@ -164,6 +169,7 @@ export default function ProductDetailSheet({
             <dt>Formato</dt>
             <dd>{FORMAT_NAMES[tipo] || 'Disco'}</dd>
           </div>
+          <LinhaFichaGenero generos={generos} onGenero={onGenero} />
           {recordLabel && (
             <div className="specRow">
               <dt>Selo</dt>
@@ -187,6 +193,8 @@ export default function ProductDetailSheet({
         {faixasDoItem && (
           <ListaFaixas faixas={faixasDoItem.faixas} fonte={faixasDoItem.fonte} className="sheetFaixas" />
         )}
+
+        <SobreGenero genero={generos[0]} onGenero={onGenero} />
 
         {/* Botão preso no fim da folha porque a ficha pode precisar rolar. */}
         <div className="sheetAcao">

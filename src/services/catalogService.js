@@ -10,6 +10,7 @@ import {
   bateAnoDoItem,
 } from '@/utils/stringUtils';
 import { chaveCaixa, lojaPelaCaixa, variantesCaixa } from '@/utils/caixaUtils';
+import { ehGeneroValido } from '@/utils/generos';
 
 export const VALID_CATEGORIES = ['discos', 'cds', 'dvds', 'vhs'];
 // Colunas que o cliente pode usar para ordenar. Qualquer outra é ignorada, para não
@@ -21,6 +22,15 @@ const catalogServerCache = new Map();
 
 export function isValidCategory(category) {
   return VALID_CATEGORIES.includes(category);
+}
+
+// Gênero só existe nos LPs (coluna discos.generos); código desconhecido é ignorado.
+export function generoDoFiltro(category, filtroGenero) {
+  return category === 'discos' && ehGeneroValido(filtroGenero) ? filtroGenero : '';
+}
+
+function aplicarFiltroGenero(query, genero) {
+  return genero ? query.contains('generos', [genero]) : query;
 }
 
 export function aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja = '') {
@@ -53,6 +63,7 @@ async function buscarComErroDeDigitacao(category, {
   colunas,
   filtroLoja,
   filtroCaixa,
+  filtroGenero,
   ordenarColuna,
   ordenarDirecao,
 }) {
@@ -76,6 +87,7 @@ async function buscarComErroDeDigitacao(category, {
   });
   if (filtroLoja) query = query.eq('loja', filtroLoja);
   query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
+  query = aplicarFiltroGenero(query, filtroGenero);
   if (ordenarColuna && ordenarDirecao) {
     const colunaReal = isVideo && ordenarColuna === 'artista' ? 'titulo' : ordenarColuna;
     query = query.order(colunaReal, { ascending: ordenarDirecao === 'asc', nullsFirst: false });
@@ -114,8 +126,8 @@ function chaveOrdemCaixa(item) {
   };
 }
 
-async function idsDiscosEmOrdem(filtroLoja) {
-  const cacheKey = filtroLoja || '__ALL__';
+async function idsDiscosEmOrdem(filtroLoja, filtroGenero = '') {
+  const cacheKey = `${filtroLoja || '__ALL__'}|${filtroGenero}`;
   const cached = ordemDiscosCache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) return cached.resultado;
 
@@ -128,7 +140,7 @@ async function idsDiscosEmOrdem(filtroLoja) {
       .order('id')
       .range(inicio, inicio + SUPABASE_PAGE_SIZE - 1);
     if (filtroLoja) q = q.eq('loja', filtroLoja);
-    return q;
+    return aplicarFiltroGenero(q, filtroGenero);
   };
 
   const primeira = await consulta(0);
@@ -181,6 +193,7 @@ export const catalogService = {
     itensPorPagina = 50,
     filtroLoja = '',
     filtroCaixa = '',
+    filtroGenero = '',
     busca = '',
     ordenarColuna = null,
     ordenarDirecao = null,
@@ -200,7 +213,8 @@ export const catalogService = {
       return { data: [], count: 0 };
     }
 
-    const cacheKey = `${category}|${pagina}|${itensPorPagina}|${filtroLoja}|${filtroCaixa}|${busca}|${ordenarColuna || ''}|${ordenarDirecao || ''}|${soContar ? 'contar' : ''}`;
+    filtroGenero = generoDoFiltro(category, filtroGenero);
+    const cacheKey = `${category}|${pagina}|${itensPorPagina}|${filtroLoja}|${filtroCaixa}|${filtroGenero}|${busca}|${ordenarColuna || ''}|${ordenarDirecao || ''}|${soContar ? 'contar' : ''}`;
     const cached = catalogServerCache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
       return cached.result;
@@ -211,12 +225,14 @@ export const catalogService = {
     if (!isVideo) {
       colunas += ', artista';
     }
+    // Os gêneros vão junto para o detalhe que abre por cima do catálogo.
+    if (category === 'discos') colunas += ', generos';
     const contarBusca = soContar && Boolean(busca);
     if (contarBusca) colunas = isVideo ? 'id, titulo, ano' : 'id, titulo, artista, caixa, ano';
 
     // Catálogo padrão de discos: caixa por número e título (ver idsDiscosEmOrdem).
     if (category === 'discos' && !busca && !filtroCaixa && !ordenarColuna) {
-      const { ids, posicoes } = await idsDiscosEmOrdem(filtroLoja);
+      const { ids, posicoes } = await idsDiscosEmOrdem(filtroLoja, filtroGenero);
       const idsPagina = ids.slice((pagina - 1) * itensPorPagina, pagina * itensPorPagina);
       let itensPagina = [];
       if (idsPagina.length > 0) {
@@ -256,6 +272,7 @@ export const catalogService = {
     }
 
     query = aplicarFiltroCaixaNaQuery(query, filtroCaixa, filtroLoja);
+    query = aplicarFiltroGenero(query, filtroGenero);
 
     if (ordenarColuna && ordenarDirecao) {
       const crescente = ordenarDirecao === 'asc';
@@ -333,6 +350,7 @@ export const catalogService = {
           colunas,
           filtroLoja,
           filtroCaixa,
+          filtroGenero,
           ordenarColuna,
           ordenarDirecao,
         });
@@ -368,3 +386,28 @@ export const catalogService = {
     return finalResult;
   },
 };
+
+// Quantos LPs ativos há em cada gênero (linha de gêneros, filtros e página /generos).
+// Uma contagem por gênero, guardada por 1 hora: não roda a cada acesso.
+const contagemGeneros = { valor: null, expiraEm: 0 };
+const CONTAGEM_TTL_MS = 60 * 60 * 1000;
+
+export async function contarDiscosPorGenero(ids) {
+  if (!supabaseServer) return {};
+  if (contagemGeneros.valor && contagemGeneros.expiraEm > Date.now()) return contagemGeneros.valor;
+  const resultados = await Promise.all(
+    ids.map(async (id) => {
+      const { count, error } = await supabaseServer
+        .from('discos')
+        .select('id', { count: 'exact', head: true })
+        .eq('deletado', false)
+        .eq('ativo', true)
+        .contains('generos', [id]);
+      if (error) throw error;
+      return [id, count || 0];
+    })
+  );
+  contagemGeneros.valor = Object.fromEntries(resultados);
+  contagemGeneros.expiraEm = Date.now() + CONTAGEM_TTL_MS;
+  return contagemGeneros.valor;
+}

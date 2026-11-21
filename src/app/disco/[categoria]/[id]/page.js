@@ -23,8 +23,8 @@ const buscarDisco = cache(async (categoria, idParam) => {
   const colunas = `id, titulo, preco, loja, caixa, ano, capa_url, observacao${temArtista ? ', artista' : ''}`;
   const { data, error } = await supabaseServer
     .from(categoria)
-    // Só o disco aberto traz as faixas; os vizinhos não precisam delas.
-    .select(categoria === 'discos' ? `${colunas}, faixas` : colunas)
+    // Só o disco aberto traz as faixas e os gêneros; os vizinhos não precisam deles.
+    .select(categoria === 'discos' ? `${colunas}, faixas, generos` : colunas)
     .eq('id', id)
     .eq('deletado', false)
     .eq('ativo', true)

@@ -30,6 +30,7 @@ export async function GET(request) {
       itensPorPagina,
       filtroLoja: loja,
       filtroCaixa: caixa,
+      filtroGenero: searchParams.get('genero') || '',
       busca,
       ordenarColuna,
       ordenarDirecao,

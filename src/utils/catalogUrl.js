@@ -1,11 +1,14 @@
-// Filtros do catálogo na URL (?categoria=cds&busca=beatles&loja=Loja+1&caixa=5&ordem=preco_asc&pagina=2),
+// Filtros do catálogo na URL (?categoria=cds&busca=beatles&loja=Loja+1&caixa=5&genero=mpb&ordem=preco_asc&pagina=2),
 // para o link poder ser compartilhado e o F5 não perder a busca.
+
+import { ehGeneroValido } from './generos.js';
 
 export const ESTADO_PADRAO = {
   categoria: 'discos',
   busca: '',
   loja: '',
   caixa: '',
+  genero: '',
   ordenacao: 'padrao',
   pagina: 1,
 };
@@ -13,7 +16,7 @@ export const ESTADO_PADRAO = {
 const CATEGORIAS = ['discos', 'cds', 'dvds', 'vhs'];
 const LOJAS = ['Loja 1', 'Loja 2'];
 const ORDENACOES = ['padrao', 'preco_asc', 'preco_desc', 'artista_asc', 'titulo_asc'];
-const PARAMETROS = ['categoria', 'busca', 'loja', 'caixa', 'ordem', 'pagina'];
+const PARAMETROS = ['categoria', 'busca', 'loja', 'caixa', 'genero', 'ordem', 'pagina'];
 
 /** Estado do catálogo lido da URL, ou null se a URL não tiver nenhum filtro. */
 export function lerEstadoDaUrl(searchParams) {
@@ -34,6 +37,8 @@ export function lerEstadoDaUrl(searchParams) {
     busca: (searchParams.get('busca') || '').slice(0, 100),
     loja: LOJAS.includes(loja) ? loja : '',
     caixa: (searchParams.get('caixa') || '').slice(0, 40),
+    // Gênero só existe nos LPs.
+    genero: !isVideo && categoria !== 'cds' && ehGeneroValido(searchParams.get('genero')) ? searchParams.get('genero') : '',
     ordenacao,
     pagina: Number.isInteger(pagina) && pagina >= 1 ? pagina : 1,
   };
@@ -46,6 +51,7 @@ export function montarQueryDoEstado(estado) {
   if (estado.busca) params.set('busca', estado.busca);
   if (estado.loja) params.set('loja', estado.loja);
   if (estado.caixa) params.set('caixa', estado.caixa);
+  if (estado.genero) params.set('genero', estado.genero);
   if (estado.ordenacao && estado.ordenacao !== ESTADO_PADRAO.ordenacao) params.set('ordem', estado.ordenacao);
   if (estado.pagina > 1) params.set('pagina', String(estado.pagina));
   return params.toString();

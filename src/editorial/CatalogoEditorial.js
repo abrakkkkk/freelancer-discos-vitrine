@@ -6,6 +6,8 @@ import CategoryTabs, { CATEGORIES } from '@/components/CategoryTabs';
 import CatalogFilters from '@/components/CatalogFilters';
 import ListaEditorial, { ListaCarregando } from './ListaEditorial';
 import FiltrosLaterais from './FiltrosLaterais';
+import LinhaGeneros from './LinhaGeneros';
+import { GENEROS, generoPorId } from '@/utils/generos';
 import ProductDetailSheet from '@/components/ProductDetailSheet';
 import CatalogPagination from '@/components/CatalogPagination';
 import { BarraEditorial, NavDesktopEditorial } from './NavEditorial';
@@ -23,8 +25,28 @@ const clientCaixasCache = new Map();
 // Último estado da sessão: ao voltar para "/" sem filtros na URL, restaura a busca anterior.
 let savedViewState = { ...ESTADO_PADRAO };
 
-function buildCatalogCacheKey({ categoria, pagina, loja, caixa, busca, ordenacao }) {
-  return `${categoria}|${pagina}|${loja}|${caixa}|${busca}|${ordenacao}`;
+function buildCatalogCacheKey({ categoria, pagina, loja, caixa, genero = '', busca, ordenacao }) {
+  return `${categoria}|${pagina}|${loja}|${caixa}|${genero}|${busca}|${ordenacao}`;
+}
+
+// Contagem dos gêneros (LPs): uma consulta por sessão, a resposta já vem guardada da CDN por 1 hora.
+let contagemGenerosPromessa = null;
+function carregarContagemGeneros() {
+  contagemGenerosPromessa ??= fetch('/api/generos')
+    .then((r) => (r.ok ? r.json() : { contagem: {} }))
+    .then((d) => d.contagem || {})
+    .catch(() => {
+      contagemGenerosPromessa = null;
+      return {};
+    });
+  return contagemGenerosPromessa;
+}
+
+/** Gêneros com discos, do maior para o menor. Sem contagem ainda, lista vazia (nada aparece). */
+function generosComDiscos(contagem) {
+  return GENEROS.map((g) => ({ ...g, total: contagem?.[g.id] || 0 }))
+    .filter((g) => g.total > 0)
+    .sort((a, b) => b.total - a.total);
 }
 
 // Contagem no nome do formato da aba ("12.861 discos").
@@ -79,11 +101,11 @@ function SemResultados({
   const dica = outrosFormatos.length
     ? 'Essa busca tem resultados em outro formato.'
     : busca && temFiltros
-      ? 'Confira a grafia ou tire os filtros de loja e caixa.'
+      ? 'Confira a grafia ou tire os filtros.'
       : busca
         ? 'Confira a grafia ou busque só pelo nome do artista.'
         : temFiltros
-          ? 'Tire os filtros de loja e caixa para ver mais itens.'
+          ? 'Tire os filtros para ver mais itens.'
           : 'Veja os outros formatos nas abas acima.';
 
   return (
@@ -136,6 +158,8 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
   const [debouncedBusca, setDebouncedBusca] = useState(estadoInicial.busca);
   const [loja, setLoja] = useState(estadoInicial.loja);
   const [caixa, setCaixa] = useState(estadoInicial.caixa);
+  const [genero, setGenero] = useState(estadoInicial.genero || '');
+  const [contagemGeneros, setContagemGeneros] = useState(null);
   const [caixas, setCaixas] = useState(() => clientCaixasCache.get(estadoInicial.loja) || []);
   const [ordenacao, setOrdenacao] = useState(estadoInicial.ordenacao);
   const [pagina, setPagina] = useState(estadoInicial.pagina);
@@ -146,6 +170,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
       pagina: estadoInicial.pagina,
       loja: estadoInicial.loja,
       caixa: estadoInicial.caixa,
+      genero: estadoInicial.genero || '',
       busca: estadoInicial.busca,
       ordenacao: estadoInicial.ordenacao,
     })
@@ -176,6 +201,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
       busca: debouncedBusca,
       loja,
       caixa,
+      genero,
       ordenacao,
       pagina,
     };
@@ -185,7 +211,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
       const url = query ? `?${query}` : window.location.pathname;
       window.history.replaceState(window.history.state, '', url);
     }
-  }, [categoria, debouncedBusca, loja, caixa, ordenacao, pagina]);
+  }, [categoria, debouncedBusca, loja, caixa, genero, ordenacao, pagina]);
 
   // A página volta para 1 só quando a busca efetiva muda (após o debounce),
   // para não disparar uma consulta extra com o termo antigo.
@@ -252,6 +278,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         pagina,
         loja,
         caixa,
+        genero,
         busca: debouncedBusca,
         ordenacao,
       });
@@ -299,6 +326,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
           caixa,
           busca: debouncedBusca,
         });
+        if (genero) params.set('genero', genero);
 
         if (ordenarColuna) params.set('ordenarColuna', ordenarColuna);
         if (ordenarDirecao) params.set('ordenarDirecao', ordenarDirecao);
@@ -336,7 +364,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         }
       }
     },
-    [categoria, pagina, loja, caixa, debouncedBusca, ordenacao]
+    [categoria, pagina, loja, caixa, genero, debouncedBusca, ordenacao]
   );
 
   useEffect(() => {
@@ -373,6 +401,38 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
     setCategoria(novaCategoria);
     setPagina(1);
     setCaixa('');
+    // Gênero só existe nos LPs.
+    if (novaCategoria !== 'discos') setGenero('');
+  };
+
+  useEffect(() => {
+    let ativo = true;
+    carregarContagemGeneros().then((c) => ativo && setContagemGeneros(c));
+    return () => {
+      ativo = false;
+    };
+  }, []);
+  const generosDisponiveis = categoria === 'discos' ? generosComDiscos(contagemGeneros) : [];
+
+  const handleGeneroChange = (novoGenero) => {
+    setGenero(novoGenero);
+    setPagina(1);
+  };
+
+  // Gênero tocado no detalhe aberto: fecha o detalhe e só depois filtra, porque fechar faz um
+  // "voltar" no histórico, que desfaria a URL nova. Leva a página até o começo da lista.
+  const escolherGeneroDoDetalhe = (novoGenero) => {
+    let feito = false;
+    const aplicar = () => {
+      if (feito) return;
+      feito = true;
+      handleGeneroChange(novoGenero);
+      const alvo = [...document.querySelectorAll('#todo-o-estoque, .edBuscaCatalogo')].find((e) => e.offsetParent);
+      alvo?.scrollIntoView({ block: 'start' });
+    };
+    window.addEventListener('popstate', () => setTimeout(aplicar, 0), { once: true });
+    setTimeout(aplicar, 400);
+    setDetailItem(null);
   };
 
   // Celular: a vitrine some ou volta acima da busca enquanto o cliente digita. Guardamos onde o
@@ -412,7 +472,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
     setPagina(1);
   };
 
-  const semFiltro = categoria === 'discos' && !debouncedBusca && !loja && !caixa && ordenacao === 'padrao' && pagina === 1;
+  const semFiltro = categoria === 'discos' && !debouncedBusca && !loja && !caixa && !genero && ordenacao === 'padrao' && pagina === 1;
 
   useLayoutEffect(() => {
     const antes = buscaTopoAntes.current;
@@ -452,7 +512,9 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
 
       {vitrine && (
         <div id="todo-o-estoque" className="edCaixaCab edEstoqueCab" data-todo-o-estoque>
-          <h2 className="edCaixaNum">{debouncedBusca ? `Busca: “${debouncedBusca}”` : 'Todo o estoque'}</h2>
+          <h2 className="edCaixaNum">
+            {debouncedBusca ? `Busca: “${debouncedBusca}”` : genero ? generoPorId(genero)?.nome : 'Todo o estoque'}
+          </h2>
           <p className="edEstoqueContagem tabularNums" aria-live="polite">
             {loading ? 'Carregando…' : erro ? null : (
               <>
@@ -481,6 +543,9 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         caixas={caixas}
         ordenacao={ordenacao}
         onOrdenacao={handleOrdenacaoChange}
+        generos={generosDisponiveis}
+        genero={genero}
+        onGenero={handleGeneroChange}
       />
       <div className="edCatalogoPrincipal">
 
@@ -502,6 +567,8 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
           tipo={categoria}
         />
       </div>
+
+      <LinhaGeneros generos={generosDisponiveis} genero={genero} onGenero={handleGeneroChange} />
 
       {vitrine && vitrineNoMeio && semFiltro && (
         <div className="vitrineMeio">
@@ -573,12 +640,13 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         <SemResultados
           busca={debouncedBusca}
           formato={CATEGORIES.find((c) => c.id === categoria)?.label || 'Discos'}
-          temFiltros={Boolean(loja || caixa)}
+          temFiltros={Boolean(loja || caixa || genero)}
           outrosFormatos={outrosFormatos}
           onLimparBusca={() => handleBuscaChange('')}
           onLimparFiltros={() => {
             handleLojaChange('');
             handleCaixaChange('');
+            handleGeneroChange('');
           }}
           onEscolherFormato={handleTabChange}
         />
@@ -616,6 +684,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         }
         onAddToCart={handleAddToCart}
         tipo={detailItem?.categoria || categoria}
+        onGenero={escolherGeneroDoDetalhe}
       />
 
       <BarraEditorial />
