@@ -33,6 +33,7 @@ export async function GET(request) {
       busca,
       ordenarColuna,
       ordenarDirecao,
+      soContar: searchParams.get('contar') === '1',
     });
 
     const totalPaginas = Math.max(1, Math.ceil(count / itensPorPagina));

@@ -9,7 +9,8 @@ import { compartilhamento } from '@/utils/seo';
 import { dadosDoDisco, JsonLd } from '@/utils/dadosEstruturados';
 import { faixasDoItem } from '@/utils/faixas';
 
-export const revalidate = 3600;
+// O estoque avisa (/api/revalidar) quando o disco muda; o tempo é só uma rede de segurança.
+export const revalidate = 86400;
 
 const VIZINHOS = 12;
 

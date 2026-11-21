@@ -354,7 +354,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
     const outras = CATEGORIES.filter((c) => c.id !== categoria);
     Promise.all(
       outras.map(async (c) => {
-        const params = new URLSearchParams({ categoria: c.id, pagina: '1', loja, busca: debouncedBusca });
+        const params = new URLSearchParams({ categoria: c.id, pagina: '1', loja, busca: debouncedBusca, contar: '1' });
         const res = await fetch(`/api/catalogo?${params.toString()}`, { signal: controller.signal });
         if (!res.ok) return null;
         const data = await res.json();

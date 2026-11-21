@@ -184,6 +184,8 @@ export const catalogService = {
     busca = '',
     ordenarColuna = null,
     ordenarDirecao = null,
+    // Só o total da busca (aviso dos outros formatos): colunas mínimas, sem aproximação nem ordem.
+    soContar = false,
   } = {}) {
     if (!isValidCategory(category)) {
       throw new Error(`Categoria inválida: ${category}`);
@@ -198,7 +200,7 @@ export const catalogService = {
       return { data: [], count: 0 };
     }
 
-    const cacheKey = `${category}|${pagina}|${itensPorPagina}|${filtroLoja}|${filtroCaixa}|${busca}|${ordenarColuna || ''}|${ordenarDirecao || ''}`;
+    const cacheKey = `${category}|${pagina}|${itensPorPagina}|${filtroLoja}|${filtroCaixa}|${busca}|${ordenarColuna || ''}|${ordenarDirecao || ''}|${soContar ? 'contar' : ''}`;
     const cached = catalogServerCache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
       return cached.result;
@@ -209,6 +211,8 @@ export const catalogService = {
     if (!isVideo) {
       colunas += ', artista';
     }
+    const contarBusca = soContar && Boolean(busca);
+    if (contarBusca) colunas = isVideo ? 'id, titulo, ano' : 'id, titulo, artista, caixa, ano';
 
     // Catálogo padrão de discos: caixa por número e título (ver idsDiscosEmOrdem).
     if (category === 'discos' && !busca && !filtroCaixa && !ordenarColuna) {
@@ -322,7 +326,7 @@ export const catalogService = {
       itensFiltrados = filtrarExato(itensFiltrados);
 
       // Nada exato: tenta de novo aceitando erro de digitação ("beatls" acha "beatles").
-      if (itensFiltrados.length === 0 && effectiveWords.some((p) => toleranciaDigitacao(p) > 0)) {
+      if (!contarBusca && itensFiltrados.length === 0 && effectiveWords.some((p) => toleranciaDigitacao(p) > 0)) {
         itensFiltrados = await buscarComErroDeDigitacao(category, {
           effectiveWords,
           isVideo,
@@ -332,6 +336,12 @@ export const catalogService = {
           ordenarColuna,
           ordenarDirecao,
         });
+      }
+
+      if (contarBusca) {
+        const contagem = { data: [], count: itensFiltrados.length };
+        catalogServerCache.set(cacheKey, { result: contagem, expiresAt: Date.now() + CATALOG_CACHE_TTL_MS });
+        return contagem;
       }
 
       if (!ordenarColuna) {

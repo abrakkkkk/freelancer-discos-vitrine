@@ -34,6 +34,10 @@ export async function POST(request) {
 
   ids.forEach((id) => revalidatePath(`/disco/${categoria}/${id}`));
   revalidatePath('/lojas', 'layout');
+  // Home e prateleiras só se refazem sozinhas a cada hora: o aviso do estoque as atualiza já.
+  revalidatePath('/');
+  revalidatePath('/chegaram-agora');
+  revalidatePath('/importados');
 
   // Disco cadastrado ou editado no estoque já ganha a lista de faixas, sem atrasar o estoque.
   if (categoria === 'discos') after(() => preencherFaixasDosDiscos(ids));

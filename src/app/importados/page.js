@@ -1,7 +1,7 @@
 import { getImportados } from '@/services/vitrineService';
 import PaginaPrateleira, { metadadosDaPrateleira } from '@/editorial/PaginaPrateleira';
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 const PAGINA = {
   titulo: 'Importados',

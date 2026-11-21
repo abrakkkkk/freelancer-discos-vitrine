@@ -11,7 +11,7 @@ import { nomeLojaPorSlug, hrefDaCaixa } from '@/utils/lojas';
 import { compartilhamento } from '@/utils/seo';
 import { JsonLd, trilha } from '@/utils/dadosEstruturados';
 
-export const revalidate = 600;
+export const revalidate = 3600;
 
 function decodificarCaixa(caixaParam) {
   try {

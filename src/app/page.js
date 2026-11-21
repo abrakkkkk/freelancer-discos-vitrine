@@ -10,8 +10,8 @@ export const metadata = {
   ...compartilhamento({ titulo: 'Freelancer Discos — Discos de vinil, CDs e DVDs', caminho: '/' }),
 };
 
-// As prateleiras são atualizadas a cada 5 minutos.
-export const revalidate = 300;
+// O estoque avisa (/api/revalidar) quando algo muda; o tempo é só uma rede de segurança.
+export const revalidate = 3600;
 
 // Computador: abertura e prateleiras acima do catálogo.
 // Celular: abertura compacta em cima; prateleiras depois da busca. A faixa vem do layout.
