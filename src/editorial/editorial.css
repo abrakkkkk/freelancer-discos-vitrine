@@ -2410,14 +2410,14 @@ a.vlFaixaItem:focus-visible {
 
 /* Gêneros no celular: linha que rola para o lado, abaixo da busca. No computador ficam nos filtros laterais. */
 .edGeneros {
-  margin: -2px -16px 14px;
+  margin: -2px 0 14px;
 }
 
 .edGenerosLinha {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding: 4px 16px;
+  padding: 4px 0;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
 }
