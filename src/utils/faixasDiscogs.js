@@ -13,7 +13,7 @@ export function headersDiscogs(env = process.env) {
 }
 
 // Respeita o limite do Discogs (60 consultas por minuto) e tenta de novo quando ele recusa.
-async function consultar(url, headers, tentativas) {
+export async function consultar(url, headers, tentativas = 5) {
   for (let tentativa = 1; tentativa <= tentativas; tentativa++) {
     const res = await fetch(url, { headers, signal: AbortSignal.timeout(15000), cache: 'no-store' }).catch(() => null);
     if (res?.ok) {
