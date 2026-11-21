@@ -6,7 +6,7 @@ import ListaFaixas from './ListaFaixas';
 import Link from 'next/link';
 import AlbumCover from './AlbumCover';
 import Localizacao from './Localizacao';
-import SobreGenero, { LinhaFichaGenero } from './SobreGenero';
+import { LinhaFichaGenero } from './SobreGenero';
 import { generosDoItem } from '@/utils/generos';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
@@ -193,8 +193,6 @@ export default function ProductDetailSheet({
         {faixasDoItem && (
           <ListaFaixas faixas={faixasDoItem.faixas} fonte={faixasDoItem.fonte} className="sheetFaixas" />
         )}
-
-        <SobreGenero genero={generos[0]} onGenero={onGenero} />
 
         {/* Botão preso no fim da folha porque a ficha pode precisar rolar. */}
         <div className="sheetAcao">

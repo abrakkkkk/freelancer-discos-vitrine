@@ -11,7 +11,7 @@ import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
 import ListaEditorial from './ListaEditorial';
 import ListaFaixas from '@/components/ListaFaixas';
-import SobreGenero, { LinhaFichaGenero } from '@/components/SobreGenero';
+import { LinhaFichaGenero } from '@/components/SobreGenero';
 import { generosDoItem } from '@/utils/generos';
 
 const FORMATO = { discos: 'Vinil (LP)', cds: 'CD', dvds: 'DVD', vhs: 'VHS' };
@@ -136,11 +136,10 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
           {botaoSacola('edDiscoSacola')}
         </div>
 
-        {/* Faixas e gênero dividem a mesma coluna (terceira coluna a partir de 1280px). */}
-        {(faixas || generos.length > 0) && (
+        {/* Terceira coluna a partir de 1280px. A descrição do gênero (SobreGenero) entra aqui quando voltar. */}
+        {faixas && (
           <div className="edDiscoFaixas">
-            {faixas && <ListaFaixas faixas={faixas.faixas} fonte={faixas.fonte} />}
-            <SobreGenero genero={generos[0]} />
+            <ListaFaixas faixas={faixas.faixas} fonte={faixas.fonte} />
           </div>
         )}
 
