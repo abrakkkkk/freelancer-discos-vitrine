@@ -63,6 +63,10 @@ function agendarGravacaoEmDisco() {
 }
 
 const SEM_CAPA = { cover: null, thumb: null };
+// Capa não achada: a CDN guarda pelo mesmo prazo do cache negativo (6 h), em vez de cada
+// visita chamar a função e o Discogs de novo.
+const SEM_CAPA_CACHE = 'public, max-age=600, s-maxage=21600';
+const FALHA_CACHE = 'public, max-age=60, s-maxage=600';
 
 async function lerItem(categoria, id) {
   if (!supabaseServer || !/^[1-9]\d{0,14}$/.test(id)) return null;
@@ -128,7 +132,7 @@ export async function GET(request) {
       headers: {
         'Cache-Control': emCache.cover
           ? 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400'
-          : 'public, max-age=600',
+          : SEM_CAPA_CACHE,
         'X-Cache': 'HIT',
       },
     });
@@ -153,15 +157,17 @@ export async function GET(request) {
   const restante = getDiscogsRestante();
   const headerRestante = restante === null ? {} : { 'X-Discogs-Restante': String(restante) };
 
+  // Busca que falhou (limite do Discogs, fora do ar): a CDN segura 10 min para cada visita
+  // não tentar de novo. Status 200 porque a CDN não guarda 503; a vitrine trata igual.
   if (!entrada) {
-    return Response.json(SEM_CAPA, { status: 503, headers: { 'Cache-Control': 'no-store', ...headerRestante } });
+    return Response.json(SEM_CAPA, { headers: { 'Cache-Control': FALHA_CACHE, ...headerRestante } });
   }
 
   if (item && entrada.cover) await gravarCapa(categoria, id, entrada.cover);
 
   if (!entrada.cover) {
     return Response.json(SEM_CAPA, {
-      headers: { 'Cache-Control': 'public, max-age=600', 'X-Cache': 'MISS', ...headerRestante },
+      headers: { 'Cache-Control': SEM_CAPA_CACHE, 'X-Cache': 'MISS', ...headerRestante },
     });
   }
 

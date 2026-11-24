@@ -2,6 +2,7 @@ import { timingSafeEqual } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { after } from 'next/server';
 import { isValidCategory } from '@/services/catalogService';
+import { preencherCapasDosItens } from '@/services/capasService';
 import { preencherFaixasDosDiscos } from '@/services/faixasService';
 
 const MAX_IDS = 500;
@@ -39,8 +40,12 @@ export async function POST(request) {
   revalidatePath('/chegaram-agora');
   revalidatePath('/importados');
 
-  // Disco cadastrado ou editado no estoque já ganha a lista de faixas e os gêneros, sem atrasar o estoque.
-  if (categoria === 'discos') after(() => preencherFaixasDosDiscos(ids));
+  // Item cadastrado ou editado no estoque já ganha capa e, se for disco, faixas e gêneros,
+  // sem atrasar o estoque. A capa vem antes: assim a vitrine não precisa procurá-la a cada visita.
+  after(async () => {
+    await preencherCapasDosItens(categoria, ids);
+    if (categoria === 'discos') await preencherFaixasDosDiscos(ids);
+  });
 
   return Response.json({ revalidados: ids.length });
 }

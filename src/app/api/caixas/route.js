@@ -9,7 +9,11 @@ export async function GET(request) {
     const loja = searchParams.get('loja') || '';
 
     const caixas = await caixaService.getCaixasComContagem(loja);
-    return NextResponse.json({ caixas });
+    // Mesmo prazo do cache de contagem em memória (60 s): a CDN responde no lugar da função.
+    return NextResponse.json(
+      { caixas },
+      { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } }
+    );
   } catch (error) {
     console.error('Erro no endpoint /api/caixas:', error);
     return NextResponse.json({ error: 'Falha ao buscar caixas' }, { status: 500 });
