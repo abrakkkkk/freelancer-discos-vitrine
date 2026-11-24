@@ -42,7 +42,8 @@ export async function POST(request) {
 
   // Item cadastrado ou editado no estoque já ganha capa e, se for disco, faixas e gêneros,
   // sem atrasar o estoque. A capa vem antes: assim a vitrine não precisa procurá-la a cada visita.
-  after(async () => {
+  // `soPaginas`: aviso do script de gêneros, que só quer as páginas refeitas, sem buscar nada.
+  if (!corpo.soPaginas) after(async () => {
     await preencherCapasDosItens(categoria, ids);
     if (categoria === 'discos') await preencherFaixasDosDiscos(ids);
   });
