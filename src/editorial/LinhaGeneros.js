@@ -4,10 +4,13 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FiX, FiChevronRight } from 'react-icons/fi';
 
+// Só os maiores gêneros: "Todos os gêneros" fica perto, a pouca rolagem.
+const GENEROS_NA_LINHA = 4;
+
 /**
- * Gêneros do catálogo no celular: uma linha que rola para o lado, logo abaixo da busca
- * (escondida a partir de 1024px, onde ficam os filtros laterais).
- * O gênero escolhido vai para o começo da linha, com o "×" para tirar.
+ * Gêneros do catálogo no celular, logo abaixo da busca (escondida a partir de 1024px, onde ficam
+ * os filtros laterais), numa linha que rola para o lado.
+ * O gênero escolhido vai para o começo, com o "×" para tirar.
  */
 export default function LinhaGeneros({ generos = [], genero = '', onGenero }) {
   const linhaRef = useRef(null);
@@ -19,7 +22,7 @@ export default function LinhaGeneros({ generos = [], genero = '', onGenero }) {
 
   if (!generos.length) return null;
   const ativo = generos.find((g) => g.id === genero);
-  const lista = ativo ? [ativo, ...generos.filter((g) => g.id !== genero)] : generos;
+  const lista = (ativo ? [ativo, ...generos.filter((g) => g.id !== genero)] : generos).slice(0, GENEROS_NA_LINHA);
 
   return (
     <nav className="edGeneros" aria-label="Gêneros">
