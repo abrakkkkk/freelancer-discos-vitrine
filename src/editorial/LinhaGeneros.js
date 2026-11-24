@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { FiX, FiChevronRight } from 'react-icons/fi';
 
-// Só os maiores gêneros: "Todos os gêneros" fica perto, a pouca rolagem.
-const GENEROS_NA_LINHA = 4;
+// Só os 5 maiores gêneros: "Todos os gêneros" fica perto, a pouca rolagem.
+const GENEROS_NA_LINHA = 5;
 
 /**
  * Gêneros do catálogo no celular, logo abaixo da busca (escondida a partir de 1024px, onde ficam
