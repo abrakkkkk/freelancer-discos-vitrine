@@ -388,9 +388,9 @@ export const catalogService = {
 };
 
 // Quantos LPs ativos há em cada gênero (linha de gêneros, filtros e página /generos).
-// Uma contagem por gênero, guardada por 1 hora: não roda a cada acesso.
+// Uma contagem por gênero, guardada por 10 minutos: não roda a cada acesso.
 const contagemGeneros = { valor: null, expiraEm: 0 };
-const CONTAGEM_TTL_MS = 60 * 60 * 1000;
+const CONTAGEM_TTL_MS = 10 * 60 * 1000;
 
 export async function contarDiscosPorGenero(ids) {
   if (!supabaseServer) return {};

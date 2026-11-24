@@ -9,8 +9,8 @@ import { GENEROS } from '@/utils/generos';
 import { compartilhamento } from '@/utils/seo';
 import { JsonLd, trilha } from '@/utils/dadosEstruturados';
 
-// Contagens e capas mudam devagar: refeita no máximo uma vez por hora.
-export const revalidate = 3600;
+// Contagens e capas: refeita no máximo a cada 10 minutos.
+export const revalidate = 600;
 
 const CAMINHO = '/generos';
 
