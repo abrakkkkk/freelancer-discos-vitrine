@@ -78,7 +78,12 @@ if (!SO_TRADUZIR) {
       d.genero_discogs = generoParaGravar(lancamento);
       if (lancamento) achados++;
       if (GRAVAR) {
-        const { error } = await supabase.from('discos').update({ genero_discogs: d.genero_discogs }).eq('id', d.id).is('genero_discogs', null);
+        // O gênero já vai para o site agora; a etapa 2 refina no fim (artista, correções).
+        const generos = generosDoDisco(d.genero_discogs, (d.faixas?.faixas || []).map((f) => f.titulo));
+        const atualizacao = { genero_discogs: d.genero_discogs };
+        if (generos.length) atualizacao.generos = generos;
+        const { error } = await supabase.from('discos').update(atualizacao).eq('id', d.id).is('genero_discogs', null);
+        if (!error && generos.length) d.generos = generos;
         if (error) console.error(`Disco ${d.id}: erro ao gravar:`, error.message);
       }
     } catch (err) {
