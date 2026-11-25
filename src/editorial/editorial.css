@@ -1971,9 +1971,8 @@ a.vlFaixaItem:focus-visible {
   }
 
   .vlAbertura {
-    /* Texto e pilha mais próximos: o conjunto tem até 1144px e fica centralizado. */
-    grid-template-columns: minmax(0, 600px) 480px;
-    justify-content: center;
+    /* O texto começa na mesma margem do logo e das prateleiras; a pilha ocupa a direita. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
     align-items: center;
     gap: 12px 64px;
     padding: 16px 0 24px;
