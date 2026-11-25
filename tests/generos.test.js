@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { GENEROS, ehNacional, fracaoPortugues, generosDoItem, traduzirGeneros } from '@/utils/generos';
 
 describe('GENEROS', () => {
-  it('tem 16 gêneros, ids únicos e descrição em todos', () => {
-    expect(GENEROS).toHaveLength(16);
-    expect(new Set(GENEROS.map((g) => g.id)).size).toBe(16);
+  it('tem 17 gêneros, ids únicos e descrição em todos', () => {
+    expect(GENEROS).toHaveLength(17);
+    expect(new Set(GENEROS.map((g) => g.id)).size).toBe(17);
     expect(GENEROS.every((g) => g.nome && g.descricao)).toBe(true);
   });
 });
@@ -48,7 +48,7 @@ describe('traduzirGeneros', () => {
 
   it('folk só vira regional quando é nacional', () => {
     expect(t(['Folk, World, & Country'], ['Caipira'], true)).toEqual(['sertanejo-forro']);
-    expect(t(['Folk, World, & Country'], ['Country'], false)).toEqual([]);
+    expect(t(['Folk, World, & Country'], ['Country'], false)).toEqual(['trilhas-outros']);
   });
 });
 
@@ -106,8 +106,20 @@ describe('generosDoDisco', () => {
 
   it('tango e outros estilos de fora não viram sertanejo pelo "Folk" amplo', () => {
     const latinFolk = ['Latin', 'Folk, World, & Country'];
-    expect(traduzirGeneros({ genres: latinFolk, styles: ['Tango', 'Milonga'] }, { nacional: true })).toEqual([]);
+    expect(traduzirGeneros({ genres: latinFolk, styles: ['Tango', 'Milonga'] }, { nacional: true })).toEqual(['trilhas-outros']);
+    expect(traduzirGeneros({ genres: ['Latin'], styles: ['Tango'] }, { nacional: true })).toEqual(['trilhas-outros']);
     expect(traduzirGeneros({ genres: latinFolk, styles: ['Folk'] }, { nacional: true })).toEqual(['sertanejo-forro']);
     expect(traduzirGeneros({ genres: latinFolk, styles: [] }, { nacional: true })).toEqual(['sertanejo-forro']);
+  });
+
+  it('folk de fora vai para Folk; o resto da música de raiz de fora, para Trilhas e outros', () => {
+    const folk = ['Folk, World, & Country'];
+    expect(traduzirGeneros({ genres: folk, styles: ['Folk'] }, { nacional: false })).toEqual(['folk']);
+    expect(traduzirGeneros({ genres: folk, styles: ['Country'] }, { nacional: false })).toEqual(['trilhas-outros']);
+    expect(traduzirGeneros({ genres: folk, styles: [] }, { nacional: false })).toEqual(['trilhas-outros']);
+    expect(traduzirGeneros({ genres: folk, styles: ['Fado'] }, { nacional: false })).toEqual(['trilhas-outros']);
+    // Folk brasileiro continua regional, e o gênero amplo não soma um segundo gênero.
+    expect(traduzirGeneros({ genres: ['Latin', ...folk], styles: ['Folk'] }, { nacional: true })).toEqual(['sertanejo-forro']);
+    expect(traduzirGeneros({ genres: ['Rock', ...folk], styles: [] }, { nacional: false })).toEqual(['rock']);
   });
 });

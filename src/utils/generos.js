@@ -81,6 +81,11 @@ export const GENEROS = [
       'Nascido na Jamaica no fim dos anos 1960, a partir do ska e do rocksteady, o reggae ganhou o mundo com Bob Marley, Peter Tosh e Jimmy Cliff. Aqui também estão o dub e o reggae feito no Brasil.',
   },
   {
+    id: 'folk',
+    nome: 'Folk',
+    descricao: 'O folk de fora do Brasil, do violão e da voz de Bob Dylan, Joan Baez e Jim Croce à música celta e ao bluegrass.',
+  },
+  {
     id: 'gospel',
     nome: 'Gospel',
     descricao: 'Música religiosa cristã, dos hinos e corais ao gospel moderno, com artistas brasileiros e estrangeiros.',
@@ -161,12 +166,26 @@ const POR_ESTILO = {
 // Estilos românticos só contam como "Romântica e Brega" em disco nacional ou latino.
 const ROMANTICOS = new Set(['Romantic', 'Ballad', 'Easy Listening', 'Chanson']);
 
-// Estilos que não impedem "Folk, World, & Country" nacional de virar sertanejo. Outro estilo
-// (tango, salsa, fado...) indica música de fora: aí o gênero amplo não decide.
+const FOLK_DISCOGS = 'Folk, World, & Country';
+
+// Folk de fora: em disco nacional, "Folk" no Discogs é música regional (fica em sertanejo).
+const ESTILOS_FOLK = new Set(['Folk', 'Celtic', 'Bluegrass']);
+
+// Estilos que não impedem "Folk, World, & Country" nacional de virar sertanejo.
 const ESTILOS_DO_INTERIOR = new Set(['Folk', 'Country']);
 
+// Música de raiz de fora do Brasil, sem gênero próprio na loja: vai para "Trilhas, Infantil e outros".
+const ESTILOS_DE_FORA = new Set([
+  'Country', 'Honky Tonk', 'Cajun', 'Zydeco', 'Tango', 'Milonga', 'Fado', 'Flamenco', 'Copla', 'Salsa',
+  'Merengue', 'Mambo', 'Cha-Cha', 'Rumba', 'Guaracha', 'Bachata', 'Pachanga', 'Afro-Cuban', 'Son Montuno',
+  'Danzon', 'Guajira', 'Bomba', 'Jibaro', 'Cuatro', 'Ranchera', 'Mariachi', 'Corrido', 'Nueva Cancion',
+  'Nueva Trova', 'Trova', 'Guarania', 'Chamamé', 'Chacarera', 'Zamba', 'Andean Music', 'Música Criolla',
+  'Candombe', 'Polka', 'Volksmusik', 'Musette', 'Canzone Napoletana', 'Laïkó', 'Klezmer', 'Cantorial',
+  'African', 'Indian Classical', 'Zouk', 'Kizomba', 'Morna', 'Funaná', 'Compas', 'Salegy', 'Hawaiian', 'Pacific',
+]);
+
 // Gênero do Discogs → gênero da loja, quando nenhum estilo resolveu.
-function porGenero(genero, nacional, styles = []) {
+function porGenero(genero, nacional) {
   switch (genero) {
     case 'Rock':
       return nacional ? 'rock-nacional' : 'rock';
@@ -189,8 +208,6 @@ function porGenero(genero, nacional, styles = []) {
     case 'Non-Music':
     case 'Brass & Military':
       return 'trilhas-outros';
-    case 'Folk, World, & Country':
-      return nacional && styles.every((e) => ESTILOS_DO_INTERIOR.has(e)) ? 'sertanejo-forro' : null;
     default:
       return null;
   }
@@ -212,13 +229,21 @@ export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = 
   for (const estilo of styles) {
     if (ROMANTICOS.has(estilo)) {
       if (nacional || latino) somar('romantica-brega');
+    } else if (ESTILOS_FOLK.has(estilo)) {
+      if (!nacional) somar('folk');
     } else {
       somar(POR_ESTILO[estilo]);
     }
   }
   // O gênero amplo do Discogs só entra quando nenhum estilo resolveu: senão um disco de MPB
   // marcado também como "Folk, World, & Country" viraria sertanejo.
-  if (!saida.length) for (const genero of genres) somar(porGenero(genero, nacional, styles));
+  if (!saida.length) for (const genero of genres) somar(porGenero(genero, nacional));
+  // "Folk, World, & Country" é o mais amplo: só decide quando nada mais decidiu.
+  if (!saida.length && genres.includes(FOLK_DISCOGS)) {
+    if (!nacional) somar('trilhas-outros');
+    else if (styles.every((e) => ESTILOS_DO_INTERIOR.has(e))) somar('sertanejo-forro');
+  }
+  if (!saida.length && styles.some((e) => ESTILOS_DE_FORA.has(e))) somar('trilhas-outros');
   return saida;
 }
 
