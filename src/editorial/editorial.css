@@ -2602,3 +2602,79 @@ a.vlFaixaItem:focus-visible {
     margin-left: -36px;
   }
 }
+
+/* Rodapé de uma linha, só no computador (no celular a barra de baixo já leva ao Contato). */
+.rodapeLoja {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .rodapeLoja {
+    display: block;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 32px;
+  }
+
+  .rodapeLojaLinha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .rodapeLojaNome {
+    margin: 0;
+    font-family: var(--font-editorial), var(--font-title);
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-strong);
+  }
+
+  .rodapeLojaInfo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+    margin: 0;
+  }
+
+  .rodapeLojaAcoes {
+    display: flex;
+    gap: 20px;
+    margin-left: auto;
+  }
+
+  .rodapeLojaLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .rodapeLojaLink:hover {
+    color: var(--text-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rodapeLojaLink:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-etiqueta);
+  }
+}
+
+@media (min-width: 1280px) {
+  .rodapeLoja {
+    max-width: 1320px;
+  }
+}

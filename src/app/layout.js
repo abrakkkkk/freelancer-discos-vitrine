@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { compartilhamento, DESCRICAO_PADRAO } from '@/utils/seo';
 import FaixaServico from '@/editorial/FaixaServico';
 import PularParaCatalogo from '@/editorial/PularParaCatalogo';
+import RodapeLoja from '@/editorial/RodapeLoja';
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -52,6 +53,7 @@ export default function RootLayout({ children }) {
           <PularParaCatalogo />
           <FaixaServico />
           <div className="edPagina">{children}</div>
+          <RodapeLoja />
         </CartProvider>
         <Analytics />
       </body>
