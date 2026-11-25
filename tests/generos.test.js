@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { GENEROS, ehNacional, fracaoPortugues, generosDoItem, traduzirGeneros } from '@/utils/generos';
 
 describe('GENEROS', () => {
-  it('tem 15 gêneros, ids únicos e descrição em todos', () => {
-    expect(GENEROS).toHaveLength(15);
-    expect(new Set(GENEROS.map((g) => g.id)).size).toBe(15);
+  it('tem 16 gêneros, ids únicos e descrição em todos', () => {
+    expect(GENEROS).toHaveLength(16);
+    expect(new Set(GENEROS.map((g) => g.id)).size).toBe(16);
     expect(GENEROS.every((g) => g.nome && g.descricao)).toBe(true);
   });
 });
@@ -89,5 +89,25 @@ describe('generosDoDisco', () => {
     const { generosDoDisco } = await import('@/utils/generos');
     expect(generosDoDisco({ genres: ['Rock'], styles: ['Pop Rock'] }, [], true)).toEqual(['rock-nacional']);
     expect(generosDoDisco({ genres: ['Rock'], styles: ['Pop Rock'] }, [])).toEqual(['rock']);
+  });
+
+  it('carimbó, lambada e cumbia vão para Carimbó e Lambada, não para sertanejo', () => {
+    const latinFolk = ['Latin', 'Folk, World, & Country'];
+    expect(traduzirGeneros({ genres: latinFolk, styles: ['Carimbó'] }, { nacional: true })).toEqual(['carimbo-lambada']);
+    expect(traduzirGeneros({ genres: ['Latin'], styles: ['Cumbia', 'Lambada'] }, { nacional: true })).toEqual(['carimbo-lambada']);
+  });
+
+  it('seresta, batucada, marcha carnavalesca e favela funk têm gênero', () => {
+    expect(traduzirGeneros({ genres: ['Latin'], styles: ['Seresta'] }, { nacional: true })).toEqual(['romantica-brega']);
+    expect(traduzirGeneros({ genres: ['Latin'], styles: ['Batucada'] }, { nacional: true })).toEqual(['samba-pagode']);
+    expect(traduzirGeneros({ genres: ['Latin'], styles: ['Marcha Carnavalesca'] }, { nacional: true })).toEqual(['samba-pagode']);
+    expect(traduzirGeneros({ genres: ['Electronic'], styles: ['Favela Funk'] }, { nacional: true })).toEqual(['soul-funk-rap']);
+  });
+
+  it('tango e outros estilos de fora não viram sertanejo pelo "Folk" amplo', () => {
+    const latinFolk = ['Latin', 'Folk, World, & Country'];
+    expect(traduzirGeneros({ genres: latinFolk, styles: ['Tango', 'Milonga'] }, { nacional: true })).toEqual([]);
+    expect(traduzirGeneros({ genres: latinFolk, styles: ['Folk'] }, { nacional: true })).toEqual(['sertanejo-forro']);
+    expect(traduzirGeneros({ genres: latinFolk, styles: [] }, { nacional: true })).toEqual(['sertanejo-forro']);
   });
 });

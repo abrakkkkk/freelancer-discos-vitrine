@@ -51,6 +51,12 @@ export const GENEROS = [
       'A música do interior e do Nordeste: a moda de viola caipira, as duplas sertanejas, o baião e o forró de Luiz Gonzaga e Jackson do Pandeiro, o frevo de Pernambuco e os ritmos de cada região do país.',
   },
   {
+    id: 'carimbo-lambada',
+    nome: 'Carimbó e Lambada',
+    descricao:
+      'Os ritmos do Norte: o carimbó, a lambada, a guitarrada e a cumbia, de Pinduca, Vieira e Seu Conjunto, Teixeira de Manaus e Dona Onete.',
+  },
+  {
     id: 'soul-funk-rap',
     nome: 'Soul, Funk e Rap',
     descricao:
@@ -126,7 +132,15 @@ const POR_ESTILO = {
   Xote: 'sertanejo-forro',
   Maracatu: 'sertanejo-forro',
   Axé: 'sertanejo-forro',
-  Lambada: 'sertanejo-forro',
+  Carimbó: 'carimbo-lambada',
+  Lambada: 'carimbo-lambada',
+  Cumbia: 'carimbo-lambada',
+  Guitarrada: 'carimbo-lambada',
+  Siriá: 'carimbo-lambada',
+  Seresta: 'romantica-brega',
+  Batucada: 'samba-pagode',
+  'Marcha Carnavalesca': 'samba-pagode',
+  'Favela Funk': 'soul-funk-rap',
   Gospel: 'gospel',
   Religious: 'gospel',
   Bolero: 'romantica-brega',
@@ -147,8 +161,12 @@ const POR_ESTILO = {
 // Estilos românticos só contam como "Romântica e Brega" em disco nacional ou latino.
 const ROMANTICOS = new Set(['Romantic', 'Ballad', 'Easy Listening', 'Chanson']);
 
+// Estilos que não impedem "Folk, World, & Country" nacional de virar sertanejo. Outro estilo
+// (tango, salsa, fado...) indica música de fora: aí o gênero amplo não decide.
+const ESTILOS_DO_INTERIOR = new Set(['Folk', 'Country']);
+
 // Gênero do Discogs → gênero da loja, quando nenhum estilo resolveu.
-function porGenero(genero, nacional) {
+function porGenero(genero, nacional, styles = []) {
   switch (genero) {
     case 'Rock':
       return nacional ? 'rock-nacional' : 'rock';
@@ -172,7 +190,7 @@ function porGenero(genero, nacional) {
     case 'Brass & Military':
       return 'trilhas-outros';
     case 'Folk, World, & Country':
-      return nacional ? 'sertanejo-forro' : null;
+      return nacional && styles.every((e) => ESTILOS_DO_INTERIOR.has(e)) ? 'sertanejo-forro' : null;
     default:
       return null;
   }
@@ -200,7 +218,7 @@ export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = 
   }
   // O gênero amplo do Discogs só entra quando nenhum estilo resolveu: senão um disco de MPB
   // marcado também como "Folk, World, & Country" viraria sertanejo.
-  if (!saida.length) for (const genero of genres) somar(porGenero(genero, nacional));
+  if (!saida.length) for (const genero of genres) somar(porGenero(genero, nacional, styles));
   return saida;
 }
 
