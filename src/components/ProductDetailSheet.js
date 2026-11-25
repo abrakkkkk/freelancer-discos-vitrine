@@ -115,11 +115,9 @@ export default function ProductDetailSheet({
             {item.artista && (
               <p
                 style={{
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  fontSize: '14px',
+                  fontWeight: 500,
                   color: 'var(--text-muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
                 }}
               >
                 {item.artista}

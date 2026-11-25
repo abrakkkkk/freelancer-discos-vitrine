@@ -217,12 +217,10 @@
 }
 
 .edArtista {
-  font-family: var(--font-editorial), var(--font-title);
+  font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.15;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1163,11 +1161,9 @@ body:has(.productDetailDialog) .sacolaAviso {
 }
 
 .edDiscoArtista {
-  font-family: var(--font-editorial), var(--font-title);
+  font-family: var(--font-body);
   font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+  font-weight: 500;
   color: var(--text-muted);
 }
 
@@ -1730,9 +1726,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 .cartItemArtista {
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-weight: 500;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
