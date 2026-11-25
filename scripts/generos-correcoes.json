@@ -1,1 +1,3260 @@
-{ "ids": {}, "artistas": {} }
+{
+  "ids": {
+    "7339": [
+      "rock"
+    ],
+    "7418": [
+      "rock"
+    ],
+    "7486": [
+      "rock"
+    ],
+    "7518": [
+      "pop"
+    ],
+    "8073": [
+      "carimbo-lambada"
+    ],
+    "8208": [
+      "romantica-brega"
+    ],
+    "8278": [
+      "classica"
+    ],
+    "8281": [
+      "bossa-nova"
+    ],
+    "8303": [
+      "bossa-nova"
+    ],
+    "8314": [
+      "pop"
+    ],
+    "8336": [
+      "samba-pagode"
+    ],
+    "8425": [
+      "samba-pagode"
+    ],
+    "8427": [
+      "sertanejo-forro"
+    ],
+    "8457": [
+      "mpb"
+    ],
+    "9288": [
+      "mpb"
+    ],
+    "9308": [
+      "trilhas-outros"
+    ],
+    "9317": [
+      "sertanejo-forro"
+    ],
+    "9343": [
+      "samba-pagode"
+    ],
+    "9347": [
+      "samba-pagode"
+    ],
+    "9360": [
+      "rock-nacional"
+    ],
+    "9365": [
+      "carimbo-lambada"
+    ],
+    "9383": [
+      "carimbo-lambada"
+    ],
+    "9393": [
+      "mpb"
+    ],
+    "9404": [
+      "rock-nacional"
+    ],
+    "9419": [
+      "mpb"
+    ],
+    "9431": [
+      "rock-nacional"
+    ],
+    "9433": [
+      "sertanejo-forro"
+    ],
+    "9438": [
+      "mpb"
+    ],
+    "9439": [
+      "sertanejo-forro"
+    ],
+    "9441": [
+      "sertanejo-forro"
+    ],
+    "9445": [
+      "sertanejo-forro"
+    ],
+    "9449": [
+      "samba-pagode"
+    ],
+    "9489": [
+      "mpb"
+    ],
+    "9496": [
+      "mpb"
+    ],
+    "9509": [
+      "sertanejo-forro"
+    ],
+    "9528": [
+      "mpb"
+    ],
+    "9560": [
+      "mpb"
+    ],
+    "9563": [
+      "samba-pagode"
+    ],
+    "9565": [
+      "sertanejo-forro"
+    ],
+    "9618": [
+      "mpb"
+    ],
+    "9620": [
+      "mpb"
+    ],
+    "9653": [
+      "mpb"
+    ],
+    "9688": [
+      "jazz-blues"
+    ],
+    "9691": [
+      "mpb"
+    ],
+    "9697": [
+      "samba-pagode"
+    ],
+    "9700": [
+      "jazz-blues"
+    ],
+    "9714": [
+      "mpb"
+    ],
+    "9722": [
+      "rock-nacional"
+    ],
+    "9741": [
+      "mpb"
+    ],
+    "9750": [
+      "jazz-blues"
+    ],
+    "9761": [
+      "mpb"
+    ],
+    "9795": [
+      "mpb"
+    ],
+    "9925": [
+      "bossa-nova"
+    ],
+    "10052": [
+      "mpb"
+    ],
+    "10605": [
+      "carimbo-lambada"
+    ],
+    "10613": [
+      "carimbo-lambada"
+    ],
+    "10614": [
+      "sertanejo-forro"
+    ],
+    "10626": [
+      "sertanejo-forro"
+    ],
+    "10649": [
+      "sertanejo-forro"
+    ],
+    "10659": [
+      "sertanejo-forro"
+    ],
+    "10662": [
+      "sertanejo-forro"
+    ],
+    "10667": [
+      "sertanejo-forro"
+    ],
+    "10669": [
+      "carimbo-lambada"
+    ],
+    "10673": [
+      "sertanejo-forro"
+    ],
+    "10693": [
+      "sertanejo-forro"
+    ],
+    "10734": [
+      "sertanejo-forro"
+    ],
+    "10735": [
+      "sertanejo-forro"
+    ],
+    "10748": [
+      "sertanejo-forro"
+    ],
+    "10755": [
+      "samba-pagode"
+    ],
+    "10771": [
+      "sertanejo-forro"
+    ],
+    "10782": [
+      "sertanejo-forro"
+    ],
+    "10810": [
+      "sertanejo-forro"
+    ],
+    "10811": [
+      "sertanejo-forro"
+    ],
+    "10824": [
+      "sertanejo-forro"
+    ],
+    "10833": [
+      "carimbo-lambada"
+    ],
+    "10848": [
+      "carimbo-lambada"
+    ],
+    "10856": [
+      "rock-nacional"
+    ],
+    "10861": [
+      "carimbo-lambada"
+    ],
+    "10881": [
+      "samba-pagode"
+    ],
+    "10884": [
+      "sertanejo-forro"
+    ],
+    "10903": [
+      "samba-pagode"
+    ],
+    "10929": [
+      "sertanejo-forro"
+    ],
+    "10939": [
+      "samba-pagode"
+    ],
+    "10946": [
+      "carimbo-lambada"
+    ],
+    "10949": [
+      "samba-pagode"
+    ],
+    "10950": [
+      "sertanejo-forro"
+    ],
+    "10951": [
+      "samba-pagode"
+    ],
+    "10957": [
+      "bossa-nova"
+    ],
+    "10963": [
+      "samba-pagode"
+    ],
+    "10976": [
+      "classica"
+    ],
+    "10983": [
+      "bossa-nova"
+    ],
+    "10985": [
+      "samba-pagode"
+    ],
+    "10987": [
+      "mpb"
+    ],
+    "10996": [
+      "mpb"
+    ],
+    "11002": [
+      "trilhas-outros"
+    ],
+    "11003": [
+      "mpb"
+    ],
+    "11004": [
+      "romantica-brega"
+    ],
+    "11010": [
+      "trilhas-outros"
+    ],
+    "11030": [
+      "classica"
+    ],
+    "11031": [
+      "classica"
+    ],
+    "11034": [
+      "samba-pagode"
+    ],
+    "11047": [
+      "trilhas-outros"
+    ],
+    "11055": [
+      "bossa-nova"
+    ],
+    "11063": [
+      "carimbo-lambada"
+    ],
+    "11064": [
+      "gospel"
+    ],
+    "11067": [
+      "samba-pagode"
+    ],
+    "11078": [
+      "trilhas-outros"
+    ],
+    "11088": [
+      "mpb"
+    ],
+    "11093": [
+      "mpb"
+    ],
+    "11097": [
+      "sertanejo-forro"
+    ],
+    "11098": [
+      "sertanejo-forro"
+    ],
+    "11104": [
+      "pop"
+    ],
+    "11107": [
+      "sertanejo-forro"
+    ],
+    "11119": [
+      "sertanejo-forro"
+    ],
+    "11126": [
+      "sertanejo-forro"
+    ],
+    "11127": [
+      "sertanejo-forro"
+    ],
+    "11131": [
+      "sertanejo-forro"
+    ],
+    "11146": [
+      "sertanejo-forro"
+    ],
+    "11147": [
+      "sertanejo-forro"
+    ],
+    "11151": [
+      "samba-pagode"
+    ],
+    "11153": [
+      "romantica-brega"
+    ],
+    "11163": [
+      "trilhas-outros"
+    ],
+    "11179": [
+      "sertanejo-forro"
+    ],
+    "11207": [
+      "samba-pagode"
+    ],
+    "11209": [
+      "samba-pagode"
+    ],
+    "11212": [
+      "romantica-brega"
+    ],
+    "11215": [
+      "sertanejo-forro"
+    ],
+    "11217": [
+      "samba-pagode"
+    ],
+    "11222": [
+      "mpb"
+    ],
+    "11235": [
+      "sertanejo-forro"
+    ],
+    "11237": [
+      "sertanejo-forro"
+    ],
+    "11242": [
+      "samba-pagode"
+    ],
+    "11245": [
+      "samba-pagode"
+    ],
+    "11246": [
+      "samba-pagode"
+    ],
+    "11250": [
+      "trilhas-outros"
+    ],
+    "11254": [
+      "samba-pagode"
+    ],
+    "11272": [
+      "samba-pagode"
+    ],
+    "11280": [
+      "mpb"
+    ],
+    "11281": [
+      "samba-pagode"
+    ],
+    "11291": [
+      "sertanejo-forro"
+    ],
+    "11293": [
+      "samba-pagode"
+    ],
+    "11301": [
+      "samba-pagode"
+    ],
+    "11302": [
+      "sertanejo-forro"
+    ],
+    "11309": [
+      "samba-pagode"
+    ],
+    "11322": [
+      "samba-pagode"
+    ],
+    "11340": [
+      "samba-pagode"
+    ],
+    "11349": [
+      "samba-pagode"
+    ],
+    "11354": [
+      "sertanejo-forro"
+    ],
+    "11405": [
+      "samba-pagode"
+    ],
+    "11411": [
+      "sertanejo-forro"
+    ],
+    "11426": [
+      "sertanejo-forro"
+    ],
+    "11436": [
+      "mpb"
+    ],
+    "11453": [
+      "samba-pagode"
+    ],
+    "11454": [
+      "mpb"
+    ],
+    "11455": [
+      "samba-pagode"
+    ],
+    "11459": [
+      "bossa-nova"
+    ],
+    "11462": [
+      "samba-pagode"
+    ],
+    "11466": [
+      "mpb"
+    ],
+    "11468": [
+      "rock-nacional"
+    ],
+    "11477": [
+      "romantica-brega"
+    ],
+    "11485": [
+      "mpb"
+    ],
+    "11505": [
+      "trilhas-outros"
+    ],
+    "11508": [
+      "mpb"
+    ],
+    "11516": [
+      "mpb"
+    ],
+    "11519": [
+      "sertanejo-forro"
+    ],
+    "11527": [
+      "samba-pagode"
+    ],
+    "11535": [
+      "mpb"
+    ],
+    "11536": [
+      "trilhas-outros"
+    ],
+    "11537": [
+      "classica"
+    ],
+    "11541": [
+      "mpb"
+    ],
+    "11543": [
+      "mpb"
+    ],
+    "11555": [
+      "samba-pagode"
+    ],
+    "11558": [
+      "samba-pagode"
+    ],
+    "11578": [
+      "mpb"
+    ],
+    "11590": [
+      "mpb"
+    ],
+    "11592": [
+      "mpb"
+    ],
+    "11594": [
+      "mpb"
+    ],
+    "11596": [
+      "samba-pagode"
+    ],
+    "11599": [
+      "mpb"
+    ],
+    "11606": [
+      "samba-pagode"
+    ],
+    "11610": [
+      "samba-pagode"
+    ],
+    "11628": [
+      "jazz-blues"
+    ],
+    "11630": [
+      "bossa-nova"
+    ],
+    "11655": [
+      "samba-pagode"
+    ],
+    "11656": [
+      "samba-pagode"
+    ],
+    "11680": [
+      "jazz-blues"
+    ],
+    "11681": [
+      "jazz-blues"
+    ],
+    "11693": [
+      "jazz-blues"
+    ],
+    "11696": [
+      "jazz-blues"
+    ],
+    "11703": [
+      "jazz-blues"
+    ],
+    "11726": [
+      "reggae"
+    ],
+    "11737": [
+      "jazz-blues"
+    ],
+    "11739": [
+      "jazz-blues"
+    ],
+    "11749": [
+      "jazz-blues"
+    ],
+    "11772": [
+      "jazz-blues"
+    ],
+    "11783": [
+      "soul-funk-rap"
+    ],
+    "11784": [
+      "soul-funk-rap"
+    ],
+    "11825": [
+      "jazz-blues"
+    ],
+    "11826": [
+      "jazz-blues"
+    ],
+    "11833": [
+      "jazz-blues"
+    ],
+    "11834": [
+      "jazz-blues"
+    ],
+    "11836": [
+      "jazz-blues"
+    ],
+    "11863": [
+      "jazz-blues"
+    ],
+    "11865": [
+      "jazz-blues"
+    ],
+    "11874": [
+      "romantica-brega"
+    ],
+    "11896": [
+      "rock"
+    ],
+    "11902": [
+      "trilhas-outros"
+    ],
+    "11907": [
+      "trilhas-outros"
+    ],
+    "11912": [
+      "jazz-blues"
+    ],
+    "11914": [
+      "rock"
+    ],
+    "11931": [
+      "jazz-blues"
+    ],
+    "11943": [
+      "rock"
+    ],
+    "11952": [
+      "soul-funk-rap"
+    ],
+    "11957": [
+      "jazz-blues"
+    ],
+    "11961": [
+      "bossa-nova"
+    ],
+    "11969": [
+      "soul-funk-rap"
+    ],
+    "11972": [
+      "jazz-blues"
+    ],
+    "11992": [
+      "soul-funk-rap"
+    ],
+    "12014": [
+      "soul-funk-rap"
+    ],
+    "12046": [
+      "soul-funk-rap"
+    ],
+    "12049": [
+      "jazz-blues"
+    ],
+    "12055": [
+      "jazz-blues"
+    ],
+    "12076": [
+      "rock"
+    ],
+    "12077": [
+      "soul-funk-rap"
+    ],
+    "12103": [
+      "jazz-blues"
+    ],
+    "12125": [
+      "jazz-blues"
+    ],
+    "12160": [
+      "jazz-blues"
+    ],
+    "12384": [
+      "sertanejo-forro"
+    ],
+    "12398": [
+      "sertanejo-forro"
+    ],
+    "12446": [
+      "romantica-brega"
+    ],
+    "12448": [
+      "sertanejo-forro"
+    ],
+    "12453": [
+      "sertanejo-forro"
+    ],
+    "12454": [
+      "samba-pagode"
+    ],
+    "12457": [
+      "sertanejo-forro"
+    ],
+    "12458": [
+      "rock-nacional"
+    ],
+    "12462": [
+      "sertanejo-forro"
+    ],
+    "12478": [
+      "sertanejo-forro"
+    ],
+    "12508": [
+      "pop"
+    ],
+    "12515": [
+      "sertanejo-forro"
+    ],
+    "12521": [
+      "carimbo-lambada"
+    ],
+    "12522": [
+      "sertanejo-forro"
+    ],
+    "12524": [
+      "sertanejo-forro"
+    ],
+    "12526": [
+      "samba-pagode"
+    ],
+    "12533": [
+      "sertanejo-forro"
+    ],
+    "12569": [
+      "samba-pagode"
+    ],
+    "12579": [
+      "sertanejo-forro"
+    ],
+    "12586": [
+      "samba-pagode"
+    ],
+    "12602": [
+      "samba-pagode"
+    ],
+    "12612": [
+      "romantica-brega"
+    ],
+    "12614": [
+      "samba-pagode"
+    ],
+    "12627": [
+      "sertanejo-forro"
+    ],
+    "12628": [
+      "sertanejo-forro"
+    ],
+    "12634": [
+      "sertanejo-forro"
+    ],
+    "12637": [
+      "sertanejo-forro"
+    ],
+    "12641": [
+      "sertanejo-forro"
+    ],
+    "12686": [
+      "carimbo-lambada"
+    ],
+    "12687": [
+      "carimbo-lambada"
+    ],
+    "12690": [
+      "trilhas-outros"
+    ],
+    "12695": [
+      "romantica-brega"
+    ],
+    "12718": [
+      "mpb"
+    ],
+    "12729": [
+      "samba-pagode"
+    ],
+    "12737": [
+      "romantica-brega"
+    ],
+    "12740": [
+      "romantica-brega"
+    ],
+    "12757": [
+      "sertanejo-forro",
+      "samba-pagode"
+    ],
+    "12765": [
+      "sertanejo-forro"
+    ],
+    "12775": [
+      "carimbo-lambada"
+    ],
+    "12777": [
+      "samba-pagode"
+    ],
+    "12798": [
+      "sertanejo-forro"
+    ],
+    "12836": [
+      "romantica-brega"
+    ],
+    "12839": [
+      "classica"
+    ],
+    "12843": [
+      "pop"
+    ],
+    "12848": [
+      "sertanejo-forro"
+    ],
+    "12849": [
+      "trilhas-outros"
+    ],
+    "12860": [
+      "mpb"
+    ],
+    "12861": [
+      "mpb"
+    ],
+    "12888": [
+      "samba-pagode"
+    ],
+    "12914": [
+      "carimbo-lambada"
+    ],
+    "12917": [
+      "samba-pagode"
+    ],
+    "12942": [
+      "sertanejo-forro"
+    ],
+    "12976": [
+      "romantica-brega"
+    ],
+    "12984": [
+      "sertanejo-forro"
+    ],
+    "13007": [
+      "samba-pagode"
+    ],
+    "13051": [
+      "sertanejo-forro"
+    ],
+    "13072": [
+      "romantica-brega"
+    ],
+    "13078": [
+      "sertanejo-forro"
+    ],
+    "13088": [
+      "sertanejo-forro"
+    ],
+    "13094": [
+      "samba-pagode"
+    ],
+    "13101": [
+      "romantica-brega"
+    ],
+    "13108": [
+      "mpb"
+    ],
+    "13145": [
+      "sertanejo-forro"
+    ],
+    "13158": [
+      "sertanejo-forro"
+    ],
+    "13163": [
+      "sertanejo-forro"
+    ],
+    "13186": [
+      "carimbo-lambada"
+    ],
+    "13189": [
+      "carimbo-lambada"
+    ],
+    "13192": [
+      "samba-pagode"
+    ],
+    "13235": [
+      "mpb"
+    ],
+    "13298": [
+      "romantica-brega"
+    ],
+    "13306": [
+      "sertanejo-forro"
+    ],
+    "13311": [
+      "carimbo-lambada"
+    ],
+    "13319": [
+      "rock"
+    ],
+    "13326": [
+      "pop"
+    ],
+    "13350": [
+      "rock-nacional"
+    ],
+    "13351": [
+      "pop"
+    ],
+    "13372": [
+      "trilhas-outros"
+    ],
+    "13383": [
+      "pop"
+    ],
+    "13384": [
+      "soul-funk-rap"
+    ],
+    "13393": [
+      "soul-funk-rap"
+    ],
+    "13411": [
+      "pop"
+    ],
+    "13415": [
+      "rock"
+    ],
+    "13419": [
+      "soul-funk-rap"
+    ],
+    "13421": [
+      "rock"
+    ],
+    "13426": [
+      "rock"
+    ],
+    "13427": [
+      "rock"
+    ],
+    "13432": [
+      "rock"
+    ],
+    "13452": [
+      "trilhas-outros"
+    ],
+    "13465": [
+      "pop"
+    ],
+    "13472": [
+      "pop"
+    ],
+    "13473": [
+      "pop"
+    ],
+    "13486": [
+      "folk"
+    ],
+    "13489": [
+      "soul-funk-rap"
+    ],
+    "13495": [
+      "soul-funk-rap"
+    ],
+    "13512": [
+      "pop"
+    ],
+    "13513": [
+      "jazz-blues"
+    ],
+    "13516": [
+      "classica"
+    ],
+    "13532": [
+      "pop"
+    ],
+    "13535": [
+      "trilhas-outros"
+    ],
+    "13539": [
+      "pop"
+    ],
+    "13552": [
+      "trilhas-outros"
+    ],
+    "13569": [
+      "trilhas-outros"
+    ],
+    "13575": [
+      "eletronica"
+    ],
+    "13613": [
+      "soul-funk-rap"
+    ],
+    "13631": [
+      "pop"
+    ],
+    "13637": [
+      "romantica-brega"
+    ],
+    "13652": [
+      "rock"
+    ],
+    "13668": [
+      "soul-funk-rap"
+    ],
+    "13692": [
+      "pop"
+    ],
+    "13697": [
+      "soul-funk-rap"
+    ],
+    "13702": [
+      "trilhas-outros"
+    ],
+    "13707": [
+      "trilhas-outros"
+    ],
+    "13710": [
+      "trilhas-outros"
+    ],
+    "13736": [
+      "pop"
+    ],
+    "13751": [
+      "rock"
+    ],
+    "13770": [
+      "pop"
+    ],
+    "13772": [
+      "pop"
+    ],
+    "13787": [
+      "pop"
+    ],
+    "13788": [
+      "classica"
+    ],
+    "13803": [
+      "pop"
+    ],
+    "13815": [
+      "rock"
+    ],
+    "13817": [
+      "soul-funk-rap"
+    ],
+    "13820": [
+      "jazz-blues"
+    ],
+    "13829": [
+      "pop"
+    ],
+    "13832": [
+      "rock"
+    ],
+    "13854": [
+      "pop"
+    ],
+    "13859": [
+      "trilhas-outros"
+    ],
+    "13860": [
+      "pop"
+    ],
+    "13868": [
+      "soul-funk-rap"
+    ],
+    "13870": [
+      "folk"
+    ],
+    "13871": [
+      "pop"
+    ],
+    "13876": [
+      "jazz-blues"
+    ],
+    "13878": [
+      "pop"
+    ],
+    "13882": [
+      "jazz-blues"
+    ],
+    "13885": [
+      "pop"
+    ],
+    "13889": [
+      "classica"
+    ],
+    "13914": [
+      "folk"
+    ],
+    "13915": [
+      "trilhas-outros"
+    ],
+    "13930": [
+      "pop"
+    ],
+    "13940": [
+      "pop"
+    ],
+    "13959": [
+      "pop"
+    ],
+    "13978": [
+      "classica"
+    ],
+    "13979": [
+      "trilhas-outros"
+    ],
+    "13984": [
+      "trilhas-outros"
+    ],
+    "13986": [
+      "trilhas-outros"
+    ],
+    "13989": [
+      "trilhas-outros"
+    ],
+    "13996": [
+      "soul-funk-rap"
+    ],
+    "14001": [
+      "rock"
+    ],
+    "14021": [
+      "trilhas-outros"
+    ],
+    "14022": [
+      "trilhas-outros"
+    ],
+    "14025": [
+      "trilhas-outros"
+    ],
+    "14026": [
+      "pop"
+    ],
+    "14032": [
+      "eletronica"
+    ],
+    "14033": [
+      "pop"
+    ],
+    "14046": [
+      "pop"
+    ],
+    "14049": [
+      "soul-funk-rap"
+    ],
+    "14050": [
+      "trilhas-outros"
+    ],
+    "14051": [
+      "soul-funk-rap"
+    ],
+    "14055": [
+      "rock"
+    ],
+    "14063": [
+      "trilhas-outros"
+    ],
+    "14064": [
+      "pop"
+    ],
+    "14069": [
+      "pop"
+    ],
+    "14070": [
+      "jazz-blues"
+    ],
+    "14072": [
+      "pop"
+    ],
+    "14077": [
+      "trilhas-outros"
+    ],
+    "14078": [
+      "soul-funk-rap"
+    ],
+    "14083": [
+      "pop"
+    ],
+    "14087": [
+      "pop"
+    ],
+    "14088": [
+      "pop"
+    ],
+    "14093": [
+      "trilhas-outros"
+    ],
+    "14104": [
+      "pop"
+    ],
+    "14110": [
+      "pop"
+    ],
+    "14121": [
+      "pop"
+    ],
+    "14123": [
+      "soul-funk-rap"
+    ],
+    "14125": [
+      "classica"
+    ],
+    "14128": [
+      "soul-funk-rap"
+    ],
+    "14144": [
+      "romantica-brega"
+    ],
+    "14155": [
+      "rock"
+    ],
+    "14160": [
+      "pop"
+    ],
+    "14163": [
+      "soul-funk-rap"
+    ],
+    "14169": [
+      "gospel"
+    ],
+    "14184": [
+      "pop"
+    ],
+    "14192": [
+      "trilhas-outros"
+    ],
+    "14194": [
+      "classica"
+    ],
+    "14201": [
+      "soul-funk-rap"
+    ],
+    "14228": [
+      "folk"
+    ],
+    "14236": [
+      "pop"
+    ],
+    "14257": [
+      "sertanejo-forro"
+    ],
+    "14262": [
+      "trilhas-outros"
+    ],
+    "14265": [
+      "pop"
+    ],
+    "14267": [
+      "romantica-brega"
+    ],
+    "14268": [
+      "samba-pagode"
+    ],
+    "14274": [
+      "samba-pagode"
+    ],
+    "14277": [
+      "samba-pagode"
+    ],
+    "14279": [
+      "sertanejo-forro"
+    ],
+    "14308": [
+      "sertanejo-forro"
+    ],
+    "14317": [
+      "pop"
+    ],
+    "14339": [
+      "pop"
+    ],
+    "14348": [
+      "pop"
+    ],
+    "14350": [
+      "sertanejo-forro"
+    ],
+    "14351": [
+      "pop"
+    ],
+    "14358": [
+      "samba-pagode"
+    ],
+    "14360": [
+      "carimbo-lambada"
+    ],
+    "14366": [
+      "carimbo-lambada"
+    ],
+    "14381": [
+      "bossa-nova"
+    ],
+    "14408": [
+      "mpb"
+    ],
+    "14421": [
+      "mpb"
+    ],
+    "14433": [
+      "romantica-brega"
+    ],
+    "14450": [
+      "sertanejo-forro"
+    ],
+    "14455": [
+      "rock-nacional"
+    ],
+    "14464": [
+      "samba-pagode"
+    ],
+    "14483": [
+      "rock-nacional"
+    ],
+    "14486": [
+      "samba-pagode"
+    ],
+    "14493": [
+      "rock-nacional"
+    ],
+    "14495": [
+      "classica"
+    ],
+    "14501": [
+      "samba-pagode"
+    ],
+    "14508": [
+      "romantica-brega"
+    ],
+    "14510": [
+      "carimbo-lambada"
+    ],
+    "14515": [
+      "trilhas-outros"
+    ],
+    "14527": [
+      "samba-pagode"
+    ],
+    "14532": [
+      "trilhas-outros"
+    ],
+    "14539": [
+      "bossa-nova"
+    ],
+    "14544": [
+      "pop"
+    ],
+    "14566": [
+      "samba-pagode"
+    ],
+    "14580": [
+      "samba-pagode"
+    ],
+    "14600": [
+      "sertanejo-forro"
+    ],
+    "14608": [
+      "romantica-brega"
+    ],
+    "14616": [
+      "carimbo-lambada"
+    ],
+    "14617": [
+      "sertanejo-forro"
+    ],
+    "14630": [
+      "sertanejo-forro"
+    ],
+    "14641": [
+      "trilhas-outros"
+    ],
+    "14648": [
+      "romantica-brega"
+    ],
+    "14665": [
+      "trilhas-outros"
+    ],
+    "14667": [
+      "pop"
+    ],
+    "14675": [
+      "samba-pagode"
+    ],
+    "14677": [
+      "pop"
+    ],
+    "14679": [
+      "romantica-brega"
+    ],
+    "14682": [
+      "trilhas-outros"
+    ],
+    "14687": [
+      "sertanejo-forro"
+    ],
+    "14698": [
+      "samba-pagode"
+    ],
+    "14727": [
+      "samba-pagode"
+    ],
+    "14735": [
+      "sertanejo-forro"
+    ],
+    "14750": [
+      "trilhas-outros"
+    ],
+    "17007": [
+      "samba-pagode"
+    ],
+    "17014": [
+      "rock-nacional"
+    ],
+    "17028": [
+      "sertanejo-forro"
+    ],
+    "17037": [
+      "bossa-nova"
+    ],
+    "17067": [
+      "bossa-nova"
+    ],
+    "17149": [
+      "jazz-blues"
+    ],
+    "17657": [
+      "trilhas-outros"
+    ],
+    "17875": [
+      "sertanejo-forro"
+    ],
+    "17896": [
+      "sertanejo-forro"
+    ],
+    "18124": [
+      "carimbo-lambada"
+    ],
+    "18406": [
+      "mpb"
+    ],
+    "18499": [
+      "pop"
+    ],
+    "18525": [
+      "jazz-blues"
+    ],
+    "19098": [
+      "carimbo-lambada"
+    ],
+    "20005": [
+      "soul-funk-rap"
+    ],
+    "20173": [
+      "pop"
+    ],
+    "20803": [
+      "samba-pagode"
+    ],
+    "20822": [
+      "rock"
+    ],
+    "20832": [
+      "mpb"
+    ],
+    "20833": [
+      "mpb"
+    ],
+    "20834": [
+      "trilhas-outros"
+    ],
+    "20838": [
+      "sertanejo-forro"
+    ],
+    "20851": [
+      "sertanejo-forro"
+    ],
+    "20852": [
+      "jazz-blues"
+    ],
+    "20856": [
+      "rock-nacional"
+    ],
+    "20864": [
+      "samba-pagode"
+    ],
+    "20870": [
+      "mpb"
+    ],
+    "20881": [
+      "trilhas-outros"
+    ],
+    "20882": [
+      "trilhas-outros"
+    ],
+    "20909": [
+      "rock-nacional"
+    ],
+    "20940": [
+      "samba-pagode"
+    ],
+    "21175": [
+      "samba-pagode"
+    ],
+    "21277": [
+      "pop"
+    ],
+    "21278": [
+      "jazz-blues"
+    ],
+    "21293": [
+      "soul-funk-rap"
+    ],
+    "21304": [
+      "soul-funk-rap"
+    ],
+    "21335": [
+      "samba-pagode"
+    ],
+    "21336": [
+      "samba-pagode"
+    ],
+    "21340": [
+      "samba-pagode"
+    ],
+    "21347": [
+      "mpb"
+    ],
+    "21385": [
+      "samba-pagode"
+    ],
+    "21393": [
+      "mpb"
+    ],
+    "21397": [
+      "samba-pagode"
+    ],
+    "21410": [
+      "samba-pagode"
+    ],
+    "21413": [
+      "sertanejo-forro"
+    ],
+    "21421": [
+      "mpb"
+    ],
+    "21442": [
+      "sertanejo-forro"
+    ],
+    "21455": [
+      "mpb"
+    ],
+    "21457": [
+      "rock-nacional"
+    ],
+    "21461": [
+      "sertanejo-forro"
+    ],
+    "21478": [
+      "mpb"
+    ],
+    "21495": [
+      "gospel"
+    ],
+    "21499": [
+      "sertanejo-forro"
+    ],
+    "21501": [
+      "romantica-brega"
+    ],
+    "21535": [
+      "mpb"
+    ],
+    "21550": [
+      "bossa-nova"
+    ],
+    "21554": [
+      "bossa-nova"
+    ],
+    "21569": [
+      "samba-pagode"
+    ],
+    "21571": [
+      "mpb"
+    ],
+    "21572": [
+      "mpb"
+    ],
+    "21580": [
+      "bossa-nova"
+    ],
+    "21581": [
+      "bossa-nova"
+    ],
+    "21604": [
+      "gospel"
+    ],
+    "21613": [
+      "carimbo-lambada"
+    ],
+    "21615": [
+      "sertanejo-forro"
+    ],
+    "21617": [
+      "samba-pagode"
+    ],
+    "21621": [
+      "mpb"
+    ],
+    "21625": [
+      "classica"
+    ],
+    "21626": [
+      "mpb"
+    ],
+    "21628": [
+      "bossa-nova"
+    ],
+    "21631": [
+      "sertanejo-forro"
+    ],
+    "21638": [
+      "classica"
+    ],
+    "21644": [
+      "bossa-nova"
+    ],
+    "21651": [
+      "bossa-nova"
+    ],
+    "21653": [
+      "mpb"
+    ],
+    "21663": [
+      "sertanejo-forro"
+    ],
+    "21669": [
+      "samba-pagode"
+    ],
+    "21673": [
+      "sertanejo-forro"
+    ],
+    "21715": [
+      "bossa-nova"
+    ],
+    "21720": [
+      "mpb"
+    ],
+    "21727": [
+      "sertanejo-forro"
+    ],
+    "21733": [
+      "trilhas-outros"
+    ],
+    "21735": [
+      "samba-pagode"
+    ],
+    "21738": [
+      "mpb"
+    ],
+    "21744": [
+      "rock-nacional"
+    ],
+    "21750": [
+      "classica"
+    ],
+    "21753": [
+      "mpb"
+    ],
+    "21755": [
+      "samba-pagode"
+    ],
+    "21760": [
+      "mpb"
+    ],
+    "21761": [
+      "sertanejo-forro"
+    ],
+    "21762": [
+      "mpb"
+    ],
+    "21780": [
+      "jazz-blues"
+    ],
+    "21783": [
+      "sertanejo-forro"
+    ],
+    "21786": [
+      "sertanejo-forro"
+    ],
+    "21787": [
+      "mpb"
+    ],
+    "21788": [
+      "samba-pagode"
+    ],
+    "21804": [
+      "romantica-brega"
+    ],
+    "21813": [
+      "samba-pagode"
+    ],
+    "21833": [
+      "samba-pagode"
+    ],
+    "21836": [
+      "soul-funk-rap"
+    ],
+    "21840": [
+      "samba-pagode"
+    ],
+    "21849": [
+      "mpb"
+    ],
+    "21855": [
+      "mpb"
+    ],
+    "21859": [
+      "samba-pagode"
+    ],
+    "21860": [
+      "mpb"
+    ],
+    "21867": [
+      "trilhas-outros"
+    ],
+    "21871": [
+      "samba-pagode"
+    ],
+    "21873": [
+      "bossa-nova"
+    ],
+    "21881": [
+      "samba-pagode"
+    ],
+    "21883": [
+      "romantica-brega"
+    ],
+    "21889": [
+      "bossa-nova"
+    ],
+    "21924": [
+      "samba-pagode"
+    ],
+    "21938": [
+      "sertanejo-forro"
+    ],
+    "21944": [
+      "samba-pagode"
+    ],
+    "21949": [
+      "rock"
+    ],
+    "21955": [
+      "samba-pagode"
+    ],
+    "21963": [
+      "bossa-nova"
+    ],
+    "21967": [
+      "samba-pagode"
+    ],
+    "21969": [
+      "bossa-nova"
+    ],
+    "21970": [
+      "romantica-brega"
+    ],
+    "21974": [
+      "samba-pagode"
+    ],
+    "21975": [
+      "romantica-brega"
+    ],
+    "21982": [
+      "bossa-nova"
+    ],
+    "21984": [
+      "samba-pagode"
+    ],
+    "21987": [
+      "samba-pagode"
+    ],
+    "21996": [
+      "jazz-blues"
+    ],
+    "21998": [
+      "mpb"
+    ],
+    "21999": [
+      "carimbo-lambada"
+    ],
+    "22003": [
+      "samba-pagode"
+    ],
+    "22006": [
+      "samba-pagode"
+    ],
+    "22008": [
+      "mpb"
+    ],
+    "22012": [
+      "trilhas-outros"
+    ],
+    "22031": [
+      "samba-pagode"
+    ],
+    "22035": [
+      "romantica-brega"
+    ],
+    "22064": [
+      "mpb"
+    ],
+    "22067": [
+      "mpb"
+    ],
+    "22100": [
+      "mpb"
+    ],
+    "22107": [
+      "mpb"
+    ],
+    "22113": [
+      "samba-pagode"
+    ],
+    "22114": [
+      "bossa-nova"
+    ],
+    "22121": [
+      "carimbo-lambada"
+    ],
+    "22124": [
+      "mpb"
+    ],
+    "22137": [
+      "samba-pagode"
+    ],
+    "22141": [
+      "mpb"
+    ],
+    "22146": [
+      "soul-funk-rap"
+    ],
+    "22171": [
+      "samba-pagode"
+    ],
+    "22174": [
+      "trilhas-outros"
+    ],
+    "22176": [
+      "romantica-brega"
+    ],
+    "22201": [
+      "pop"
+    ],
+    "22226": [
+      "pop"
+    ],
+    "22227": [
+      "mpb"
+    ],
+    "22228": [
+      "mpb"
+    ],
+    "22235": [
+      "mpb"
+    ],
+    "22240": [
+      "mpb"
+    ],
+    "22255": [
+      "trilhas-outros"
+    ],
+    "22276": [
+      "sertanejo-forro"
+    ],
+    "22292": [
+      "sertanejo-forro"
+    ],
+    "22294": [
+      "sertanejo-forro"
+    ],
+    "22295": [
+      "sertanejo-forro"
+    ],
+    "22296": [
+      "sertanejo-forro"
+    ],
+    "22297": [
+      "sertanejo-forro"
+    ],
+    "22302": [
+      "sertanejo-forro"
+    ],
+    "22304": [
+      "sertanejo-forro"
+    ],
+    "22307": [
+      "sertanejo-forro"
+    ],
+    "22318": [
+      "mpb"
+    ],
+    "22335": [
+      "sertanejo-forro"
+    ],
+    "22403": [
+      "sertanejo-forro"
+    ],
+    "22415": [
+      "sertanejo-forro"
+    ],
+    "22417": [
+      "sertanejo-forro"
+    ],
+    "22421": [
+      "carimbo-lambada"
+    ],
+    "22425": [
+      "sertanejo-forro"
+    ],
+    "22429": [
+      "sertanejo-forro"
+    ],
+    "22431": [
+      "sertanejo-forro"
+    ],
+    "22432": [
+      "sertanejo-forro"
+    ],
+    "22434": [
+      "sertanejo-forro"
+    ],
+    "22440": [
+      "sertanejo-forro"
+    ],
+    "22441": [
+      "sertanejo-forro"
+    ],
+    "22443": [
+      "sertanejo-forro"
+    ],
+    "22448": [
+      "carimbo-lambada"
+    ],
+    "22454": [
+      "sertanejo-forro"
+    ],
+    "22457": [
+      "sertanejo-forro"
+    ],
+    "22460": [
+      "sertanejo-forro"
+    ],
+    "22461": [
+      "sertanejo-forro"
+    ],
+    "22462": [
+      "sertanejo-forro"
+    ],
+    "22466": [
+      "sertanejo-forro"
+    ],
+    "22471": [
+      "sertanejo-forro"
+    ],
+    "22473": [
+      "sertanejo-forro"
+    ],
+    "22474": [
+      "sertanejo-forro"
+    ],
+    "22502": [
+      "samba-pagode"
+    ],
+    "22506": [
+      "sertanejo-forro"
+    ],
+    "22511": [
+      "carimbo-lambada"
+    ],
+    "22512": [
+      "sertanejo-forro"
+    ],
+    "22513": [
+      "sertanejo-forro"
+    ],
+    "22570": [
+      "sertanejo-forro",
+      "samba-pagode"
+    ],
+    "22572": [
+      "mpb"
+    ],
+    "22582": [
+      "carimbo-lambada"
+    ],
+    "22621": [
+      "mpb"
+    ],
+    "22625": [
+      "samba-pagode"
+    ],
+    "22627": [
+      "gospel"
+    ],
+    "22632": [
+      "mpb"
+    ],
+    "22644": [
+      "sertanejo-forro"
+    ],
+    "22671": [
+      "bossa-nova"
+    ],
+    "22694": [
+      "samba-pagode"
+    ],
+    "22696": [
+      "sertanejo-forro"
+    ],
+    "22699": [
+      "samba-pagode"
+    ],
+    "22727": [
+      "bossa-nova"
+    ],
+    "22776": [
+      "samba-pagode"
+    ],
+    "22795": [
+      "mpb"
+    ],
+    "22800": [
+      "mpb"
+    ],
+    "22820": [
+      "sertanejo-forro"
+    ],
+    "22826": [
+      "trilhas-outros"
+    ],
+    "22876": [
+      "samba-pagode"
+    ],
+    "22882": [
+      "sertanejo-forro"
+    ],
+    "22897": [
+      "sertanejo-forro"
+    ],
+    "22901": [
+      "romantica-brega"
+    ],
+    "22904": [
+      "rock-nacional"
+    ],
+    "22959": [
+      "jazz-blues"
+    ],
+    "22972": [
+      "pop"
+    ],
+    "22986": [
+      "rock"
+    ],
+    "22998": [
+      "rock"
+    ],
+    "23001": [
+      "soul-funk-rap"
+    ],
+    "23004": [
+      "rock"
+    ],
+    "23005": [
+      "pop"
+    ],
+    "23008": [
+      "pop"
+    ],
+    "23010": [
+      "pop"
+    ],
+    "23019": [
+      "sertanejo-forro"
+    ],
+    "23044": [
+      "pop"
+    ],
+    "23046": [
+      "rock-nacional"
+    ],
+    "23059": [
+      "jazz-blues"
+    ],
+    "23061": [
+      "romantica-brega"
+    ],
+    "23080": [
+      "pop"
+    ],
+    "23081": [
+      "classica"
+    ],
+    "23087": [
+      "sertanejo-forro"
+    ],
+    "23101": [
+      "sertanejo-forro"
+    ],
+    "23107": [
+      "romantica-brega"
+    ],
+    "23121": [
+      "soul-funk-rap"
+    ],
+    "23123": [
+      "soul-funk-rap"
+    ],
+    "23127": [
+      "soul-funk-rap"
+    ],
+    "23137": [
+      "rock"
+    ],
+    "23138": [
+      "jazz-blues"
+    ],
+    "23141": [
+      "pop"
+    ],
+    "23142": [
+      "samba-pagode"
+    ],
+    "23143": [
+      "classica"
+    ],
+    "23160": [
+      "sertanejo-forro"
+    ],
+    "23166": [
+      "sertanejo-forro"
+    ],
+    "23168": [
+      "jazz-blues"
+    ],
+    "23176": [
+      "samba-pagode"
+    ],
+    "23179": [
+      "soul-funk-rap"
+    ],
+    "23180": [
+      "jazz-blues"
+    ],
+    "23186": [
+      "trilhas-outros"
+    ],
+    "23196": [
+      "pop"
+    ],
+    "23201": [
+      "rock"
+    ],
+    "23204": [
+      "jazz-blues"
+    ],
+    "23207": [
+      "soul-funk-rap"
+    ],
+    "23209": [
+      "trilhas-outros"
+    ],
+    "23212": [
+      "rock"
+    ],
+    "23228": [
+      "soul-funk-rap"
+    ],
+    "23229": [
+      "soul-funk-rap"
+    ],
+    "23237": [
+      "sertanejo-forro"
+    ],
+    "23242": [
+      "trilhas-outros"
+    ],
+    "23243": [
+      "samba-pagode"
+    ],
+    "23245": [
+      "sertanejo-forro"
+    ],
+    "23263": [
+      "soul-funk-rap"
+    ],
+    "23267": [
+      "sertanejo-forro"
+    ],
+    "23268": [
+      "sertanejo-forro"
+    ],
+    "23271": [
+      "sertanejo-forro"
+    ],
+    "23281": [
+      "sertanejo-forro"
+    ],
+    "23282": [
+      "sertanejo-forro"
+    ],
+    "23289": [
+      "jazz-blues"
+    ],
+    "23291": [
+      "sertanejo-forro"
+    ],
+    "23294": [
+      "mpb"
+    ],
+    "23338": [
+      "mpb"
+    ],
+    "23388": [
+      "soul-funk-rap"
+    ],
+    "23458": [
+      "bossa-nova"
+    ],
+    "23460": [
+      "bossa-nova"
+    ],
+    "23468": [
+      "soul-funk-rap"
+    ],
+    "23477": [
+      "romantica-brega"
+    ],
+    "23491": [
+      "romantica-brega"
+    ],
+    "23498": [
+      "soul-funk-rap"
+    ],
+    "23506": [
+      "trilhas-outros"
+    ],
+    "23521": [
+      "jazz-blues"
+    ],
+    "23537": [
+      "jazz-blues"
+    ],
+    "23540": [
+      "jazz-blues"
+    ],
+    "23552": [
+      "jazz-blues"
+    ],
+    "23585": [
+      "trilhas-outros"
+    ],
+    "23640": [
+      "pop"
+    ],
+    "23642": [
+      "trilhas-outros"
+    ],
+    "23650": [
+      "gospel"
+    ],
+    "23696": [
+      "jazz-blues"
+    ],
+    "23710": [
+      "trilhas-outros"
+    ],
+    "23754": [
+      "soul-funk-rap"
+    ],
+    "23785": [
+      "pop"
+    ],
+    "23811": [
+      "pop"
+    ],
+    "23812": [
+      "pop"
+    ],
+    "23814": [
+      "pop"
+    ],
+    "23850": [
+      "jazz-blues"
+    ],
+    "23880": [
+      "folk"
+    ],
+    "23883": [
+      "folk"
+    ],
+    "24058": [
+      "trilhas-outros"
+    ],
+    "24273": [
+      "pop"
+    ],
+    "24315": [
+      "pop"
+    ],
+    "24317": [
+      "pop"
+    ],
+    "24318": [
+      "pop"
+    ],
+    "24319": [
+      "pop"
+    ],
+    "24320": [
+      "pop"
+    ],
+    "24327": [
+      "soul-funk-rap"
+    ],
+    "24331": [
+      "jazz-blues"
+    ],
+    "24355": [
+      "jazz-blues"
+    ],
+    "24356": [
+      "jazz-blues"
+    ],
+    "24412": [
+      "trilhas-outros"
+    ],
+    "24433": [
+      "soul-funk-rap"
+    ],
+    "24454": [
+      "soul-funk-rap"
+    ],
+    "24473": [
+      "classica"
+    ],
+    "24487": [
+      "pop"
+    ],
+    "24495": [
+      "pop"
+    ],
+    "24518": [
+      "soul-funk-rap"
+    ],
+    "24532": [
+      "jazz-blues"
+    ],
+    "24591": [
+      "jazz-blues"
+    ],
+    "24594": [
+      "trilhas-outros"
+    ],
+    "24603": [
+      "trilhas-outros"
+    ],
+    "24616": [
+      "jazz-blues"
+    ],
+    "24663": [
+      "jazz-blues"
+    ],
+    "24700": [
+      "sertanejo-forro"
+    ],
+    "24710": [
+      "pop"
+    ],
+    "24721": [
+      "rock"
+    ],
+    "24735": [
+      "trilhas-outros"
+    ],
+    "24742": [
+      "trilhas-outros"
+    ],
+    "24747": [
+      "trilhas-outros"
+    ],
+    "24769": [
+      "trilhas-outros"
+    ],
+    "24829": [
+      "trilhas-outros"
+    ],
+    "24839": [
+      "trilhas-outros"
+    ],
+    "24911": [
+      "trilhas-outros"
+    ],
+    "24924": [
+      "trilhas-outros"
+    ],
+    "24949": [
+      "trilhas-outros"
+    ],
+    "25012": [
+      "sertanejo-forro"
+    ],
+    "25027": [
+      "trilhas-outros"
+    ],
+    "25055": [
+      "trilhas-outros"
+    ],
+    "25099": [
+      "trilhas-outros"
+    ],
+    "25102": [
+      "sertanejo-forro"
+    ],
+    "25103": [
+      "trilhas-outros"
+    ],
+    "25106": [
+      "trilhas-outros"
+    ],
+    "25108": [
+      "trilhas-outros"
+    ],
+    "25158": [
+      "classica"
+    ],
+    "25215": [
+      "rock"
+    ],
+    "25244": [
+      "trilhas-outros"
+    ],
+    "25295": [
+      "soul-funk-rap"
+    ],
+    "25319": [
+      "sertanejo-forro"
+    ],
+    "25324": [
+      "sertanejo-forro"
+    ],
+    "25355": [
+      "sertanejo-forro"
+    ],
+    "25360": [
+      "sertanejo-forro"
+    ],
+    "25383": [
+      "sertanejo-forro"
+    ],
+    "25433": [
+      "trilhas-outros"
+    ],
+    "25434": [
+      "trilhas-outros"
+    ],
+    "25487": [
+      "rock-nacional"
+    ],
+    "25602": [
+      "trilhas-outros"
+    ],
+    "25606": [
+      "trilhas-outros"
+    ],
+    "25691": [
+      "mpb"
+    ],
+    "25712": [
+      "sertanejo-forro"
+    ],
+    "25733": [
+      "mpb"
+    ],
+    "25737": [
+      "trilhas-outros"
+    ],
+    "25738": [
+      "trilhas-outros"
+    ],
+    "25749": [
+      "sertanejo-forro"
+    ],
+    "25757": [
+      "sertanejo-forro"
+    ],
+    "25860": [
+      "sertanejo-forro"
+    ],
+    "25926": [
+      "sertanejo-forro"
+    ],
+    "25932": [
+      "mpb"
+    ],
+    "25938": [
+      "sertanejo-forro"
+    ],
+    "25943": [
+      "romantica-brega"
+    ],
+    "25964": [
+      "trilhas-outros"
+    ],
+    "25965": [
+      "trilhas-outros"
+    ],
+    "25971": [
+      "samba-pagode"
+    ],
+    "25980": [
+      "romantica-brega"
+    ],
+    "26001": [
+      "jazz-blues"
+    ],
+    "26012": [
+      "rock"
+    ],
+    "26049": [
+      "pop"
+    ],
+    "26054": [
+      "pop"
+    ],
+    "26055": [
+      "gospel"
+    ],
+    "26065": [
+      "rock"
+    ],
+    "26081": [
+      "jazz-blues"
+    ],
+    "26084": [
+      "pop"
+    ],
+    "26085": [
+      "trilhas-outros"
+    ],
+    "26103": [
+      "jazz-blues"
+    ],
+    "26118": [
+      "jazz-blues"
+    ],
+    "26128": [
+      "pop"
+    ],
+    "26129": [
+      "soul-funk-rap"
+    ],
+    "26138": [
+      "jazz-blues"
+    ],
+    "26207": [
+      "mpb"
+    ],
+    "26212": [
+      "samba-pagode"
+    ],
+    "26223": [
+      "carimbo-lambada"
+    ],
+    "26230": [
+      "trilhas-outros"
+    ],
+    "26234": [
+      "mpb"
+    ],
+    "26239": [
+      "mpb"
+    ],
+    "26240": [
+      "mpb"
+    ],
+    "26263": [
+      "classica"
+    ],
+    "26275": [
+      "pop"
+    ],
+    "26280": [
+      "pop"
+    ],
+    "26283": [
+      "soul-funk-rap"
+    ],
+    "26291": [
+      "jazz-blues"
+    ],
+    "26292": [
+      "jazz-blues"
+    ],
+    "26316": [
+      "pop"
+    ],
+    "26317": [
+      "classica"
+    ],
+    "26318": [
+      "trilhas-outros"
+    ],
+    "26352": [
+      "pop"
+    ],
+    "26383": [
+      "jazz-blues"
+    ],
+    "26404": [
+      "samba-pagode"
+    ],
+    "26410": [
+      "classica"
+    ],
+    "26422": [
+      "pop"
+    ],
+    "26424": [
+      "sertanejo-forro"
+    ],
+    "26427": [
+      "jazz-blues"
+    ],
+    "26451": [
+      "classica"
+    ],
+    "26456": [
+      "classica"
+    ],
+    "26459": [
+      "classica"
+    ],
+    "26479": [
+      "classica"
+    ],
+    "26481": [
+      "classica"
+    ],
+    "26515": [
+      "samba-pagode"
+    ],
+    "26524": [
+      "carimbo-lambada"
+    ],
+    "26525": [
+      "carimbo-lambada"
+    ],
+    "26536": [
+      "samba-pagode"
+    ],
+    "26539": [
+      "samba-pagode"
+    ],
+    "26540": [
+      "sertanejo-forro"
+    ],
+    "26547": [
+      "sertanejo-forro"
+    ],
+    "26549": [
+      "romantica-brega"
+    ],
+    "26559": [
+      "sertanejo-forro"
+    ],
+    "26562": [
+      "sertanejo-forro"
+    ],
+    "26588": [
+      "carimbo-lambada"
+    ],
+    "26598": [
+      "sertanejo-forro"
+    ],
+    "26602": [
+      "sertanejo-forro"
+    ],
+    "26612": [
+      "sertanejo-forro"
+    ],
+    "26632": [
+      "sertanejo-forro",
+      "carimbo-lambada"
+    ],
+    "26642": [
+      "samba-pagode"
+    ],
+    "26644": [
+      "sertanejo-forro"
+    ],
+    "26645": [
+      "sertanejo-forro"
+    ],
+    "26651": [
+      "sertanejo-forro"
+    ],
+    "26653": [
+      "sertanejo-forro"
+    ],
+    "26656": [
+      "sertanejo-forro"
+    ],
+    "26657": [
+      "sertanejo-forro"
+    ],
+    "26663": [
+      "sertanejo-forro"
+    ],
+    "26665": [
+      "sertanejo-forro"
+    ],
+    "26671": [
+      "sertanejo-forro"
+    ],
+    "26675": [
+      "sertanejo-forro"
+    ],
+    "26677": [
+      "sertanejo-forro"
+    ],
+    "26679": [
+      "sertanejo-forro"
+    ],
+    "26680": [
+      "sertanejo-forro"
+    ],
+    "26685": [
+      "sertanejo-forro"
+    ],
+    "26699": [
+      "sertanejo-forro"
+    ],
+    "26702": [
+      "sertanejo-forro"
+    ],
+    "26703": [
+      "sertanejo-forro"
+    ],
+    "26704": [
+      "sertanejo-forro"
+    ],
+    "26747": [
+      "sertanejo-forro"
+    ],
+    "26749": [
+      "sertanejo-forro"
+    ],
+    "26760": [
+      "sertanejo-forro"
+    ],
+    "26768": [
+      "sertanejo-forro"
+    ],
+    "26865": [
+      "mpb"
+    ],
+    "26891": [
+      "sertanejo-forro"
+    ],
+    "26898": [
+      "romantica-brega"
+    ],
+    "26928": [
+      "trilhas-outros"
+    ],
+    "26939": [
+      "rock-nacional"
+    ],
+    "26949": [
+      "romantica-brega"
+    ],
+    "27019": [
+      "romantica-brega"
+    ],
+    "27059": [
+      "sertanejo-forro"
+    ],
+    "27062": [
+      "rock"
+    ],
+    "27123": [
+      "soul-funk-rap"
+    ],
+    "27129": [
+      "soul-funk-rap"
+    ],
+    "27150": [
+      "soul-funk-rap"
+    ],
+    "27171": [
+      "sertanejo-forro"
+    ],
+    "27172": [
+      "sertanejo-forro"
+    ],
+    "27185": [
+      "trilhas-outros"
+    ],
+    "27191": [
+      "trilhas-outros"
+    ],
+    "27193": [
+      "pop"
+    ],
+    "27195": [
+      "classica"
+    ],
+    "27202": [
+      "pop"
+    ],
+    "27262": [
+      "romantica-brega"
+    ],
+    "27283": [
+      "soul-funk-rap"
+    ],
+    "27296": [
+      "jazz-blues"
+    ],
+    "27302": [
+      "pop"
+    ],
+    "27303": [
+      "pop"
+    ],
+    "27313": [
+      "jazz-blues"
+    ],
+    "27347": [
+      "soul-funk-rap"
+    ],
+    "27511": [
+      "soul-funk-rap"
+    ],
+    "27583": [
+      "sertanejo-forro"
+    ],
+    "27586": [
+      "sertanejo-forro"
+    ],
+    "27588": [
+      "sertanejo-forro"
+    ],
+    "27589": [
+      "sertanejo-forro"
+    ],
+    "27592": [
+      "sertanejo-forro"
+    ],
+    "27644": [
+      "mpb"
+    ],
+    "27645": [
+      "pop"
+    ],
+    "27693": [
+      "romantica-brega"
+    ],
+    "27709": [
+      "romantica-brega"
+    ],
+    "27710": [
+      "romantica-brega"
+    ],
+    "27720": [
+      "mpb"
+    ],
+    "27769": [
+      "romantica-brega"
+    ],
+    "27789": [
+      "romantica-brega"
+    ],
+    "27852": [
+      "sertanejo-forro"
+    ],
+    "27853": [
+      "sertanejo-forro"
+    ],
+    "27874": [
+      "sertanejo-forro"
+    ],
+    "27889": [
+      "sertanejo-forro"
+    ],
+    "27898": [
+      "sertanejo-forro"
+    ],
+    "27899": [
+      "romantica-brega"
+    ],
+    "27912": [
+      "sertanejo-forro"
+    ],
+    "27923": [
+      "sertanejo-forro"
+    ],
+    "27927": [
+      "sertanejo-forro"
+    ],
+    "27928": [
+      "sertanejo-forro"
+    ],
+    "27996": [
+      "trilhas-outros"
+    ],
+    "28004": [
+      "sertanejo-forro"
+    ],
+    "28018": [
+      "sertanejo-forro"
+    ],
+    "28047": [
+      "sertanejo-forro"
+    ],
+    "28048": [
+      "sertanejo-forro"
+    ],
+    "28069": [
+      "sertanejo-forro"
+    ],
+    "28074": [
+      "sertanejo-forro"
+    ],
+    "28076": [
+      "sertanejo-forro"
+    ],
+    "28184": [
+      "rock-nacional"
+    ],
+    "28220": [
+      "trilhas-outros"
+    ],
+    "28224": [
+      "classica"
+    ],
+    "28227": [
+      "sertanejo-forro"
+    ],
+    "28232": [
+      "sertanejo-forro"
+    ],
+    "28238": [
+      "sertanejo-forro"
+    ],
+    "28240": [
+      "sertanejo-forro"
+    ],
+    "28242": [
+      "sertanejo-forro"
+    ],
+    "28256": [
+      "trilhas-outros"
+    ],
+    "28263": [
+      "carimbo-lambada"
+    ],
+    "28273": [
+      "sertanejo-forro"
+    ],
+    "28278": [
+      "sertanejo-forro"
+    ],
+    "28279": [
+      "sertanejo-forro"
+    ],
+    "28280": [
+      "sertanejo-forro"
+    ],
+    "28282": [
+      "sertanejo-forro"
+    ],
+    "28283": [
+      "sertanejo-forro"
+    ],
+    "28302": [
+      "samba-pagode"
+    ],
+    "28312": [
+      "sertanejo-forro"
+    ],
+    "28318": [
+      "pop"
+    ],
+    "28325": [
+      "trilhas-outros"
+    ],
+    "28369": [
+      "trilhas-outros"
+    ],
+    "28400": [
+      "samba-pagode"
+    ],
+    "28421": [
+      "samba-pagode"
+    ],
+    "28423": [
+      "classica"
+    ],
+    "28430": [
+      "samba-pagode"
+    ],
+    "28502": [
+      "trilhas-outros"
+    ],
+    "28514": [
+      "romantica-brega"
+    ],
+    "28519": [
+      "romantica-brega"
+    ],
+    "28558": [
+      "samba-pagode"
+    ],
+    "28577": [
+      "samba-pagode"
+    ],
+    "28594": [
+      "romantica-brega"
+    ],
+    "28666": [
+      "samba-pagode"
+    ],
+    "28680": [
+      "samba-pagode"
+    ],
+    "28685": [
+      "samba-pagode"
+    ],
+    "28687": [
+      "samba-pagode"
+    ],
+    "28690": [
+      "samba-pagode"
+    ],
+    "28693": [
+      "samba-pagode"
+    ],
+    "28695": [
+      "samba-pagode"
+    ],
+    "28700": [
+      "samba-pagode"
+    ],
+    "28764": [
+      "mpb"
+    ],
+    "28766": [
+      "samba-pagode"
+    ],
+    "28851": [
+      "samba-pagode"
+    ],
+    "28888": [
+      "pop"
+    ],
+    "29074": [
+      "mpb"
+    ],
+    "29100": [
+      "trilhas-outros"
+    ],
+    "29105": [
+      "trilhas-outros"
+    ],
+    "29149": [
+      "romantica-brega"
+    ],
+    "29153": [
+      "pop"
+    ],
+    "29181": [
+      "classica"
+    ],
+    "29200": [
+      "romantica-brega"
+    ],
+    "29250": [
+      "romantica-brega"
+    ],
+    "29263": [
+      "mpb"
+    ],
+    "29303": [
+      "sertanejo-forro"
+    ],
+    "29341": [
+      "carimbo-lambada"
+    ],
+    "29342": [
+      "sertanejo-forro"
+    ],
+    "29368": [
+      "romantica-brega"
+    ],
+    "29408": [
+      "carimbo-lambada"
+    ],
+    "29429": [
+      "sertanejo-forro"
+    ],
+    "29447": [
+      "carimbo-lambada"
+    ],
+    "29471": [
+      "carimbo-lambada"
+    ],
+    "29514": [
+      "sertanejo-forro"
+    ],
+    "29521": [
+      "sertanejo-forro"
+    ],
+    "29585": [
+      "sertanejo-forro"
+    ],
+    "29587": [
+      "sertanejo-forro"
+    ],
+    "29619": [
+      "sertanejo-forro"
+    ],
+    "29627": [
+      "carimbo-lambada"
+    ],
+    "29642": [
+      "sertanejo-forro"
+    ],
+    "29660": [
+      "trilhas-outros"
+    ],
+    "29739": [
+      "carimbo-lambada"
+    ],
+    "29768": [
+      "carimbo-lambada"
+    ],
+    "29773": [
+      "sertanejo-forro"
+    ],
+    "29793": [
+      "carimbo-lambada"
+    ],
+    "29851": [
+      "sertanejo-forro"
+    ],
+    "29853": [
+      "sertanejo-forro"
+    ],
+    "29869": [
+      "carimbo-lambada"
+    ],
+    "29871": [
+      "sertanejo-forro"
+    ],
+    "29898": [
+      "sertanejo-forro"
+    ],
+    "29899": [
+      "sertanejo-forro"
+    ],
+    "29903": [
+      "sertanejo-forro"
+    ],
+    "29912": [
+      "sertanejo-forro"
+    ],
+    "29928": [
+      "sertanejo-forro"
+    ],
+    "29965": [
+      "sertanejo-forro"
+    ],
+    "29969": [
+      "sertanejo-forro"
+    ],
+    "29974": [
+      "trilhas-outros"
+    ],
+    "30074": [
+      "jazz-blues"
+    ],
+    "30088": [
+      "jazz-blues"
+    ],
+    "30110": [
+      "soul-funk-rap"
+    ],
+    "30164": [
+      "jazz-blues"
+    ],
+    "30606": [
+      "classica"
+    ],
+    "30692": [
+      "trilhas-outros"
+    ],
+    "30711": [
+      "samba-pagode"
+    ],
+    "30741": [
+      "sertanejo-forro"
+    ],
+    "30770": [
+      "jazz-blues"
+    ],
+    "31646": [
+      "sertanejo-forro"
+    ],
+    "31672": [
+      "trilhas-outros"
+    ],
+    "31681": [
+      "sertanejo-forro"
+    ],
+    "31698": [
+      "sertanejo-forro"
+    ],
+    "31702": [
+      "sertanejo-forro"
+    ],
+    "31733": [
+      "sertanejo-forro"
+    ],
+    "31738": [
+      "sertanejo-forro"
+    ],
+    "31740": [
+      "carimbo-lambada"
+    ],
+    "31770": [
+      "sertanejo-forro"
+    ],
+    "31797": [
+      "sertanejo-forro"
+    ],
+    "32091": [
+      "sertanejo-forro"
+    ]
+  },
+  "artistas": {}
+}
