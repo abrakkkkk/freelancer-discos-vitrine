@@ -588,7 +588,7 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
           'Carregando…'
         ) : erro ? null : (
           <>
-            <strong style={{ color: '#ffffff', fontWeight: 500 }}>
+            <strong style={{ color: 'var(--text-strong)', fontWeight: 500 }}>
               {total.toLocaleString('pt-BR')}
             </strong>{' '}
             {(NOME_CONTAGEM[categoria] || NOME_CONTAGEM.discos)[total === 1 ? 0 : 1]}
@@ -604,10 +604,10 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
         <div
           style={{
             padding: '16px',
-            backgroundColor: '#151518',
+            backgroundColor: 'var(--bg-card)',
             border: '1px solid #232328',
             borderRadius: '12px',
-            color: '#ffffff',
+            color: 'var(--text-strong)',
             textAlign: 'center',
             marginBottom: '16px',
           }}
@@ -619,10 +619,10 @@ function Catalogo({ vitrine = null, vitrineNoMeio = false, className = '' }) {
             style={{
               minHeight: '44px',
               padding: '0 18px',
-              backgroundColor: '#8b1e1e',
+              backgroundColor: 'var(--accent)',
               border: 'none',
               borderRadius: '8px',
-              color: '#ffffff',
+              color: 'var(--text-strong)',
               fontSize: '14px',
               fontWeight: 600,
               cursor: 'pointer',

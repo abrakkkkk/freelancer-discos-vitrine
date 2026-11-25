@@ -41,7 +41,7 @@
   letter-spacing: 0;
   text-transform: uppercase;
   white-space: nowrap;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .edCaixaInfo {
@@ -92,7 +92,7 @@
   font-size: 22px;
   font-weight: 700;
   line-height: 1;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 /* Altura mínima de 44px para o alvo de toque. */
@@ -123,7 +123,7 @@
 
 @media (hover: hover) {
   .edLetraAtalho:hover {
-    color: #ffffff;
+    color: var(--text-strong);
   }
 }
 
@@ -237,7 +237,7 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 1.25;
-  color: #ffffff;
+  color: var(--text-strong);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -269,7 +269,7 @@
   line-height: 1.1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .edLocalLoja {
@@ -333,7 +333,7 @@
   font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: #ffffff;
+  color: var(--text-strong);
   white-space: nowrap;
 }
 /* O traço sob o nome usa a cor da loja (vermelho na 1, azul na 2). */
@@ -368,7 +368,7 @@
   letter-spacing: 0;
   text-transform: uppercase;
   white-space: nowrap;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .edLojaNome::after {
@@ -402,7 +402,7 @@
   font-family: var(--font-editorial), var(--font-title);
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 @media (hover: hover) {
@@ -457,7 +457,7 @@
   font-size: 26px;
   font-weight: 700;
   line-height: 1;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .edCaixaItens {
@@ -541,7 +541,7 @@
 }
 
 .edBarraItemAtivo {
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 /* Com cinco itens, "Compartilhar" só cabe com letra menor nos celulares estreitos. */
@@ -575,7 +575,7 @@
   padding: 2px 4px;
   border-radius: var(--radius-pill);
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 800;
@@ -669,7 +669,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edPagina .categoryTabBtnActive,
 .edPagina .categoryTabBtnActive:hover {
   background: none;
-  color: #ffffff;
+  color: var(--text-strong);
   font-weight: 700;
   box-shadow: inset 0 -3px 0 var(--accent);
 }
@@ -724,7 +724,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   aspect-ratio: 1 / 1;
   padding: 16px;
   border-radius: var(--radius-lg);
-  background-color: #ffffff;
+  background-color: var(--text-strong);
 }
 
 .edQrEndereco {
@@ -732,7 +732,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-family: var(--font-editorial), var(--font-title);
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
   overflow-wrap: anywhere;
   user-select: all;
 }
@@ -762,8 +762,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 .edCredito {
   margin-top: 24px;
   font-size: 12px;
-  /* Contraste de 4,5:1 sobre o fundo, o mínimo para leitura. */
-  color: #777781;
+  color: var(--text-dim);
 }
 
 .edCredito a {
@@ -809,7 +808,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-size: 28px;
   font-weight: 700;
   line-height: 1.1;
-  color: #ffffff;
+  color: var(--text-strong);
   overflow-wrap: anywhere;
 }
 
@@ -826,7 +825,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #ffffff;
+  color: var(--text-strong);
   font-size: 16px;
   font-weight: 600;
   text-decoration: underline;
@@ -841,7 +840,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 @media (hover: hover) {
   .edContatoLink:hover {
-    text-decoration-color: #ffffff;
+    text-decoration-color: var(--text-strong);
   }
 }
 
@@ -874,7 +873,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-family: var(--font-editorial), var(--font-title);
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 /* O mapa do Google é claro; o filtro o escurece para não destoar da página escura. */
@@ -973,7 +972,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     font-weight: 700;
     letter-spacing: 0.02em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .edLatOpcao {
@@ -1000,7 +999,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
   .edLatOpcaoAtiva,
   .edLatOpcaoAtiva:hover {
-    color: #ffffff;
+    color: var(--text-strong);
     font-weight: 600;
     background-color: var(--bg-card);
     box-shadow: inset 2px 0 0 var(--accent);
@@ -1038,7 +1037,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     border: 1px solid var(--border-light);
     border-radius: var(--radius-sm);
     background: none;
-    color: #ffffff;
+    color: var(--text-strong);
     font-family: var(--font-editorial), var(--font-title);
     font-size: 14px;
     font-weight: 700;
@@ -1139,7 +1138,12 @@ body:has(.productDetailDialog) .sacolaAviso {
   color: var(--text-muted);
 }
 
+/* Área de toque de 44px sem aumentar a linha: a margem negativa compensa a altura. */
 .edDiscoCaminho a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: -13px 0;
   color: var(--text-muted);
   text-decoration: none;
 }
@@ -1174,7 +1178,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-weight: 700;
   line-height: 1.05;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
   overflow-wrap: anywhere;
 }
 
@@ -1183,7 +1187,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-family: var(--font-editorial), var(--font-title);
   font-size: 26px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .edDiscoSacola {
@@ -1314,7 +1318,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   }
 
   .edCaixaLatLetra:hover {
-    color: #ffffff;
+    color: var(--text-strong);
     background-color: var(--bg-card);
   }
 
@@ -1482,11 +1486,11 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edLatEscolhaAtiva:hover {
     border-color: var(--accent);
     background-color: var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .edLatEscolhaAtiva .edPonto {
-    background-color: #ffffff !important;
+    background-color: var(--text-strong) !important;
   }
 
   .edLatGrupoLoja .edLatEscolhas {
@@ -1519,7 +1523,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   .edLatCaixaAtiva:hover {
     border-color: var(--accent);
     background-color: var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .edNavDesktop {
@@ -1544,13 +1548,13 @@ body:has(.productDetailDialog) .sacolaAviso {
 
   .edNavDesktop .desktopNavLink:hover {
     background: none;
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .edNavDesktop .desktopNavLinkActive,
   .edNavDesktop .desktopNavLinkActive:hover {
     background: none;
-    color: #ffffff;
+    color: var(--text-strong);
     font-weight: 700;
   }
 
@@ -1628,7 +1632,7 @@ body:has(.productDetailDialog) .sacolaAviso {
 
   .edPagina ::selection {
     background-color: var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
   }
 }
 
@@ -1655,12 +1659,12 @@ body:has(.productDetailDialog) .sacolaAviso {
 
 /* Sem backdrop-filter, o fundo fica sólido para manter a leitura. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .cartFundo { background-color: #050506; }
+  .cartFundo { background-color: var(--bg-overlay); }
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .cartFundo {
-    background-color: #050506;
+    background-color: var(--bg-overlay);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -1676,7 +1680,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #232328;
+  border-bottom: 1px solid var(--border);
 }
 
 .cartTopoTitulo {
@@ -1694,7 +1698,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   line-height: 1;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
   padding-bottom: 8px;
 }
 
@@ -1721,7 +1725,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: center;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid #232328;
+  border-bottom: 1px solid var(--border);
 }
 
 .cartItemArtista {
@@ -1742,7 +1746,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   line-height: 1.1;
   letter-spacing: 0.01em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1752,7 +1756,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-family: var(--font-editorial), var(--font-title);
   font-size: 19px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
   white-space: nowrap;
 }
 
@@ -1762,7 +1766,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   gap: 8px;
   font-size: 14px;
   line-height: 1.4;
-  color: #e4e4e7;
+  color: var(--text);
 }
 
 .cartNota svg {
@@ -1775,7 +1779,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   align-items: baseline;
   justify-content: space-between;
   padding-top: 12px;
-  border-top: 1px solid #232328;
+  border-top: 1px solid var(--border);
 }
 
 .cartTotal span {
@@ -1791,7 +1795,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   font-size: 32px;
   font-weight: 700;
   line-height: 1;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 @media (max-width: 1023px) {
@@ -1803,7 +1807,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   .fieldSelectActive {
     background-color: var(--accent);
     border-color: var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .filtrosAtivos {
@@ -1826,7 +1830,7 @@ body:has(.productDetailDialog) .sacolaAviso {
     padding: 0 8px 0 12px;
     border-radius: var(--radius-pill);
     background-color: var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
     font-weight: 700;
   }
 
@@ -1861,7 +1865,7 @@ body:has(.productDetailDialog) .sacolaAviso {
   min-height: 36px;
   padding: calc(8px + env(safe-area-inset-top, 0px)) 16px 8px;
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
   font-size: 12px;
   font-weight: 500;
 }
@@ -1875,11 +1879,11 @@ body:has(.productDetailDialog) .sacolaAviso {
   text-decoration: none;
 }
 
-/* Área de toque de 32px no link do WhatsApp sem aumentar a faixa: o preenchimento é
+/* Área de toque de 44px no link do WhatsApp sem aumentar a faixa: a altura extra é
    compensado pela margem negativa. */
 a.vlFaixaItem {
-  min-height: 32px;
-  margin: -8px 0;
+  min-height: 44px;
+  margin: -14px 0;
   padding: 0 4px;
 }
 
@@ -1889,7 +1893,7 @@ a.vlFaixaItem:hover {
 }
 
 a.vlFaixaItem:focus-visible {
-  outline: 2px solid #ffffff;
+  outline: 2px solid var(--text-strong);
   outline-offset: 2px;
 }
 
@@ -1922,7 +1926,7 @@ a.vlFaixaItem:focus-visible {
   line-height: 0.95;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .vlAberturaTexto {
@@ -2007,7 +2011,7 @@ a.vlFaixaItem:focus-visible {
     padding: 2px 6px;
     border-radius: var(--radius-etiqueta);
     background-color: var(--badge-label);
-    color: #ffffff;
+    color: var(--text-strong);
     font-family: var(--font-editorial), var(--font-title);
     font-size: 12px;
     font-weight: 600;
@@ -2101,7 +2105,7 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edEstoqueContagem strong {
-    color: #ffffff;
+    color: var(--text-strong);
     font-weight: 500;
   }
 
@@ -2321,7 +2325,7 @@ a.vlFaixaItem:focus-visible {
     padding: 2px 6px;
     border-radius: var(--radius-etiqueta);
     background-color: var(--badge-label);
-    color: #ffffff;
+    color: var(--text-strong);
     font-family: var(--font-editorial), var(--font-title);
     font-size: 12px;
     font-weight: 600;
@@ -2455,7 +2459,7 @@ a.vlFaixaItem:focus-visible {
 .edGeneroAtivo {
   border-color: var(--accent);
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
   font-weight: 600;
 }
 
@@ -2523,7 +2527,7 @@ a.vlFaixaItem:focus-visible {
   font-weight: 700;
   line-height: 1.05;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
   text-wrap: balance;
 }
 
@@ -2534,7 +2538,7 @@ a.vlFaixaItem:focus-visible {
 
 .edGeneroItemTotal strong {
   font-weight: 500;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 /* Capas sobrepostas, como discos encostados na caixa. */
@@ -2574,7 +2578,7 @@ a.vlFaixaItem:focus-visible {
 
 @media (hover: hover) {
   .edGeneroItem:hover .edGeneroItemSeta {
-    color: #ffffff;
+    color: var(--text-strong);
   }
 }
 

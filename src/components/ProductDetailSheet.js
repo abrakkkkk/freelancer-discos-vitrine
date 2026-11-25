@@ -83,7 +83,7 @@ export default function ProductDetailSheet({
     <div className="productDetailBackdrop">
       <div
         onClick={onClose}
-        style={{ position: 'fixed', inset: 0, backgroundColor: '#050506', zIndex: 1 }}
+        style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--bg-overlay)', zIndex: 1 }}
       />
 
       <div
@@ -117,7 +117,7 @@ export default function ProductDetailSheet({
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: '#a1a1aa',
+                  color: 'var(--text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
                 }}
@@ -129,7 +129,7 @@ export default function ProductDetailSheet({
               style={{
                 fontSize: '21px',
                 fontWeight: 700,
-                color: '#ffffff',
+                color: 'var(--text-strong)',
                 lineHeight: 1.2,
                 marginTop: '2px',
                 overflowWrap: 'anywhere',
@@ -139,7 +139,7 @@ export default function ProductDetailSheet({
             </h2>
             <p
               className="tabularNums"
-              style={{ fontSize: '20px', fontWeight: 700, color: '#ffffff', marginTop: '8px' }}
+              style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-strong)', marginTop: '8px' }}
             >
               {precoFormatado}
             </p>

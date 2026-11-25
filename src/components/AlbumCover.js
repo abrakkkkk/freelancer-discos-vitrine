@@ -126,7 +126,7 @@ export default function AlbumCover({
         aspectRatio: '1 / 1',
         borderRadius: 'var(--radius-capa)',
         overflow: 'hidden',
-        backgroundColor: '#111114',
+        backgroundColor: 'var(--bg-input)',
         border: '1px solid #26262e',
         display: 'flex',
         alignItems: 'center',
@@ -185,10 +185,10 @@ export default function AlbumCover({
             right: '6px',
             padding: '2px 4px',
             borderRadius: 'var(--radius-etiqueta)',
-            backgroundColor: '#3f3f46',
+            backgroundColor: 'var(--badge-neutral)',
             fontSize: '12px',
             fontWeight: 700,
-            color: '#ffffff',
+            color: 'var(--text-strong)',
             letterSpacing: '0.04em',
           }}
         >

@@ -49,7 +49,10 @@ export default function ContatoPage() {
             <h2 id="contato-endereco" className="edContatoRotulo">Endereço</h2>
             <p className="edContatoValor">{LOJA.rua}</p>
             <p className="edContatoNota">
-              {LOJA.referencia} · {LOJA.bairroCidade} · {LOJA.cep}
+              {LOJA.referencia} ·{' '}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                {LOJA.bairroCidade} · {LOJA.cep}
+              </span>
             </p>
             <p className="edContatoNota">Loja 1, Loja 2 e o Anexo ficam lado a lado.</p>
             <a href={LOJA.mapa} target="_blank" rel="noopener noreferrer" className="edContatoLink">

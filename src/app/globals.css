@@ -26,6 +26,7 @@
   --accent-hover: #a32424;
   --accent-texto: #e64545; /* vermelho para texto e links no fundo escuro (contraste 5,0:1) */
 
+  --text-strong: #ffffff; /* títulos, preços e texto sobre o vermelho */
   --text: #e4e4e7;
   --text-muted: #a1a1aa;
   --text-dim: #8a8a93;
@@ -54,7 +55,7 @@
 
 ::selection {
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 ::-webkit-scrollbar {
@@ -63,13 +64,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #09090b;
+  background-color: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: #27272a;
   border-radius: var(--radius-sm);
-  border: 2px solid #09090b;
+  border: 2px solid var(--bg);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -154,7 +155,7 @@ select:focus-visible,
 .headerTitle {
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
   line-height: 1.05;
 }
 
@@ -202,7 +203,7 @@ select:focus-visible,
 .categoryTabBtnActive:hover {
   background-color: var(--accent);
   border-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .fieldInput,
@@ -212,7 +213,7 @@ select:focus-visible,
   background-color: var(--bg-input);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  color: #ffffff;
+  color: var(--text-strong);
   font-size: 16px;
   font-family: var(--font-body);
 }
@@ -272,7 +273,7 @@ input[type='search']::-webkit-search-cancel-button {
   font-size: 12px;
   font-weight: 600;
   line-height: 1.4;
-  color: #ffffff;
+  color: var(--text-strong);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -305,7 +306,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .cardLocalCaixa {
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .cardLocalLoja {
@@ -358,7 +359,7 @@ input[type='search']::-webkit-search-cancel-button {
   background-color: var(--bg-input);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  color: #ffffff;
+  color: var(--text-strong);
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
@@ -427,7 +428,7 @@ input[type='search']::-webkit-search-cancel-button {
 .semResultadosTitulo {
   font-size: 16px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-strong);
   overflow-wrap: anywhere;
 }
 
@@ -459,7 +460,7 @@ input[type='search']::-webkit-search-cancel-button {
   padding: 8px 8px 8px 16px;
   border-radius: var(--radius-md);
   background-color: var(--badge-success);
-  color: #ffffff;
+  color: var(--text-strong);
   box-shadow: var(--shadow-md);
   animation: sacolaAvisoEntra 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -488,7 +489,7 @@ input[type='search']::-webkit-search-cancel-button {
   border: none;
   border-radius: var(--radius-sm);
   background-color: #154229;
-  color: #ffffff;
+  color: var(--text-strong);
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
@@ -537,7 +538,7 @@ input[type='search']::-webkit-search-cancel-button {
   margin-top: 12px;
   padding: 8px 8px 8px 16px;
   border-radius: var(--radius-md);
-  color: #ffffff;
+  color: var(--text-strong);
   font-size: 14px;
   line-height: 1.4;
 }
@@ -562,7 +563,7 @@ input[type='search']::-webkit-search-cancel-button {
   border: none;
   border-radius: var(--radius-sm);
   background-color: #3f3f46;
-  color: #ffffff;
+  color: var(--text-strong);
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
@@ -599,7 +600,7 @@ input[type='search']::-webkit-search-cancel-button {
   margin-top: 12px;
   margin-bottom: calc(-1 * (env(safe-area-inset-bottom, 16px) + 16px));
   padding: 12px 0 calc(env(safe-area-inset-bottom, 16px) + 16px);
-  background-color: #18181c;
+  background-color: var(--bg-modal);
   border-top: 1px solid var(--border);
 }
 
@@ -621,21 +622,12 @@ input[type='search']::-webkit-search-cancel-button {
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .sheetLocalLoja {
   font-size: 14px;
   color: var(--text-muted);
-}
-
-/* Cards de /lojas */
-.productCard.lojaCardLoja1 {
-  border-left: 4px solid var(--loja-1);
-}
-
-.productCard.lojaCardLoja2 {
-  border-left: 4px solid var(--loja-2);
 }
 
 .filterChip {
@@ -648,7 +640,7 @@ input[type='search']::-webkit-search-cancel-button {
   border-radius: var(--radius-pill);
   background-color: var(--badge-neutral);
   border: none;
-  color: #ffffff;
+  color: var(--text-strong);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -745,14 +737,14 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .specRow dd {
-  color: #ffffff;
+  color: var(--text-strong);
   font-weight: 500;
   text-align: right;
 }
 
 @keyframes solidPulse {
   0%, 100% {
-    background-color: #151518;
+    background-color: var(--bg-card);
   }
   50% {
     background-color: #1d1d22;
@@ -760,7 +752,7 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .skeletonCard {
-  background-color: #151518;
+  background-color: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 12px;
@@ -829,10 +821,10 @@ input[type='search']::-webkit-search-cancel-button {
   max-width: 520px;
   max-height: calc(100vh - 24px);
   max-height: calc(100dvh - 24px - env(safe-area-inset-top, 0px));
-  background-color: #18181c;
-  border-top: 1px solid #2d2d35;
-  border-left: 1px solid #2d2d35;
-  border-right: 1px solid #2d2d35;
+  background-color: var(--bg-modal);
+  border-top: 1px solid var(--border-light);
+  border-left: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
   border-top-left-radius: var(--radius-xl);
   border-top-right-radius: var(--radius-xl);
   display: flex;
@@ -858,10 +850,10 @@ input[type='search']::-webkit-search-cancel-button {
   max-width: 540px;
   max-height: calc(100vh - 20px);
   max-height: calc(100dvh - 20px - env(safe-area-inset-top, 0px));
-  background-color: #18181c;
-  border-top: 1px solid #2d2d35;
-  border-left: 1px solid #2d2d35;
-  border-right: 1px solid #2d2d35;
+  background-color: var(--bg-modal);
+  border-top: 1px solid var(--border-light);
+  border-left: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
   border-top-left-radius: var(--radius-xl);
   border-top-right-radius: var(--radius-xl);
   display: flex;
@@ -930,7 +922,7 @@ input[type='search']::-webkit-search-cancel-button {
 
   .desktopNavLink:hover {
     background-color: #202026;
-    color: #ffffff;
+    color: var(--text-strong);
     border-color: #34343d;
   }
 
@@ -938,7 +930,7 @@ input[type='search']::-webkit-search-cancel-button {
   .desktopNavLinkActive:hover {
     background-color: #222228;
     border-color: #3f3f46;
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .desktopNavCartBtn {
@@ -949,7 +941,7 @@ input[type='search']::-webkit-search-cancel-button {
     border-radius: var(--radius-md);
     background-color: var(--accent);
     border: 1px solid var(--accent);
-    color: #ffffff;
+    color: var(--text-strong);
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
@@ -968,7 +960,7 @@ input[type='search']::-webkit-search-cancel-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: var(--text-strong);
     color: #8b1e1e;
     font-size: 12px;
     font-weight: 800;
@@ -1013,7 +1005,7 @@ input[type='search']::-webkit-search-cancel-button {
     max-width: 580px;
     max-height: calc(100vh - 64px);
     max-height: calc(100dvh - 64px);
-    border: 1px solid #2d2d35;
+    border: 1px solid var(--border-light);
     border-radius: var(--radius-xl);
     padding: 24px;
     padding-bottom: 24px;
@@ -1040,7 +1032,7 @@ input[type='search']::-webkit-search-cancel-button {
     height: 100dvh;
     margin-left: auto;
     border: none;
-    border-left: 1px solid #2d2d35;
+    border-left: 1px solid var(--border-light);
     border-radius: 0;
     padding: 24px 24px 24px;
     box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85);
@@ -1125,7 +1117,7 @@ input[type='search']::-webkit-search-cancel-button {
 
 .botao--primario {
   background-color: var(--accent);
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .botao--primario:not(:disabled):hover {
@@ -1135,7 +1127,7 @@ input[type='search']::-webkit-search-cancel-button {
 .botao--secundario {
   background-color: transparent;
   border-color: var(--border-light);
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .botao--secundario:not(:disabled):hover {
@@ -1150,12 +1142,12 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .botao--terciario:not(:disabled):hover {
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .botao--whatsapp {
   background-color: #25d366;
-  color: #050506;
+  color: var(--bg-overlay);
   font-family: var(--font-editorial), var(--font-title);
   font-size: 18px;
   font-weight: 700;
@@ -1174,7 +1166,7 @@ input[type='search']::-webkit-search-cancel-button {
 .botao--perigo {
   background-color: transparent;
   border-color: var(--border-light);
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .botao--perigo:not(:disabled):hover {
@@ -1187,7 +1179,7 @@ input[type='search']::-webkit-search-cancel-button {
   .botao--desktop-secundario {
     background-color: transparent;
     border-color: var(--border-light);
-    color: #ffffff;
+    color: var(--text-strong);
   }
 
   .botao--desktop-secundario:not(:disabled):hover {
@@ -1264,7 +1256,7 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .paginacaoResumo strong {
-  color: #ffffff;
+  color: var(--text-strong);
   font-weight: 500;
 }
 
@@ -1321,8 +1313,8 @@ input[type='search']::-webkit-search-cancel-button {
   z-index: 100;
   padding: 8px 12px;
   border-radius: var(--radius-md);
-  background-color: #ffffff;
-  color: #09090b;
+  background-color: var(--text-strong);
+  color: var(--bg);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
@@ -1346,7 +1338,7 @@ input[type='search']::-webkit-search-cancel-button {
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--text-strong);
 }
 
 .faixasLado {
@@ -1394,7 +1386,7 @@ input[type='search']::-webkit-search-cancel-button {
 }
 
 .faixaNome {
-  color: #ffffff;
+  color: var(--text-strong);
   font-weight: 500;
   overflow-wrap: anywhere;
 }
