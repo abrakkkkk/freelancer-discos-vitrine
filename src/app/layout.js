@@ -2,6 +2,7 @@ import { Figtree, Barlow_Condensed } from 'next/font/google';
 import './globals.css';
 import '@/editorial/editorial.css';
 import { CartProvider } from '@/components/CartProvider';
+import { Analytics } from '@vercel/analytics/next';
 import { compartilhamento, DESCRICAO_PADRAO } from '@/utils/seo';
 import FaixaServico from '@/editorial/FaixaServico';
 import PularParaCatalogo from '@/editorial/PularParaCatalogo';
@@ -52,6 +53,7 @@ export default function RootLayout({ children }) {
           <FaixaServico />
           <div className="edPagina">{children}</div>
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );
