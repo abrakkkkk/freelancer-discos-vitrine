@@ -6,6 +6,7 @@ import { FiX, FiChevronRight } from 'react-icons/fi';
 
 // Só os 4 maiores gêneros: "Todos os gêneros" fica perto, a pouca rolagem.
 const GENEROS_NA_LINHA = 4;
+const FORA_DA_LINHA = 'trilhas-outros';
 
 /**
  * Gêneros do catálogo no celular, logo abaixo da busca (escondida a partir de 1024px, onde ficam
@@ -22,7 +23,9 @@ export default function LinhaGeneros({ generos = [], genero = '', onGenero }) {
 
   if (!generos.length) return null;
   const ativo = generos.find((g) => g.id === genero);
-  const lista = (ativo ? [ativo, ...generos.filter((g) => g.id !== genero)] : generos).slice(0, GENEROS_NA_LINHA);
+  // "Trilhas, Infantil e outros" é o resto do catálogo: só entra na linha quando escolhido.
+  const outros = generos.filter((g) => g.id !== genero && g.id !== FORA_DA_LINHA);
+  const lista = (ativo ? [ativo, ...outros] : outros).slice(0, GENEROS_NA_LINHA);
 
   return (
     <nav className="edGeneros" aria-label="Gêneros">
