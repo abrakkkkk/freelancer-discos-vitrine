@@ -1,7 +1,6 @@
 import { formatCaixa } from './stringUtils';
 
-// Temporário: enquanto o dono viaja, os pedidos vão para o WhatsApp do filho.
-// O número oficial da loja é 5585987879214 (o do Perfil da Empresa no Google).
+// WhatsApp da loja, o mesmo da página Contato e do rodapé (LOJA.whatsapp).
 export const WHATSAPP_PHONE = '5585988817621';
 
 export function getCartItemKey(item) {

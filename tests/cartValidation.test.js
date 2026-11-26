@@ -20,7 +20,7 @@ describe('cartUtils', () => {
       { id: 1, titulo: 'Clube da Esquina', artista: 'Milton Nascimento', preco: 250, loja: 'Loja 1', caixa: '1' },
     ];
     const url = generateWhatsAppUrl(itens, 'Ana', 'Meireles');
-    expect(url).toContain('https://wa.me/5585987879214?text=');
+    expect(url).toContain('https://wa.me/5585988817621?text=');
     expect(url).toContain(encodeURIComponent('Milton Nascimento - Clube da Esquina'));
     expect(url).toContain(encodeURIComponent('Total: R$ 250,00'));
   });

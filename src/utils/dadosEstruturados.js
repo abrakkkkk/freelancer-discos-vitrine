@@ -7,8 +7,8 @@ const ORG_ID = `${SITE}/#loja`;
 
 const FORMATO = { discos: 'Disco de vinil', cds: 'CD', dvds: 'DVD', vhs: 'Fita VHS' };
 
-// Telefone oficial da loja, o mesmo do Perfil da Empresa no Google. Não é o WhatsApp dos
-// pedidos do site (WHATSAPP_PHONE), que pode mudar por um tempo.
+// Telefone do Perfil da Empresa no Google: os dados estruturados precisam mostrar o mesmo número.
+// O WhatsApp da loja (pedidos, Contato e rodapé) é outro, em LOJA.whatsapp.
 const telefone = '+55 85 98787-9214';
 
 // Dados da loja física, usados também na página Contato.
@@ -17,8 +17,8 @@ export const LOJA = {
   referencia: 'Próximo à Estação das Artes',
   bairroCidade: 'Centro, Fortaleza - CE',
   cep: '60030-000',
-  telefoneVisivel: '(85) 98787-9214',
-  whatsapp: '5585987879214',
+  telefoneVisivel: '(85) 98881-7621',
+  whatsapp: '5585988817621',
   instagram: 'freelancer_discosalex',
   mapa: 'https://maps.google.com/?cid=5205041543162428716',
 };
