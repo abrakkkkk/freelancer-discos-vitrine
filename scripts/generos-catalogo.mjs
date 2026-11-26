@@ -155,8 +155,13 @@ const gravacoes = [];
 
 for (const d of discos) {
   let { generos, origem } = calculados.get(d.id);
-  const doArtista = generoDoArtista(d.artista);
-  if (doArtista && doArtista !== generos[0]) {
+  // "fixos": discos escolhidos um a um, que vencem a regra do artista.
+  const fixo = validos(CORRECOES.fixos?.[d.id]);
+  const doArtista = fixo.length ? null : generoDoArtista(d.artista);
+  if (fixo.length) {
+    generos = fixo;
+    origem = 'manual';
+  } else if (doArtista && doArtista !== generos[0]) {
     generos = [doArtista];
     origem = 'artista';
   }
