@@ -9,7 +9,7 @@ describe('GENEROS', () => {
   });
 
   it('nenhum gênero junta dois em um nome', () => {
-    expect(GENEROS.filter((g) => /,| e /.test(g.nome) && !['latina-mundo', 'metal', 'orquestras'].includes(g.id)).map((g) => g.nome)).toEqual([]);
+    expect(GENEROS.filter((g) => /,| e /.test(g.nome) && !['metal', 'orquestras'].includes(g.id)).map((g) => g.nome)).toEqual([]);
   });
 });
 
@@ -93,8 +93,9 @@ describe('traduzirGeneros: um gênero por disco', () => {
     expect(t(['Folk, World, & Country'], ['Country'])).toEqual(['country']);
     expect(t(['Folk, World, & Country'], ['Country', 'Gospel'])).toEqual(['gospel']);
     expect(t(['Folk, World, & Country'], ['Folk'])).toEqual(['folk']);
-    expect(t(['Latin', 'Folk, World, & Country'], ['Tango'])).toEqual(['latina-mundo']);
-    expect(t(['Folk, World, & Country'], [])).toEqual(['latina-mundo']);
+    expect(t(['Latin', 'Folk, World, & Country'], ['Tango'])).toEqual(['latina']);
+    expect(t(['Folk, World, & Country'], [])).toEqual(['mundo']);
+    expect(t(['Folk, World, & Country'], ['Fado'])).toEqual(['mundo']);
   });
 
   it('regional é só do Brasil', () => {

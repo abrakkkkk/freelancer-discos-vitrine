@@ -36,7 +36,8 @@ export const GENEROS = [
   g('reggae', 'Reggae', 'O reggae da Jamaica de Bob Marley e Jimmy Cliff e o reggae brasileiro.'),
   g('folk', 'Folk', 'O folk do violão e da voz, de Bob Dylan, Joan Baez e Simon & Garfunkel à música celta.'),
   g('country', 'Country', 'A música do interior dos Estados Unidos, de Johnny Cash e Willie Nelson a Dolly Parton e Kenny Rogers.'),
-  g('latina-mundo', 'Latina e Mundo', 'Tango, salsa, bolero, mariachi, fado, flamenco e a música de raiz de outros países.'),
+  g('latina', 'Latina', 'A música da América Latina e da Espanha: tango, salsa, bolero, mariachi, merengue, música andina e flamenco.'),
+  g('mundo', 'Música do Mundo', 'Fado, música africana, indiana, japonesa, havaiana, do Caribe francês e inglês, cigana e do Leste Europeu.'),
   g('afro-brasileira', 'Afro-brasileira', 'Os cantos de Umbanda e Candomblé, o afoxé e a música da capoeira.'),
   g('gospel', 'Gospel', 'Música cristã: hinos, corais, gospel americano e louvor brasileiro.'),
   g('classica', 'Clássica', 'Sinfonias, óperas, música de câmara e piano, de Bach, Mozart e Beethoven a Villa-Lobos.'),
@@ -92,13 +93,16 @@ estilos(2, 'country', ['Country', 'Honky Tonk', 'Bluegrass', 'Cajun', 'Zydeco'])
 estilos(2, 'trilhas', ['Soundtrack', 'Score', 'Musical']);
 estilos(2, 'infantil', ['Story', 'Nursery Rhymes', 'Educational']);
 estilos(2, 'outros', ['Comedy', 'Poetry', 'Spoken Word', 'Dialogue', 'Speech', 'Monolog', 'Interview', 'Radioplay', 'Marches']);
-estilos(2, 'latina-mundo', [
-  'Tango', 'Milonga', 'Fado', 'Flamenco', 'Copla', 'Salsa', 'Merengue', 'Mambo', 'Cha-Cha', 'Rumba', 'Guaracha',
-  'Bachata', 'Pachanga', 'Afro-Cuban', 'Son Montuno', 'Danzon', 'Guajira', 'Bomba', 'Jibaro', 'Cuatro', 'Ranchera',
-  'Mariachi', 'Corrido', 'Nueva Cancion', 'Nueva Trova', 'Trova', 'Guarania', 'Chacarera', 'Zamba', 'Andean Music',
-  'Música Criolla', 'Candombe', 'Polka', 'Volksmusik', 'Musette', 'Canzone Napoletana', 'Laïkó', 'Klezmer',
-  'Indian Classical', 'Zouk', 'Kizomba', 'Morna', 'Funaná', 'Compas', 'Salegy', 'Hawaiian', 'Pacific', 'Calypso',
-  'Soca', 'Beguine', 'Cumbia', 'Bolero', 'Chamamé', 'African', 'Afrobeat', 'Highlife', 'Schlager',
+estilos(2, 'latina', [
+  'Tango', 'Milonga', 'Flamenco', 'Copla', 'Salsa', 'Merengue', 'Mambo', 'Cha-Cha', 'Rumba', 'Guaracha', 'Bachata',
+  'Pachanga', 'Afro-Cuban', 'Son Montuno', 'Danzon', 'Guajira', 'Bomba', 'Jibaro', 'Cuatro', 'Ranchera', 'Mariachi',
+  'Corrido', 'Nueva Cancion', 'Nueva Trova', 'Trova', 'Guarania', 'Chacarera', 'Zamba', 'Andean Music', 'Música Criolla',
+  'Candombe', 'Cumbia', 'Bolero', 'Chamamé', 'Reggaeton', 'Latin Pop',
+]);
+estilos(2, 'mundo', [
+  'Fado', 'Polka', 'Volksmusik', 'Musette', 'Canzone Napoletana', 'Laïkó', 'Klezmer', 'Cantorial', 'Indian Classical',
+  'Zouk', 'Kizomba', 'Morna', 'Funaná', 'Compas', 'Salegy', 'Hawaiian', 'Pacific', 'Calypso', 'Soca', 'Beguine',
+  'African', 'Afrobeat', 'Highlife', 'Schlager',
 ]);
 estilos(1, 'mpb', ['MPB']);
 estilos(1, 'rock', [
@@ -115,7 +119,7 @@ estilos(1, 'eletronica', [
   'Hip-House', 'Bass Music', 'Leftfield', 'Abstract', 'Synthwave', 'Drum n Bass', 'Electro House', 'Tech House', 'New Age',
 ]);
 estilos(1, 'orquestras', ['Light Music', 'Space-Age', 'Lounge', 'Instrumental', 'Exotica', 'Marimba', 'Organ']);
-estilos(1, 'pop', ['Europop', 'Dance-pop', 'Indie Pop', 'Vocal', 'Alt-Pop', 'Latin Pop', 'Sunshine Pop', 'Baroque Pop', 'Yé-Yé']);
+estilos(1, 'pop', ['Europop', 'Dance-pop', 'Indie Pop', 'Vocal', 'Alt-Pop', 'Sunshine Pop', 'Baroque Pop', 'Yé-Yé']);
 
 // Estilos românticos: contam como "Romântica" só em disco nacional.
 const ROMANTICOS = new Set(['Romantic', 'Ballad', 'Easy Listening', 'Chanson']);
@@ -178,7 +182,7 @@ export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = 
     if (genres.includes(genero)) return [traduzir(nacional)];
   }
   // "Folk, World, & Country" é o mais amplo: no Brasil é regional, fora é música do mundo.
-  if (genres.includes(FOLK_DISCOGS)) return [nacional ? 'regional' : 'latina-mundo'];
+  if (genres.includes(FOLK_DISCOGS)) return [nacional ? 'regional' : 'mundo'];
   return [];
 }
 
@@ -198,7 +202,7 @@ export function fracaoPortugues(titulos = []) {
  */
 export function ehNacional({ genres = [], styles = [] } = {}, titulos = []) {
   if (genres.includes('Latin')) {
-    return !styles.some((e) => ESTILOS[e]?.genero === 'latina-mundo' && e !== 'Bolero' && e !== 'Cumbia');
+    return !styles.some((e) => ['latina', 'mundo'].includes(ESTILOS[e]?.genero) && e !== 'Bolero' && e !== 'Cumbia');
   }
   if (!titulos.length) return null;
   return fracaoPortugues(titulos) >= 0.4;
