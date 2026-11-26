@@ -108,31 +108,44 @@ for (const d of discos) {
   else if (!nacionalPorArtista.has(k)) nacionalPorArtista.set(k, null);
 }
 
+const porArtistaManual = new Map(Object.entries(CORRECOES.artistas || {}).map(([a, g]) => [normalizeText(a), g]));
+const validos = (lista) => (Array.isArray(lista) ? lista.filter(ehGeneroValido).slice(0, 1) : []);
+
+// Gênero de cada disco antes do artista: correção manual do disco, senão o Discogs.
 const calculados = new Map();
 for (const d of discos) {
-  calculados.set(d.id, generosDoDisco(d.genero_discogs, titulosDasFaixas(d), nacionalPorArtista.get(chaveArtista(d.artista)) ?? null));
+  const manual = validos(CORRECOES.ids?.[d.id]);
+  calculados.set(
+    d.id,
+    manual.length
+      ? { generos: manual, origem: 'manual' }
+      : { generos: generosDoDisco(d.genero_discogs, titulosDasFaixas(d), nacionalPorArtista.get(chaveArtista(d.artista)) ?? null), origem: 'discogs' }
+  );
 }
 
-// Gênero principal mais comum do artista, quando pelo menos 2 discos dele têm e 60% concordam.
+// Um artista, um gênero: o mais comum entre os discos dele (com pelo menos 2 discos com gênero e
+// sem empate). Assim os discos do mesmo artista não ficam espalhados. Coletâneas ficam disco a disco.
 const votos = new Map();
 for (const d of discos) {
   const k = chaveArtista(d.artista);
-  const principal = calculados.get(d.id)[0];
-  if (!k || !principal) continue;
+  const [genero] = calculados.get(d.id).generos;
+  if (!k || !genero) continue;
   const v = votos.get(k) || new Map();
-  v.set(principal, (v.get(principal) || 0) + 1);
+  v.set(genero, (v.get(genero) || 0) + 1);
   votos.set(k, v);
 }
 function generoDoArtista(artista) {
-  const v = votos.get(chaveArtista(artista));
+  const k = chaveArtista(artista);
+  const manual = validos(porArtistaManual.get(k));
+  if (manual.length) return manual[0];
+  const v = votos.get(k);
   if (!v) return null;
-  const total = [...v.values()].reduce((a, b) => a + b, 0);
-  const [genero, n] = [...v.entries()].sort((a, b) => b[1] - a[1])[0];
-  return total >= 2 && n / total >= 0.6 ? genero : null;
+  const ordem = [...v.entries()].sort((a, b) => b[1] - a[1]);
+  const total = ordem.reduce((a, [, n]) => a + n, 0);
+  if (total < 2 && ordem.length === 1) return ordem[0][0];
+  if (total < 2 || (ordem[1] && ordem[1][1] === ordem[0][1])) return null;
+  return ordem[0][0];
 }
-
-const porArtistaManual = new Map(Object.entries(CORRECOES.artistas || {}).map(([a, g]) => [normalizeText(a), g]));
-const validos = (lista) => (Array.isArray(lista) ? lista.filter(ehGeneroValido) : []);
 
 const iguais = (a, b) => JSON.stringify(a || []) === JSON.stringify(b || []);
 const relatorio = fs.createWriteStream(RELATORIO);
@@ -140,19 +153,11 @@ const resumo = { discogs: 0, artista: 0, manual: 0, semGenero: 0, mudou: 0 };
 const contagem = {};
 
 for (const d of discos) {
-  let generos = calculados.get(d.id);
-  let origem = 'discogs';
-  if (!generos.length) {
-    const doArtista = generoDoArtista(d.artista);
-    if (doArtista) {
-      generos = [doArtista];
-      origem = 'artista';
-    }
-  }
-  const manual = validos(CORRECOES.ids?.[d.id]) .length ? validos(CORRECOES.ids[d.id]) : validos(porArtistaManual.get(chaveArtista(d.artista)));
-  if (manual.length) {
-    generos = manual;
-    origem = 'manual';
+  let { generos, origem } = calculados.get(d.id);
+  const doArtista = generoDoArtista(d.artista);
+  if (doArtista && doArtista !== generos[0]) {
+    generos = [doArtista];
+    origem = 'artista';
   }
 
   if (generos.length) resumo[origem]++;

@@ -1,110 +1,46 @@
 // Gêneros da loja: a lista que o cliente vê, e a tradução dos gêneros e estilos do Discogs para ela.
-// O Discogs chama quase toda a música brasileira de "Latin"; o que separa MPB, samba e bossa nova é o estilo.
+// Cada disco fica num gênero só. O Discogs chama quase toda a música brasileira de "Latin";
+// o que separa samba, forró, sertanejo e os outros é o estilo.
+
+const g = (id, nome, descricao) => ({ id, nome, descricao });
 
 export const GENEROS = [
-  {
-    id: 'mpb',
-    nome: 'MPB',
-    descricao:
-      'A canção brasileira de autor que surgiu nos festivais dos anos 1960, misturando samba, bossa nova, baião e as guitarras do rock. Caetano Veloso, Gilberto Gil, Chico Buarque, Milton Nascimento, Elis Regina e Gal Costa estão entre os nomes que deram forma ao gênero.',
-  },
-  {
-    id: 'samba-pagode',
-    nome: 'Samba e Pagode',
-    descricao:
-      'Nascido nas rodas do Rio de Janeiro no começo do século XX, o samba virou a música mais tocada do país. Aqui estão também o samba-canção, o choro, o partido-alto e o pagode, que nos anos 1980 levou o banjo e o tantã para as rodas de fundo de quintal.',
-  },
-  {
-    id: 'bossa-nova',
-    nome: 'Bossa Nova',
-    descricao:
-      'Surgiu no fim dos anos 1950 com a batida de violão de João Gilberto e as canções de Tom Jobim e Vinicius de Moraes: o samba tocado baixinho, com harmonias do jazz. Foi o gênero que levou a música brasileira para o mundo.',
-  },
-  {
-    id: 'rock-nacional',
-    nome: 'Rock Nacional',
-    descricao:
-      'O rock cantado em português, da Jovem Guarda dos anos 1960 às bandas que lotaram estádios nos anos 1980, como Legião Urbana, Titãs, Paralamas do Sucesso e Barão Vermelho.',
-  },
-  {
-    id: 'rock',
-    nome: 'Rock',
-    descricao:
-      'O rock de fora do Brasil, do rock and roll dos anos 1950 ao progressivo, ao punk e ao metal. Dos Beatles e Rolling Stones ao Pink Floyd e Led Zeppelin, muitos desses discos saíram em edição nacional na época.',
-  },
-  {
-    id: 'pop',
-    nome: 'Pop',
-    descricao:
-      'Música feita para o rádio e para as pistas, do Brasil e de fora, com refrões que todo mundo canta junto: de ABBA e Michael Jackson a Madonna, Rita Lee e Kid Abelha.',
-  },
-  {
-    id: 'romantica-brega',
-    nome: 'Romântica e Brega',
-    descricao:
-      'As canções de amor e dor de cotovelo que tocavam no rádio AM e nas festas: boleros, baladas e o brega de Waldick Soriano, Odair José, Reginaldo Rossi e Amado Batista.',
-  },
-  {
-    id: 'sertanejo-forro',
-    nome: 'Sertanejo, Forró e Regional',
-    descricao:
-      'A música do interior e do Nordeste: a moda de viola caipira, as duplas sertanejas, o baião e o forró de Luiz Gonzaga e Jackson do Pandeiro, o frevo de Pernambuco e os ritmos de cada região do país.',
-  },
-  {
-    id: 'carimbo-lambada',
-    nome: 'Carimbó e Lambada',
-    descricao:
-      'Os ritmos do Norte: o carimbó, a lambada, a guitarrada e a cumbia, de Pinduca, Vieira e Seu Conjunto, Teixeira de Manaus e Dona Onete.',
-  },
-  {
-    id: 'soul-funk-rap',
-    nome: 'Soul, Funk e Rap',
-    descricao:
-      'A música negra dos Estados Unidos e do Brasil: soul, funk, disco e rap. Da Motown e de James Brown a Tim Maia, Cassiano e Banda Black Rio, que trouxeram esse suingue para cá nos anos 1970.',
-  },
-  {
-    id: 'jazz-blues',
-    nome: 'Jazz e Blues',
-    descricao:
-      'Do blues do sul dos Estados Unidos às big bands, ao bebop e ao jazz modal: Louis Armstrong, Ella Fitzgerald, Miles Davis, John Coltrane. Inclui também o jazz instrumental feito no Brasil.',
-  },
-  {
-    id: 'eletronica',
-    nome: 'Eletrônica',
-    descricao:
-      'Música feita com sintetizadores e máquinas de ritmo, dos pioneiros Kraftwerk e Jean-Michel Jarre à música de pista dos anos 1980 e 1990, como house e techno.',
-  },
-  {
-    id: 'reggae',
-    nome: 'Reggae',
-    descricao:
-      'Nascido na Jamaica no fim dos anos 1960, a partir do ska e do rocksteady, o reggae ganhou o mundo com Bob Marley, Peter Tosh e Jimmy Cliff. Aqui também estão o dub e o reggae feito no Brasil.',
-  },
-  {
-    id: 'folk',
-    nome: 'Folk',
-    descricao: 'O folk de fora do Brasil, do violão e da voz de Bob Dylan, Joan Baez e Jim Croce à música celta e ao bluegrass.',
-  },
-  {
-    id: 'gospel',
-    nome: 'Gospel',
-    descricao: 'Música religiosa cristã, dos hinos e corais ao gospel moderno, com artistas brasileiros e estrangeiros.',
-  },
-  {
-    id: 'classica',
-    nome: 'Clássica',
-    descricao:
-      'Música de concerto: sinfonias, óperas, música de câmara e obras para piano, de Bach, Mozart e Beethoven a Villa-Lobos, em gravações de orquestras, coros e solistas.',
-  },
-  {
-    id: 'trilhas-outros',
-    nome: 'Trilhas, Infantil e outros',
-    descricao:
-      'Trilhas sonoras de filmes e novelas, discos infantis e o que não cabe nos outros gêneros, como gravações de humor, de bandas militares e discos falados.',
-  },
+  g('mpb', 'MPB', 'A canção brasileira de autor que nasceu nos festivais dos anos 1960: Caetano, Gil, Chico, Milton, Elis e Gal.'),
+  g('samba', 'Samba', 'O samba das rodas do Rio, o samba-canção, o partido-alto, os sambas-enredo e as marchinhas de carnaval.'),
+  g('pagode', 'Pagode', 'O samba de fundo de quintal com banjo e tantã, de Fundo de Quintal, Zeca Pagodinho, Raça Negra e Só Pra Contrariar.'),
+  g('choro', 'Choro', 'A música instrumental do bandolim, da flauta e do cavaquinho, de Pixinguinha, Jacob do Bandolim e Waldir Azevedo.'),
+  g('bossa-nova', 'Bossa Nova', 'O samba de voz baixa e violão de João Gilberto, Tom Jobim, Vinicius de Moraes, Nara Leão e Astrud Gilberto.'),
+  g('rock-nacional', 'Rock Nacional', 'O rock feito no Brasil, da Jovem Guarda de Roberto e Erasmo aos anos 1980 de Titãs, Legião Urbana e Paralamas.'),
+  g('rock', 'Rock', 'Do rock and roll dos anos 1950 ao progressivo, ao hard rock, ao punk e à new wave, de Elvis e Beatles ao Queen.'),
+  g('pop', 'Pop', 'Os sucessos das paradas do mundo, de ABBA e Michael Jackson a Madonna, Rita Lee e Kid Abelha.'),
+  g('romantica', 'Romântica', 'Boleros, serestas e baladas de amor, de Nelson Gonçalves, Angela Maria, Agnaldo Timóteo e Roberto Carlos.'),
+  g('brega', 'Brega', 'O brega de Waldick Soriano, Odair José, Reginaldo Rossi, Amado Batista e do brega paraense.'),
+  g('sertanejo', 'Sertanejo', 'A moda de viola caipira e as duplas sertanejas, de Tonico e Tinoco a Chitãozinho e Xororó.'),
+  g('forro', 'Forró', 'O baião, o xote e o forró de Luiz Gonzaga, Jackson do Pandeiro, Dominguinhos e das bandas de forró.'),
+  g('regional', 'Regional', 'Os ritmos de cada canto do Brasil: frevo, maracatu, bumba-meu-boi, repente, cantoria e música junina.'),
+  g('axe', 'Axé', 'O carnaval da Bahia, de Luiz Caldas, Chiclete com Banana e Asa de Águia ao Olodum e à Banda Cheiro de Amor.'),
+  g('carimbo', 'Carimbó', 'O ritmo do Pará, de Pinduca, Verequete, Mestre Lucindo e Dona Onete.'),
+  g('lambada', 'Lambada', 'A lambada e a guitarrada do Norte, de Vieira e Seu Conjunto, Teixeira de Manaus e Mestre Solano.'),
+  g('soul', 'Soul', 'A música negra americana dos anos 1960 e 1970, de Ray Charles, Aretha Franklin, Marvin Gaye e Tim Maia.'),
+  g('funk', 'Funk', 'O funk de James Brown, do Earth, Wind & Fire e do Parliament, e o funk carioca.'),
+  g('rap', 'Rap', 'O hip hop, do Run DMC e LL Cool J aos Racionais e ao rap nacional.'),
+  g('disco', 'Disco', 'A música das pistas dos anos 1970, de Donna Summer, Bee Gees e Chic às Frenéticas.'),
+  g('jazz', 'Jazz', 'Do swing das big bands ao bebop, ao cool e ao fusion, de Duke Ellington e Miles Davis a Ella Fitzgerald.'),
+  g('blues', 'Blues', 'O blues de B.B. King, Muddy Waters, John Lee Hooker e Etta James.'),
+  g('eletronica', 'Eletrônica', 'Do synth-pop e da música de pista dos anos 1980 à house e ao techno.'),
+  g('reggae', 'Reggae', 'O reggae da Jamaica de Bob Marley e Jimmy Cliff e o reggae brasileiro.'),
+  g('folk', 'Folk', 'O folk do violão e da voz, de Bob Dylan, Joan Baez e Simon & Garfunkel à música celta.'),
+  g('country', 'Country', 'A música do interior dos Estados Unidos, de Johnny Cash e Willie Nelson a Dolly Parton e Kenny Rogers.'),
+  g('latina-mundo', 'Latina e Mundo', 'Tango, salsa, bolero, mariachi, fado, flamenco e a música de raiz de outros países.'),
+  g('afro-brasileira', 'Afro-brasileira', 'Os cantos de Umbanda e Candomblé, o afoxé e a música da capoeira.'),
+  g('gospel', 'Gospel', 'Música cristã: hinos, corais, gospel americano e louvor brasileiro.'),
+  g('classica', 'Clássica', 'Sinfonias, óperas, música de câmara e piano, de Bach, Mozart e Beethoven a Villa-Lobos.'),
+  g('trilhas', 'Trilhas Sonoras', 'Trilhas de filmes, novelas e musicais.'),
+  g('infantil', 'Infantil', 'Discos para crianças: cantigas de roda, histórias e os sucessos da TV.'),
+  g('outros', 'Outros', 'O que não cabe nos outros gêneros: humor, poesia, discursos, bandas militares e coletâneas variadas.'),
 ];
 
-const POR_ID = new Map(GENEROS.map((g) => [g.id, g]));
+const POR_ID = new Map(GENEROS.map((x) => [x.id, x]));
 
 export const generoPorId = (id) => POR_ID.get(id) || null;
 export const ehGeneroValido = (id) => POR_ID.has(id);
@@ -114,137 +50,122 @@ export function generosDoItem(item) {
   return (Array.isArray(item?.generos) ? item.generos : []).map(generoPorId).filter(Boolean);
 }
 
-// Estilo do Discogs → gênero da loja. Os estilos vêm antes dos gêneros porque são mais precisos.
-const POR_ESTILO = {
-  MPB: 'mpb',
-  'Tropicalia': 'mpb',
-  'Tropicália': 'mpb',
-  Samba: 'samba-pagode',
-  Pagode: 'samba-pagode',
-  'Samba-Canção': 'samba-pagode',
-  Choro: 'samba-pagode',
-  'Partido Alto': 'samba-pagode',
-  'Samba-Enredo': 'samba-pagode',
-  'Samba Enredo': 'samba-pagode',
-  'Bossa Nova': 'bossa-nova',
-  Bossanova: 'bossa-nova',
-  'Jovem Guarda': 'rock-nacional',
-  Forró: 'sertanejo-forro',
-  Baião: 'sertanejo-forro',
-  Sertanejo: 'sertanejo-forro',
-  Caipira: 'sertanejo-forro',
-  Frevo: 'sertanejo-forro',
-  Xote: 'sertanejo-forro',
-  Maracatu: 'sertanejo-forro',
-  Axé: 'sertanejo-forro',
-  Carimbó: 'carimbo-lambada',
-  Lambada: 'carimbo-lambada',
-  Cumbia: 'carimbo-lambada',
-  Guitarrada: 'carimbo-lambada',
-  Siriá: 'carimbo-lambada',
-  Seresta: 'romantica-brega',
-  Batucada: 'samba-pagode',
-  'Marcha Carnavalesca': 'samba-pagode',
-  'Favela Funk': 'soul-funk-rap',
-  Gospel: 'gospel',
-  Religious: 'gospel',
-  Bolero: 'romantica-brega',
-  Brega: 'romantica-brega',
-  Reggae: 'reggae',
-  'Roots Reggae': 'reggae',
-  Dub: 'reggae',
-  Ska: 'reggae',
-  Rocksteady: 'reggae',
-  Dancehall: 'reggae',
-  Ragga: 'reggae',
-  Disco: 'soul-funk-rap',
-  Soundtrack: 'trilhas-outros',
-  Score: 'trilhas-outros',
-  Musical: 'trilhas-outros',
-};
+// Peso dos estilos: o mais específico decide. 3 = ritmo bem definido, 2 = estilo claro, 1 = estilo amplo.
+const ESTILOS = {};
+const estilos = (peso, genero, lista) => lista.forEach((e) => (ESTILOS[e] = { genero, peso }));
 
-// Estilos românticos só contam como "Romântica e Brega" em disco nacional ou latino.
+estilos(3, 'pagode', ['Pagode']);
+estilos(3, 'choro', ['Choro']);
+estilos(3, 'rock-nacional', ['Jovem Guarda']);
+estilos(3, 'forro', ['Forró', 'Baião', 'Xote', 'Xaxado']);
+estilos(3, 'sertanejo', ['Sertanejo', 'Caipira']);
+estilos(3, 'regional', ['Frevo', 'Maracatu', 'Repente', 'Embolada', 'Coco', 'Ciranda', 'Bumba-meu-boi']);
+estilos(3, 'axe', ['Axé']);
+estilos(3, 'carimbo', ['Carimbó', 'Siriá']);
+estilos(3, 'lambada', ['Lambada', 'Guitarrada']);
+estilos(3, 'brega', ['Brega']);
+estilos(3, 'funk', ['Favela Funk']);
+estilos(3, 'gospel', ['Gospel']);
+estilos(2, 'samba', ['Samba', 'Samba-Canção', 'Samba-Enredo', 'Samba Enredo', 'Partido Alto', 'Batucada', 'Marcha Carnavalesca']);
+estilos(2, 'bossa-nova', ['Bossa Nova', 'Bossanova']);
+estilos(2, 'mpb', ['Tropicalia', 'Tropicália']);
+estilos(2, 'romantica', ['Seresta']);
+estilos(2, 'reggae', ['Reggae', 'Roots Reggae', 'Dub', 'Ska', 'Rocksteady', 'Dancehall', 'Ragga', 'Reggae-Pop', 'Lovers Rock']);
+estilos(2, 'disco', ['Disco', 'Italo-Disco', 'Euro-Disco', 'Hi NRG']);
+estilos(2, 'soul', ['Soul', 'Rhythm & Blues', 'Neo Soul', 'Contemporary R&B', 'Doo Wop', 'Northern Soul', 'Southern Soul']);
+estilos(2, 'funk', ['Funk', 'P.Funk', 'Boogie', 'Go-Go', 'Minneapolis Sound', 'Miami Bass']);
+estilos(2, 'rap', ['Pop Rap', 'Conscious', 'Gangsta', 'Boom Bap', 'Trap', 'Hardcore Hip-Hop', 'Hip Hop']);
+estilos(2, 'blues', ['Chicago Blues', 'Electric Blues', 'Delta Blues', 'Country Blues', 'Piano Blues', 'Modern Electric Blues', 'Jump Blues', 'Harmonica Blues', 'Louisiana Blues', 'East Coast Blues']);
+estilos(2, 'country', ['Country', 'Honky Tonk', 'Bluegrass', 'Cajun', 'Zydeco']);
+estilos(2, 'trilhas', ['Soundtrack', 'Score', 'Musical']);
+estilos(2, 'infantil', ['Story', 'Nursery Rhymes', 'Educational']);
+estilos(2, 'outros', ['Comedy', 'Poetry', 'Spoken Word', 'Dialogue', 'Speech', 'Monolog', 'Interview', 'Radioplay', 'Marches']);
+estilos(2, 'latina-mundo', [
+  'Tango', 'Milonga', 'Fado', 'Flamenco', 'Copla', 'Salsa', 'Merengue', 'Mambo', 'Cha-Cha', 'Rumba', 'Guaracha',
+  'Bachata', 'Pachanga', 'Afro-Cuban', 'Son Montuno', 'Danzon', 'Guajira', 'Bomba', 'Jibaro', 'Cuatro', 'Ranchera',
+  'Mariachi', 'Corrido', 'Nueva Cancion', 'Nueva Trova', 'Trova', 'Guarania', 'Chacarera', 'Zamba', 'Andean Music',
+  'Música Criolla', 'Candombe', 'Polka', 'Volksmusik', 'Musette', 'Canzone Napoletana', 'Laïkó', 'Klezmer',
+  'Indian Classical', 'Zouk', 'Kizomba', 'Morna', 'Funaná', 'Compas', 'Salegy', 'Hawaiian', 'Pacific', 'Calypso',
+  'Soca', 'Beguine', 'Cumbia', 'Bolero', 'Chamamé', 'African', 'Afrobeat', 'Highlife', 'Schlager',
+]);
+estilos(1, 'mpb', ['MPB']);
+estilos(1, 'rock', [
+  'Pop Rock', 'Rock & Roll', 'Soft Rock', 'Folk Rock', 'Prog Rock', 'Hard Rock', 'Classic Rock', 'Blues Rock', 'New Wave',
+  'Psychedelic Rock', 'Alternative Rock', 'Art Rock', 'Heavy Metal', 'Beat', 'Punk', 'Rockabilly', 'Symphonic Rock',
+  'AOR', 'Glam', 'Indie Rock', 'Arena Rock', 'Thrash', 'Southern Rock', 'Garage Rock', 'Post-Punk', 'Psychedelic',
+  'Grindcore', 'Hardcore', 'Surf', 'Krautrock', 'Death Metal', 'Power Pop', 'Mod', 'Space Rock', 'Speed Metal',
+  'Black Metal', 'Twist', 'Acid Rock', 'Goth Rock', 'Stoner Rock', 'Pub Rock', 'Nu Metal', 'Power Metal', 'Doom Metal',
+  'Grunge', 'Britpop', 'Math Rock', 'Noise Rock', 'Rock Opera', 'Avantgarde', 'Country Rock',
+]);
+estilos(1, 'eletronica', [
+  'Synth-pop', 'House', 'Electro', 'Euro House', 'Techno', 'Eurodance', 'Italodance', 'Downtempo', 'Ambient',
+  'Experimental', 'Freestyle', 'Trance', 'Industrial', 'Deep House', 'Garage House', 'Trip Hop', 'Breaks', 'Acid House',
+  'Hip-House', 'Bass Music', 'Leftfield', 'Abstract', 'Synthwave', 'Drum n Bass', 'Electro House', 'Tech House', 'New Age',
+]);
+estilos(1, 'pop', ['Europop', 'Dance-pop', 'Indie Pop', 'Vocal', 'Light Music', 'Alt-Pop', 'Latin Pop', 'Sunshine Pop', 'Baroque Pop', 'Yé-Yé']);
+
+// Estilos românticos: contam como "Romântica" só em disco nacional.
 const ROMANTICOS = new Set(['Romantic', 'Ballad', 'Easy Listening', 'Chanson']);
+// Folk e música celta de fora; em disco nacional, "Folk" é música regional.
+const ESTILOS_FOLK = new Set(['Folk', 'Celtic']);
+// Música religiosa afro-brasileira: o Discogs marca como "Religious" junto com estes estilos.
+const ESTILOS_AFRO = new Set(['African', 'Batucada', 'Afoxé', 'Candomblé', 'Umbanda', 'Capoeira']);
 
 const FOLK_DISCOGS = 'Folk, World, & Country';
 
-// Folk de fora: em disco nacional, "Folk" no Discogs é música regional (fica em sertanejo).
-const ESTILOS_FOLK = new Set(['Folk', 'Celtic', 'Bluegrass']);
-
-// Estilos que não impedem "Folk, World, & Country" nacional de virar sertanejo.
-const ESTILOS_DO_INTERIOR = new Set(['Folk', 'Country']);
-
-// Música de raiz de fora do Brasil, sem gênero próprio na loja: vai para "Trilhas, Infantil e outros".
-const ESTILOS_DE_FORA = new Set([
-  'Country', 'Honky Tonk', 'Cajun', 'Zydeco', 'Tango', 'Milonga', 'Fado', 'Flamenco', 'Copla', 'Salsa',
-  'Merengue', 'Mambo', 'Cha-Cha', 'Rumba', 'Guaracha', 'Bachata', 'Pachanga', 'Afro-Cuban', 'Son Montuno',
-  'Danzon', 'Guajira', 'Bomba', 'Jibaro', 'Cuatro', 'Ranchera', 'Mariachi', 'Corrido', 'Nueva Cancion',
-  'Nueva Trova', 'Trova', 'Guarania', 'Chamamé', 'Chacarera', 'Zamba', 'Andean Music', 'Música Criolla',
-  'Candombe', 'Polka', 'Volksmusik', 'Musette', 'Canzone Napoletana', 'Laïkó', 'Klezmer', 'Cantorial',
-  'African', 'Indian Classical', 'Zouk', 'Kizomba', 'Morna', 'Funaná', 'Compas', 'Salegy', 'Hawaiian', 'Pacific',
-]);
-
-// Gênero do Discogs → gênero da loja, quando nenhum estilo resolveu.
-function porGenero(genero, nacional) {
-  switch (genero) {
-    case 'Rock':
-      return nacional ? 'rock-nacional' : 'rock';
-    case 'Pop':
-      return 'pop';
-    case 'Jazz':
-    case 'Blues':
-      return 'jazz-blues';
-    case 'Funk / Soul':
-    case 'Hip Hop':
-      return 'soul-funk-rap';
-    case 'Electronic':
-      return 'eletronica';
-    case 'Reggae':
-      return 'reggae';
-    case 'Classical':
-      return 'classica';
-    case 'Stage & Screen':
-    case "Children's":
-    case 'Non-Music':
-    case 'Brass & Military':
-      return 'trilhas-outros';
-    default:
-      return null;
-  }
-}
-
-const MAX_GENEROS = 2;
+// Gênero amplo do Discogs, quando nenhum estilo decidiu. A ordem é a prioridade.
+const POR_GENERO = [
+  ['Classical', () => 'classica'],
+  ["Children's", () => 'infantil'],
+  ['Stage & Screen', () => 'trilhas'],
+  ['Reggae', () => 'reggae'],
+  ['Hip Hop', () => 'rap'],
+  ['Blues', () => 'blues'],
+  ['Jazz', () => 'jazz'],
+  ['Funk / Soul', () => 'soul'],
+  ['Electronic', () => 'eletronica'],
+  ['Rock', (nacional) => (nacional ? 'rock-nacional' : 'rock')],
+  ['Pop', () => 'pop'],
+  ['Non-Music', () => 'outros'],
+  ['Brass & Military', () => 'outros'],
+];
 
 /**
- * Traduz o que o Discogs diz de um lançamento para até 2 gêneros da loja, o principal primeiro.
- * `nacional`: true quando o disco é brasileiro (ver ehNacional). Volta [] quando não dá para decidir.
+ * Traduz o que o Discogs diz de um lançamento para um gênero da loja (lista com 0 ou 1 item).
+ * `nacional`: true quando o disco é brasileiro (ver ehNacional).
  */
 export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = false } = {}) {
-  const latino = genres.includes('Latin');
-  const saida = [];
-  const somar = (id) => {
-    if (id && !saida.includes(id) && saida.length < MAX_GENEROS) saida.push(id);
-  };
+  // Religioso afro-brasileiro antes de tudo: senão "Religious" ou "Batucada" levariam para Gospel ou Samba.
+  if (styles.includes('Religious') && styles.some((e) => ESTILOS_AFRO.has(e)) && !styles.includes('Gospel')) {
+    return ['afro-brasileira'];
+  }
 
+  let melhor = null;
   for (const estilo of styles) {
-    if (ROMANTICOS.has(estilo)) {
-      if (nacional || latino) somar('romantica-brega');
-    } else if (ESTILOS_FOLK.has(estilo)) {
-      if (!nacional) somar('folk');
-    } else {
-      somar(POR_ESTILO[estilo]);
-    }
+    let regra = ESTILOS[estilo];
+    if (!regra && ROMANTICOS.has(estilo) && nacional) regra = { genero: 'romantica', peso: 1 };
+    if (!regra && ESTILOS_FOLK.has(estilo)) regra = nacional ? { genero: 'regional', peso: 1 } : { genero: 'folk', peso: 2 };
+    if (!regra) continue;
+    let genero = regra.genero;
+    // Rock feito no Brasil; bolero e cumbia brasileiros.
+    if (genero === 'rock' && nacional) genero = 'rock-nacional';
+    if (nacional && estilo === 'Bolero') genero = 'romantica';
+    if (nacional && estilo === 'Cumbia') genero = 'lambada';
+    // "Country" em disco brasileiro é o sertanejo.
+    if (nacional && genero === 'country') genero = 'sertanejo';
+    if (!melhor || regra.peso > melhor.peso) melhor = { genero, peso: regra.peso };
   }
-  // O gênero amplo do Discogs só entra quando nenhum estilo resolveu: senão um disco de MPB
-  // marcado também como "Folk, World, & Country" viraria sertanejo.
-  if (!saida.length) for (const genero of genres) somar(porGenero(genero, nacional));
-  // "Folk, World, & Country" é o mais amplo: só decide quando nada mais decidiu.
-  if (!saida.length && genres.includes(FOLK_DISCOGS)) {
-    if (!nacional) somar('trilhas-outros');
-    else if (styles.every((e) => ESTILOS_DO_INTERIOR.has(e))) somar('sertanejo-forro');
+  if (melhor) return [melhor.genero];
+
+  // Música cristã sem estilo de gênero musical.
+  if (styles.includes('Religious')) return ['gospel'];
+
+  for (const [genero, traduzir] of POR_GENERO) {
+    if (genres.includes(genero)) return [traduzir(nacional)];
   }
-  if (!saida.length && styles.some((e) => ESTILOS_DE_FORA.has(e))) somar('trilhas-outros');
-  return saida;
+  // "Folk, World, & Country" é o mais amplo: no Brasil é regional, fora é música do mundo.
+  if (genres.includes(FOLK_DISCOGS)) return [nacional ? 'regional' : 'latina-mundo'];
+  return [];
 }
 
 // Palavras e terminações comuns em português e raras em inglês.
@@ -258,23 +179,26 @@ export function fracaoPortugues(titulos = []) {
 }
 
 /**
- * Disco brasileiro? "Latin" no Discogs ou títulos das faixas em português.
- * Sem faixas e sem "Latin" volta null: quem chama decide pelo artista.
+ * Disco brasileiro? "Latin" no Discogs sem estilo de fora (tango, salsa...), ou títulos das faixas
+ * em português. Sem faixas e sem "Latin" volta null: quem chama decide pelo artista.
  */
-export function ehNacional({ genres = [] } = {}, titulos = []) {
-  if (genres.includes('Latin')) return true;
+export function ehNacional({ genres = [], styles = [] } = {}, titulos = []) {
+  if (genres.includes('Latin')) {
+    return !styles.some((e) => ESTILOS[e]?.genero === 'latina-mundo' && e !== 'Bolero' && e !== 'Cumbia');
+  }
   if (!titulos.length) return null;
   return fracaoPortugues(titulos) >= 0.4;
 }
 
 /**
- * Gêneros da loja de um disco, a partir do que o Discogs disse (discos.genero_discogs) e dos
- * títulos das faixas. `nacionalPeloArtista` decide quando nem "Latin" nem as faixas decidem.
+ * Gênero da loja de um disco (lista com 0 ou 1 item), a partir do que o Discogs disse
+ * (discos.genero_discogs) e dos títulos das faixas. `nacionalPeloArtista` decide quando nem
+ * as faixas nem "Latin" decidem.
  */
 export function generosDoDisco(generoDiscogs, titulos = [], nacionalPeloArtista = null) {
   const genres = generoDiscogs?.genres || [];
   const styles = generoDiscogs?.styles || [];
   if (!genres.length && !styles.length) return [];
-  const nacional = ehNacional({ genres }, titulos) ?? nacionalPeloArtista ?? false;
+  const nacional = ehNacional({ genres, styles }, titulos) ?? nacionalPeloArtista ?? false;
   return traduzirGeneros({ genres, styles }, { nacional });
 }
