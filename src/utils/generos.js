@@ -10,7 +10,11 @@ export const GENEROS = [
   g('pagode', 'Pagode', 'O samba de fundo de quintal com banjo e tantã, de Fundo de Quintal, Zeca Pagodinho, Raça Negra e Só Pra Contrariar.'),
   g('choro', 'Choro', 'A música instrumental do bandolim, da flauta e do cavaquinho, de Pixinguinha, Jacob do Bandolim e Waldir Azevedo.'),
   g('bossa-nova', 'Bossa Nova', 'O samba de voz baixa e violão de João Gilberto, Tom Jobim, Vinicius de Moraes, Nara Leão e Astrud Gilberto.'),
+  g('jovem-guarda', 'Jovem Guarda', 'O iê-iê-iê brasileiro dos anos 1960: Erasmo Carlos, Wanderley Cardoso, Jerry Adriani, Renato e Seus Blue Caps e Os Vips.'),
   g('rock-nacional', 'Rock Nacional', 'O rock feito no Brasil, da Jovem Guarda de Roberto e Erasmo aos anos 1980 de Titãs, Legião Urbana e Paralamas.'),
+  g('rock-and-roll', 'Rock and Roll', 'O rock dos anos 1950 e começo dos 1960: Elvis, Chuck Berry, Little Richard, Bill Haley e o rockabilly.'),
+  g('rock-progressivo', 'Rock Progressivo', 'O rock de suítes longas, teclados e orquestra: Yes, Genesis, Pink Floyd, Rick Wakeman e Jethro Tull.'),
+  g('metal', 'Hard Rock e Metal', 'Guitarras pesadas, de Deep Purple, Uriah Heep e Black Sabbath ao Iron Maiden e ao thrash.'),
   g('rock', 'Rock', 'Do rock and roll dos anos 1950 ao progressivo, ao hard rock, ao punk e à new wave, de Elvis e Beatles ao Queen.'),
   g('pop', 'Pop', 'Os sucessos das paradas do mundo, de ABBA e Michael Jackson a Madonna, Rita Lee e Kid Abelha.'),
   g('romantica', 'Romântica', 'Boleros, serestas e baladas de amor, de Nelson Gonçalves, Angela Maria, Agnaldo Timóteo e Roberto Carlos.'),
@@ -27,6 +31,7 @@ export const GENEROS = [
   g('disco', 'Disco', 'A música das pistas dos anos 1970, de Donna Summer, Bee Gees e Chic às Frenéticas.'),
   g('jazz', 'Jazz', 'Do swing das big bands ao bebop, ao cool e ao fusion, de Duke Ellington e Miles Davis a Ella Fitzgerald.'),
   g('blues', 'Blues', 'O blues de B.B. King, Muddy Waters, John Lee Hooker e Etta James.'),
+  g('orquestras', 'Orquestras e Instrumental', 'Orquestras de baile e discos instrumentais: Ray Conniff, Mantovani, Paul Mauriat, Herb Alpert, Waldir Calmon e os discos de sax, órgão e teclado.'),
   g('eletronica', 'Eletrônica', 'Do synth-pop e da música de pista dos anos 1980 à house e ao techno.'),
   g('reggae', 'Reggae', 'O reggae da Jamaica de Bob Marley e Jimmy Cliff e o reggae brasileiro.'),
   g('folk', 'Folk', 'O folk do violão e da voz, de Bob Dylan, Joan Baez e Simon & Garfunkel à música celta.'),
@@ -56,7 +61,7 @@ const estilos = (peso, genero, lista) => lista.forEach((e) => (ESTILOS[e] = { ge
 
 estilos(3, 'pagode', ['Pagode']);
 estilos(3, 'choro', ['Choro']);
-estilos(3, 'rock-nacional', ['Jovem Guarda']);
+estilos(3, 'jovem-guarda', ['Jovem Guarda']);
 estilos(3, 'forro', ['Forró', 'Baião', 'Xote', 'Xaxado']);
 estilos(3, 'sertanejo', ['Sertanejo', 'Caipira']);
 estilos(3, 'regional', ['Frevo', 'Maracatu', 'Repente', 'Embolada', 'Coco', 'Ciranda', 'Bumba-meu-boi']);
@@ -70,6 +75,13 @@ estilos(2, 'samba', ['Samba', 'Samba-Canção', 'Samba-Enredo', 'Samba Enredo', 
 estilos(2, 'bossa-nova', ['Bossa Nova', 'Bossanova']);
 estilos(2, 'mpb', ['Tropicalia', 'Tropicália']);
 estilos(2, 'romantica', ['Seresta']);
+estilos(2, 'rock-progressivo', ['Prog Rock', 'Symphonic Rock', 'Art Rock', 'Krautrock', 'Space Rock', 'Rock Opera']);
+estilos(2, 'metal', [
+  'Heavy Metal', 'Thrash', 'Death Metal', 'Black Metal', 'Speed Metal', 'Power Metal', 'Doom Metal', 'Sludge Metal',
+  'Nu Metal', 'Grindcore', 'Industrial Metal', 'Stoner Rock', 'Neo-Classical Metal', 'Alternative Metal', 'Funk Metal',
+]);
+estilos(2, 'rock-and-roll', ['Rockabilly', 'Doo Wop', 'Twist', 'Psychobilly']);
+estilos(1, 'metal', ['Hard Rock']);
 estilos(2, 'reggae', ['Reggae', 'Roots Reggae', 'Dub', 'Ska', 'Rocksteady', 'Dancehall', 'Ragga', 'Reggae-Pop', 'Lovers Rock']);
 estilos(2, 'disco', ['Disco', 'Italo-Disco', 'Euro-Disco', 'Hi NRG']);
 estilos(2, 'soul', ['Soul', 'Rhythm & Blues', 'Neo Soul', 'Contemporary R&B', 'Doo Wop', 'Northern Soul', 'Southern Soul']);
@@ -90,19 +102,20 @@ estilos(2, 'latina-mundo', [
 ]);
 estilos(1, 'mpb', ['MPB']);
 estilos(1, 'rock', [
-  'Pop Rock', 'Rock & Roll', 'Soft Rock', 'Folk Rock', 'Prog Rock', 'Hard Rock', 'Classic Rock', 'Blues Rock', 'New Wave',
-  'Psychedelic Rock', 'Alternative Rock', 'Art Rock', 'Heavy Metal', 'Beat', 'Punk', 'Rockabilly', 'Symphonic Rock',
-  'AOR', 'Glam', 'Indie Rock', 'Arena Rock', 'Thrash', 'Southern Rock', 'Garage Rock', 'Post-Punk', 'Psychedelic',
-  'Grindcore', 'Hardcore', 'Surf', 'Krautrock', 'Death Metal', 'Power Pop', 'Mod', 'Space Rock', 'Speed Metal',
-  'Black Metal', 'Twist', 'Acid Rock', 'Goth Rock', 'Stoner Rock', 'Pub Rock', 'Nu Metal', 'Power Metal', 'Doom Metal',
-  'Grunge', 'Britpop', 'Math Rock', 'Noise Rock', 'Rock Opera', 'Avantgarde', 'Country Rock',
+  'Pop Rock', 'Rock & Roll', 'Soft Rock', 'Folk Rock', 'Classic Rock', 'Blues Rock', 'New Wave',
+  'Psychedelic Rock', 'Alternative Rock', 'Beat', 'Punk',
+  'AOR', 'Glam', 'Indie Rock', 'Arena Rock', 'Southern Rock', 'Garage Rock', 'Post-Punk', 'Psychedelic',
+  'Hardcore', 'Surf', 'Power Pop', 'Mod',
+  'Acid Rock', 'Goth Rock', 'Pub Rock',
+  'Grunge', 'Britpop', 'Math Rock', 'Noise Rock', 'Avantgarde', 'Country Rock',
 ]);
 estilos(1, 'eletronica', [
   'Synth-pop', 'House', 'Electro', 'Euro House', 'Techno', 'Eurodance', 'Italodance', 'Downtempo', 'Ambient',
   'Experimental', 'Freestyle', 'Trance', 'Industrial', 'Deep House', 'Garage House', 'Trip Hop', 'Breaks', 'Acid House',
   'Hip-House', 'Bass Music', 'Leftfield', 'Abstract', 'Synthwave', 'Drum n Bass', 'Electro House', 'Tech House', 'New Age',
 ]);
-estilos(1, 'pop', ['Europop', 'Dance-pop', 'Indie Pop', 'Vocal', 'Light Music', 'Alt-Pop', 'Latin Pop', 'Sunshine Pop', 'Baroque Pop', 'Yé-Yé']);
+estilos(1, 'orquestras', ['Light Music', 'Space-Age', 'Lounge', 'Instrumental', 'Exotica', 'Marimba', 'Organ']);
+estilos(1, 'pop', ['Europop', 'Dance-pop', 'Indie Pop', 'Vocal', 'Alt-Pop', 'Latin Pop', 'Sunshine Pop', 'Baroque Pop', 'Yé-Yé']);
 
 // Estilos românticos: contam como "Romântica" só em disco nacional.
 const ROMANTICOS = new Set(['Romantic', 'Ballad', 'Easy Listening', 'Chanson']);
@@ -144,6 +157,7 @@ export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = 
   for (const estilo of styles) {
     let regra = ESTILOS[estilo];
     if (!regra && ROMANTICOS.has(estilo) && nacional) regra = { genero: 'romantica', peso: 1 };
+    if (!regra && estilo === 'Easy Listening' && !nacional) regra = { genero: 'orquestras', peso: 1 };
     if (!regra && ESTILOS_FOLK.has(estilo)) regra = nacional ? { genero: 'regional', peso: 1 } : { genero: 'folk', peso: 2 };
     if (!regra) continue;
     let genero = regra.genero;

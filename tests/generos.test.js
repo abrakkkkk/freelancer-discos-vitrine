@@ -9,7 +9,7 @@ describe('GENEROS', () => {
   });
 
   it('nenhum gênero junta dois em um nome', () => {
-    expect(GENEROS.filter((g) => /,| e /.test(g.nome) && g.id !== 'latina-mundo').map((g) => g.nome)).toEqual([]);
+    expect(GENEROS.filter((g) => /,| e /.test(g.nome) && !['latina-mundo', 'metal', 'orquestras'].includes(g.id)).map((g) => g.nome)).toEqual([]);
   });
 });
 
@@ -69,7 +69,17 @@ describe('traduzirGeneros: um gênero por disco', () => {
 
   it('rock nacional e internacional', () => {
     expect(t(['Rock'], ['New Wave', 'Post-Punk'], true)).toEqual(['rock-nacional']);
-    expect(t(['Rock'], ['Hard Rock'], false)).toEqual(['rock']);
+    expect(t(['Rock'], ['Classic Rock'], false)).toEqual(['rock']);
+  });
+
+  it('progressivo, hard rock e metal, rock and roll e jovem guarda separados', () => {
+    expect(t(['Rock'], ['Prog Rock', 'Classic Rock'])).toEqual(['rock-progressivo']);
+    expect(t(['Rock'], ['Heavy Metal'])).toEqual(['metal']);
+    expect(t(['Rock'], ['Hard Rock'])).toEqual(['metal']);
+    expect(t(['Rock'], ['Rockabilly'])).toEqual(['rock-and-roll']);
+    expect(t(['Latin'], ['Jovem Guarda'], true)).toEqual(['jovem-guarda']);
+    expect(t(['Pop'], ['Easy Listening'])).toEqual(['orquestras']);
+    expect(t(['Latin'], ['Easy Listening'], true)).toEqual(['romantica']);
   });
 
   it('Umbanda e Candomblé vão para Afro-brasileira, não para Gospel', () => {
