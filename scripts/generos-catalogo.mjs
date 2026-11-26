@@ -151,6 +151,7 @@ const iguais = (a, b) => JSON.stringify(a || []) === JSON.stringify(b || []);
 const relatorio = fs.createWriteStream(RELATORIO);
 const resumo = { discogs: 0, artista: 0, manual: 0, semGenero: 0, mudou: 0 };
 const contagem = {};
+const gravacoes = [];
 
 for (const d of discos) {
   let { generos, origem } = calculados.get(d.id);
@@ -170,12 +171,20 @@ for (const d of discos) {
   const valor = generos.length ? generos : null;
   if (iguais(valor, d.generos)) continue;
   resumo.mudou++;
-  if (GRAVAR) {
-    const { error } = await supabase.from('discos').update({ generos: valor }).eq('id', d.id);
-    if (error) console.error(`Disco ${d.id}: erro ao gravar gêneros:`, error.message);
-  }
+  if (GRAVAR) gravacoes.push({ id: d.id, valor });
 }
 relatorio.end();
+
+// Grava 10 discos por vez: um por vez levava mais de uma hora no catálogo inteiro.
+for (let i = 0; i < gravacoes.length; i += 10) {
+  await Promise.all(
+    gravacoes.slice(i, i + 10).map(async ({ id, valor }) => {
+      const { error } = await supabase.from('discos').update({ generos: valor }).eq('id', id);
+      if (error) console.error(`Disco ${id}: erro ao gravar gêneros:`, error.message);
+    })
+  );
+  if ((i / 10) % 50 === 0) console.log(`  gravados ${Math.min(i + 10, gravacoes.length)}/${gravacoes.length}`);
+}
 
 console.log('Etapa 2:', resumo);
 console.log('Por gênero:', Object.entries(contagem).sort((a, b) => b[1] - a[1]).map(([g, n]) => `${g} ${n}`).join(', '));
