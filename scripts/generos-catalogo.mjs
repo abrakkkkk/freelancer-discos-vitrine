@@ -22,6 +22,7 @@ import {
   ehGeneroValido,
   analisarDisco,
   montarGeneros,
+  juntarGeneros,
 } from '../src/utils/generos.js';
 import { isVariousArtist, normalizeText } from '../src/utils/coverMatch.js';
 
@@ -192,6 +193,13 @@ for (const d of discos) {
       origem: origemPorArtista.get(chaveArtista(d.artista)) || null,
       coletanea: isVariousArtist(d.artista) || !d.artista?.trim(),
     });
+  }
+  // "extras": gêneros a mais escolhidos disco a disco, com fonte (Discogs da edição, Wikipédia do
+  // álbum ou o próprio título). Não trocam o principal e valem também para coletânea.
+  const extrasManuais = validos(CORRECOES.extras?.[d.id]);
+  if (extrasManuais.length) {
+    generos = juntarGeneros(generos[0], [...generos.slice(1), ...extrasManuais]);
+    if (generos.length > 1) generos = generos.filter((g) => g !== 'outros');
   }
 
   if (generos.length) resumo[origem]++;

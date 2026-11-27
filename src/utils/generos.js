@@ -170,6 +170,13 @@ const POR_GENERO = [
 
 // Estilos que não viram gênero extra: aparecem em discos de outros gêneros sem dizer muito deles.
 const SEM_EXTRA = new Set(['Rhythm & Blues', 'Doo Wop', 'Marches', 'Schlager', 'Polka']);
+const EXTRA_POR_ESTILO = { 'Blues Rock': 'blues', 'Country Rock': 'country' };
+// Estilos da música clássica no Discogs. Valem só com o gênero "Classical" no lançamento:
+// "Classical" sozinho aparece até em disco de MPB e de Natal.
+const ESTILOS_CLASSICOS = new Set([
+  'Baroque', 'Romantic', 'Classical', 'Opera', 'Operetta', 'Oratorio', 'Choral', 'Impressionist', 'Modern Classical',
+  'Contemporary', 'Neo-Classical', 'Neo-Romantic', 'Renaissance', 'Medieval', 'Post-Modern', 'Symphony', 'Concerto',
+]);
 
 /**
  * O que o Discogs diz de um lançamento, nos gêneros da loja: `principal` (o estilo mais específico,
@@ -199,6 +206,15 @@ export function analisarGeneros({ genres = [], styles = [] } = {}, { nacional = 
     if (nacional && genero === 'country') genero = 'sertanejo';
     if (!melhor || regra.peso > melhor.peso) melhor = { genero, peso: regra.peso };
     if (regra.peso >= 2 && !SEM_EXTRA.has(estilo) && genero !== 'outros' && !fortes.includes(genero)) fortes.push(genero);
+  }
+  // Estilos que só acrescentam um gênero, sem decidir o principal: blues rock também é blues,
+  // country rock também é country, e disco com estilo clássico (barroco, ópera...) também é clássico.
+  for (const estilo of styles) {
+    let extra = EXTRA_POR_ESTILO[estilo];
+    if (!extra && genres.includes('Classical') && ESTILOS_CLASSICOS.has(estilo)) extra = 'classica';
+    // Country rock brasileiro não é sertanejo.
+    if (extra === 'country' && nacional) continue;
+    if (extra && !fortes.includes(extra)) fortes.push(extra);
   }
   if (melhor) return { principal: melhor.genero, fortes };
 
