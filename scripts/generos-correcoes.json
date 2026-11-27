@@ -1524,6 +1524,9 @@
     "13235": [
       "mpb"
     ],
+    "13237": [
+      "lambada"
+    ],
     "13239": [
       "outros"
     ],
@@ -2528,6 +2531,9 @@
     ],
     "20909": [
       "rock-nacional"
+    ],
+    "20921": [
+      "rap-nacional"
     ],
     "20940": [
       "pagode"
@@ -4587,6 +4593,9 @@
     "27093": [
       "outros"
     ],
+    "27119": [
+      "rap-nacional"
+    ],
     "27123": [
       "rap"
     ],
@@ -4958,6 +4967,9 @@
     ],
     "28485": [
       "outros"
+    ],
+    "28487": [
+      "orquestras"
     ],
     "28494": [
       "outros"
@@ -5887,6 +5899,45 @@
       "outros"
     ],
     "32091": [
+      "regional"
+    ],
+    "32464": [
+      "jazz"
+    ],
+    "32478": [
+      "forro"
+    ],
+    "32518": [
+      "latina"
+    ],
+    "32568": [
+      "outros"
+    ],
+    "32598": [
+      "outros"
+    ],
+    "32622": [
+      "forro"
+    ],
+    "32623": [
+      "lambada"
+    ],
+    "32672": [
+      "latina"
+    ],
+    "32686": [
+      "outros"
+    ],
+    "32689": [
+      "choro"
+    ],
+    "32696": [
+      "latina"
+    ],
+    "32701": [
+      "forro"
+    ],
+    "32722": [
       "regional"
     ]
   },
@@ -8686,6 +8737,9 @@
     ],
     "Super Bacana": [
       "funk"
+    ],
+    "Teixeirinha": [
+      "regional"
     ]
   },
   "fixos": {
@@ -8698,5 +8752,20 @@
     "32066": [
       "afro-brasileira"
     ]
+  },
+  "origem": {
+    "Djonga": "br",
+    "FBC": "br",
+    "Sergio Rick": "br",
+    "DJ Marlboro": "br",
+    "Rap Brasil": "br",
+    "Skowa e Máfia": "br",
+    "Super Bacana": "br",
+    "Subversão Brasileira": "br",
+    "Xuxa": "br",
+    "Trini Lopez": "fora",
+    "Chick Corea": "fora",
+    "Ana Belen": "fora",
+    "Teixeirinha": "br"
   }
 }

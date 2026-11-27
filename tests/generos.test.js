@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { GENEROS, ehNacional, fracaoPortugues, generosDoDisco, generosDoItem, traduzirGeneros } from '@/utils/generos';
+import {
+  GENEROS,
+  SO_BRASILEIROS,
+  SO_DE_FORA,
+  ehNacional,
+  fracaoPortugues,
+  generoNaOrigem,
+  generosDoDisco,
+  generosDoItem,
+  nacionalPeloGenero,
+  traduzirGeneros,
+} from '@/utils/generos';
 
 describe('GENEROS', () => {
   it('ids únicos, nome e descrição em todos', () => {
@@ -13,17 +24,24 @@ describe('GENEROS', () => {
   });
 });
 
-describe('traduzirGeneros: um gênero por disco', () => {
+describe('traduzirGeneros: o principal primeiro, depois os outros estilos claros', () => {
   const t = (genres, styles, nacional = false) => traduzirGeneros({ genres, styles }, { nacional });
 
-  it('sempre no máximo um gênero', () => {
-    expect(t(['Latin', 'Pop'], ['MPB', 'Samba', 'Bossa Nova'], true)).toHaveLength(1);
-    expect(t(['Jazz', 'Funk / Soul'], ['Jazz-Funk'])).toHaveLength(1);
+  it('disco de sertanejo com forró fica nos dois', () => {
+    expect(t(['Latin'], ['Sertanejo', 'Forró'], true)).toEqual(['sertanejo', 'forro']);
+    expect(t(['Latin', 'Pop'], ['MPB', 'Samba', 'Bossa Nova'], true)).toEqual(['samba', 'bossa-nova']);
+    expect(t(['Funk / Soul'], ['Soul', 'Disco'])).toEqual(['soul', 'disco']);
   });
 
-  it('o estilo mais específico decide: samba vence MPB, pagode vence samba', () => {
+  it('estilo amplo (peso 1) não vira gênero extra', () => {
     expect(t(['Latin'], ['MPB', 'Samba'], true)).toEqual(['samba']);
-    expect(t(['Latin'], ['Samba', 'Pagode'], true)).toEqual(['pagode']);
+    expect(t(['Rock', 'Pop'], ['Prog Rock', 'Pop Rock'])).toEqual(['rock-progressivo']);
+    expect(t(['Funk / Soul'], ['Soul', 'Rhythm & Blues'])).toEqual(['soul']);
+  });
+
+  it('o estilo mais específico decide o principal: samba vence MPB, pagode vence samba', () => {
+    expect(t(['Latin'], ['MPB', 'Samba'], true)).toEqual(['samba']);
+    expect(t(['Latin'], ['Samba', 'Pagode'], true)).toEqual(['pagode', 'samba']);
     expect(t(['Latin'], ['MPB'], true)).toEqual(['mpb']);
   });
 
@@ -53,7 +71,14 @@ describe('traduzirGeneros: um gênero por disco', () => {
     expect(t(['Funk / Soul'], ['Funk'])).toEqual(['funk']);
     expect(t(['Hip Hop'], [])).toEqual(['rap']);
     expect(t(['Funk / Soul'], ['Disco'])).toEqual(['disco']);
-    expect(t(['Electronic'], ['Favela Funk'], true)).toEqual(['funk']);
+  });
+
+  it('funk e rap brasileiros separados dos de fora', () => {
+    expect(t(['Electronic'], ['Favela Funk'], true)).toEqual(['funk-brasileiro']);
+    expect(t(['Funk / Soul'], ['Funk'], true)).toEqual(['funk-brasileiro']);
+    expect(t(['Hip Hop'], [], true)).toEqual(['rap-nacional']);
+    expect(t(['Hip Hop'], ['Conscious'], true)).toEqual(['rap-nacional']);
+    expect(t(['Funk / Soul', 'Latin'], ['Soul', 'Funk'], true)).toEqual(['soul', 'funk-brasileiro']);
   });
 
   it('jazz e blues separados', () => {
@@ -91,7 +116,7 @@ describe('traduzirGeneros: um gênero por disco', () => {
 
   it('country é Country; folk de fora é Folk; raiz de fora é Latina e Mundo', () => {
     expect(t(['Folk, World, & Country'], ['Country'])).toEqual(['country']);
-    expect(t(['Folk, World, & Country'], ['Country', 'Gospel'])).toEqual(['gospel']);
+    expect(t(['Folk, World, & Country'], ['Country', 'Gospel'])).toEqual(['gospel', 'country']);
     expect(t(['Folk, World, & Country'], ['Folk'])).toEqual(['folk']);
     expect(t(['Latin', 'Folk, World, & Country'], ['Tango'])).toEqual(['latina']);
     expect(t(['Folk, World, & Country'], [])).toEqual(['mundo']);
@@ -101,6 +126,8 @@ describe('traduzirGeneros: um gênero por disco', () => {
   it('regional é só do Brasil', () => {
     expect(t(['Latin', 'Folk, World, & Country'], ['Folk'], true)).toEqual(['regional']);
     expect(t(['Folk, World, & Country'], [], true)).toEqual(['regional']);
+    expect(t(['Folk, World, & Country'], [])).toEqual(['mundo']);
+    expect(generoNaOrigem('regional', false)).toBe(null);
   });
 
   it('Latin sem estilo fica sem gênero', () => {
@@ -145,5 +172,27 @@ describe('generosDoDisco', () => {
   it('sem faixas, o artista decide se o rock é nacional', () => {
     expect(generosDoDisco({ genres: ['Rock'], styles: ['Pop Rock'] }, [], true)).toEqual(['rock-nacional']);
     expect(generosDoDisco({ genres: ['Rock'], styles: ['Pop Rock'] }, [])).toEqual(['rock']);
+  });
+});
+
+describe('gêneros brasileiros e de fora', () => {
+  it('todo gênero dos dois lados existe e nenhum está nos dois', () => {
+    const ids = new Set(GENEROS.map((g) => g.id));
+    expect([...SO_BRASILEIROS, ...SO_DE_FORA].every((id) => ids.has(id))).toBe(true);
+    expect([...SO_BRASILEIROS].filter((id) => SO_DE_FORA.has(id))).toEqual([]);
+  });
+
+  it('generoNaOrigem troca o par conforme o disco', () => {
+    expect(generoNaOrigem('funk', true)).toBe('funk-brasileiro');
+    expect(generoNaOrigem('funk-brasileiro', false)).toBe('funk');
+    expect(generoNaOrigem('rap', true)).toBe('rap-nacional');
+    expect(generoNaOrigem('rock-nacional', false)).toBe('rock');
+    expect(generoNaOrigem('soul', true)).toBe('soul');
+  });
+
+  it('nacionalPeloGenero: o principal decide quando só existe de um lado', () => {
+    expect(nacionalPeloGenero('samba', false)).toBe(true);
+    expect(nacionalPeloGenero('rock', true)).toBe(false);
+    expect(nacionalPeloGenero('soul', true)).toBe(true);
   });
 });

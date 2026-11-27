@@ -4,7 +4,9 @@
 //    pela capa (conferindo artista e título) e, por último, pela busca. ~1 consulta por disco.
 // 2. Traduz para os gêneros da loja (src/utils/generos.js), sem consultar o Discogs. Disco sem
 //    "Latin" e sem faixas usa o artista para saber se é nacional; disco sem gênero herda o do
-//    artista quando os outros discos dele concordam. Correções manuais em scripts/generos-correcoes.json.
+//    artista quando os outros discos dele concordam. O disco ganha também os gêneros dos outros estilos
+//    claros do Discogs (vários gêneros por disco). Correções manuais em scripts/generos-correcoes.json
+//    (listas: o primeiro gênero é o principal).
 // Pode ser interrompido e retomado: a etapa 1 só pega o que ainda não foi procurado.
 //
 //   node --env-file=.env.local scripts/generos-catalogo.mjs                 (teste, não grava)
@@ -15,7 +17,15 @@ import fs from 'fs';
 import path from 'path';
 import { createClient } from '@supabase/supabase-js';
 import { headersDiscogs, buscarLancamentoParaGenero, generoParaGravar } from '../src/utils/faixasDiscogs.js';
-import { generosDoDisco, ehGeneroValido } from '../src/utils/generos.js';
+import {
+  generosDoDisco,
+  ehGeneroValido,
+  analisarDisco,
+  nacionalPeloGenero,
+  generoNaOrigem,
+  juntarGeneros,
+  SO_DE_FORA,
+} from '../src/utils/generos.js';
 import { isVariousArtist, normalizeText } from '../src/utils/coverMatch.js';
 
 const args = process.argv.slice(2);
@@ -108,18 +118,23 @@ for (const d of discos) {
   else if (!nacionalPorArtista.has(k)) nacionalPorArtista.set(k, null);
 }
 
+// Artistas cujo disco o Discogs não deixa claro se é brasileiro ("br") ou de fora ("fora").
+const origemPorArtista = new Map(Object.entries(CORRECOES.origem || {}).map(([a, o]) => [normalizeText(a), o]));
 const porArtistaManual = new Map(Object.entries(CORRECOES.artistas || {}).map(([a, g]) => [normalizeText(a), g]));
-const validos = (lista) => (Array.isArray(lista) ? lista.filter(ehGeneroValido).slice(0, 1) : []);
+// Correções aceitam mais de um gênero; o primeiro é o principal.
+const validos = (lista) => (Array.isArray(lista) ? [...new Set(lista.filter(ehGeneroValido))] : []);
 
-// Gênero de cada disco antes do artista: correção manual do disco, senão o Discogs.
+// Gênero principal de cada disco antes do artista: correção manual do disco, senão o Discogs.
+// Do Discogs vêm também os gêneros extras (estilos claros) e se o disco é brasileiro.
 const calculados = new Map();
 for (const d of discos) {
   const manual = validos(CORRECOES.ids?.[d.id]);
+  const discogs = analisarDisco(d.genero_discogs, titulosDasFaixas(d), nacionalPorArtista.get(chaveArtista(d.artista)) ?? null);
   calculados.set(
     d.id,
     manual.length
-      ? { generos: manual, origem: 'manual' }
-      : { generos: generosDoDisco(d.genero_discogs, titulosDasFaixas(d), nacionalPorArtista.get(chaveArtista(d.artista)) ?? null), origem: 'discogs' }
+      ? { generos: manual, fortes: [], nacional: discogs.nacional, origem: 'manual' }
+      : { generos: discogs.principal ? [discogs.principal] : [], fortes: discogs.fortes, nacional: discogs.nacional, origem: 'discogs' }
   );
 }
 
@@ -152,18 +167,38 @@ const relatorio = fs.createWriteStream(RELATORIO);
 const resumo = { discogs: 0, artista: 0, manual: 0, semGenero: 0, mudou: 0 };
 const contagem = {};
 const gravacoes = [];
+const MUDANCAS = path.join(PASTA, GRAVAR ? 'generos-mudancas.jsonl' : 'generos-mudancas-teste.jsonl');
+const mudancas = fs.createWriteStream(MUDANCAS);
 
 for (const d of discos) {
-  let { generos, origem } = calculados.get(d.id);
+  const calculado = calculados.get(d.id);
+  let { generos, origem } = calculado;
   // "fixos": discos escolhidos um a um, que vencem a regra do artista.
   const fixo = validos(CORRECOES.fixos?.[d.id]);
   const doArtista = fixo.length ? null : generoDoArtista(d.artista);
   if (fixo.length) {
     generos = fixo;
     origem = 'manual';
-  } else if (doArtista && doArtista !== generos[0]) {
-    generos = [doArtista];
-    origem = 'artista';
+  } else {
+    if (doArtista && doArtista !== generos[0]) {
+      generos = [doArtista, ...generos.slice(1)];
+      origem = 'artista';
+    }
+    // Extras do Discogs (um disco de sertanejo com forró fica nos dois), na versão brasileira ou de
+    // fora conforme o gênero principal ou a origem do artista. Regional só em disco brasileiro.
+    const origemManual = origemPorArtista.get(chaveArtista(d.artista));
+    const nacional = origemManual ? origemManual === 'br' : nacionalPeloGenero(generos[0], calculado.nacional);
+    // Regional de artista de fora vira Música do Mundo.
+    const principal = generos[0] && (generoNaOrigem(generos[0], nacional) || 'mundo');
+    // Coletânea leva no máximo um gênero extra: as trilhas de novela juntam de tudo.
+    // Em disco brasileiro, gênero só de fora não entra como extra (a não ser Latina: tango, bolero).
+    const extras = calculado.fortes
+      .map((g) => generoNaOrigem(g, nacional))
+      .filter((g) => g && !(nacional && SO_DE_FORA.has(g) && g !== 'latina'));
+    generos = juntarGeneros(principal, [...generos.slice(1), ...extras]);
+    // "Outros" é o resto: sai quando o disco tem gênero melhor.
+    if (generos.length > 1) generos = generos.filter((g) => g !== 'outros');
+    if (isVariousArtist(d.artista) || !d.artista?.trim()) generos = generos.slice(0, 2);
   }
 
   if (generos.length) resumo[origem]++;
@@ -176,9 +211,11 @@ for (const d of discos) {
   const valor = generos.length ? generos : null;
   if (iguais(valor, d.generos)) continue;
   resumo.mudou++;
+  mudancas.write(JSON.stringify({ id: d.id, artista: d.artista, titulo: d.titulo, antes: d.generos, depois: valor }) + '\n');
   if (GRAVAR) gravacoes.push({ id: d.id, valor });
 }
 relatorio.end();
+mudancas.end();
 
 // Grava 10 discos por vez: um por vez levava mais de uma hora no catálogo inteiro.
 for (let i = 0; i < gravacoes.length; i += 10) {
@@ -193,5 +230,5 @@ for (let i = 0; i < gravacoes.length; i += 10) {
 
 console.log('Etapa 2:', resumo);
 console.log('Por gênero:', Object.entries(contagem).sort((a, b) => b[1] - a[1]).map(([g, n]) => `${g} ${n}`).join(', '));
-console.log(`Discos sem gênero em ${RELATORIO}`);
+console.log(`Discos sem gênero em ${RELATORIO}; mudanças em ${MUDANCAS}`);
 if (!GRAVAR) console.log('Teste: nada foi gravado. Use --gravar.');

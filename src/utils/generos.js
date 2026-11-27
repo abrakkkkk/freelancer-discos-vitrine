@@ -1,6 +1,7 @@
 // Gêneros da loja: a lista que o cliente vê, e a tradução dos gêneros e estilos do Discogs para ela.
-// Cada disco fica num gênero só. O Discogs chama quase toda a música brasileira de "Latin";
-// o que separa samba, forró, sertanejo e os outros é o estilo.
+// Um disco pode estar em mais de um gênero: o principal primeiro, depois os estilos claros do Discogs
+// (um disco de sertanejo com forró aparece nos dois). O Discogs chama quase toda a música brasileira
+// de "Latin"; o que separa samba, forró, sertanejo e os outros é o estilo.
 
 const g = (id, nome, descricao) => ({ id, nome, descricao });
 
@@ -26,8 +27,10 @@ export const GENEROS = [
   g('carimbo', 'Carimbó', 'O ritmo do Pará, de Pinduca, Verequete, Mestre Lucindo e Dona Onete.'),
   g('lambada', 'Lambada', 'A lambada e a guitarrada do Norte, de Vieira e Seu Conjunto, Teixeira de Manaus e Mestre Solano.'),
   g('soul', 'Soul', 'A música negra americana dos anos 1960 e 1970, de Ray Charles, Aretha Franklin, Marvin Gaye e Tim Maia.'),
-  g('funk', 'Funk', 'O funk de James Brown, do Earth, Wind & Fire e do Parliament, e o funk carioca.'),
-  g('rap', 'Rap', 'O hip hop, do Run DMC e LL Cool J aos Racionais e ao rap nacional.'),
+  g('funk-brasileiro', 'Funk Brasileiro', 'O funk feito no Brasil, da Banda Black Rio e do Black Rio dos anos 1970 ao funk carioca dos bailes.'),
+  g('rap-nacional', 'Rap Nacional', 'O hip hop brasileiro, de Thaíde e DJ Hum e Racionais MCs a Sabotage, Emicida e Criolo.'),
+  g('funk', 'Funk', 'O funk de James Brown, do Earth, Wind & Fire, do Parliament e de Prince.'),
+  g('rap', 'Rap', 'O hip hop de fora, do Run DMC e Grandmaster Flash a LL Cool J e Public Enemy.'),
   g('disco', 'Disco', 'A música das pistas dos anos 1970, de Donna Summer, Bee Gees e Chic às Frenéticas.'),
   g('jazz', 'Jazz', 'Do swing das big bands ao bebop, ao cool e ao fusion, de Duke Ellington e Miles Davis a Ella Fitzgerald.'),
   g('blues', 'Blues', 'O blues de B.B. King, Muddy Waters, John Lee Hooker e Etta James.'),
@@ -47,6 +50,24 @@ export const GENEROS = [
 ];
 
 const POR_ID = new Map(GENEROS.map((x) => [x.id, x]));
+
+// Gêneros só de discos brasileiros e só de discos de fora. Os outros recebem os dois.
+export const SO_BRASILEIROS = new Set([
+  'mpb', 'samba', 'pagode', 'choro', 'bossa-nova', 'jovem-guarda', 'rock-nacional', 'romantica', 'brega', 'sertanejo',
+  'forro', 'regional', 'axe', 'carimbo', 'lambada', 'afro-brasileira', 'funk-brasileiro', 'rap-nacional',
+]);
+export const SO_DE_FORA = new Set(['rock', 'rock-and-roll', 'funk', 'rap', 'country', 'folk', 'latina', 'mundo']);
+// O mesmo gênero em versão de fora e brasileira.
+const PARES = [['rock', 'rock-nacional'], ['funk', 'funk-brasileiro'], ['rap', 'rap-nacional']];
+const PARA_BRASIL = new Map(PARES);
+const PARA_FORA = new Map(PARES.map(([a, b]) => [b, a]));
+
+/** Ajusta o gênero à origem do disco: funk vira funk brasileiro e vice-versa; regional só no Brasil (null fora). */
+export function generoNaOrigem(id, nacional) {
+  if (nacional) return PARA_BRASIL.get(id) || id;
+  if (id === 'regional') return null;
+  return PARA_FORA.get(id) || id;
+}
 
 export const generoPorId = (id) => POR_ID.get(id) || null;
 export const ehGeneroValido = (id) => POR_ID.has(id);
@@ -70,7 +91,7 @@ estilos(3, 'axe', ['Axé']);
 estilos(3, 'carimbo', ['Carimbó', 'Siriá']);
 estilos(3, 'lambada', ['Lambada', 'Guitarrada']);
 estilos(3, 'brega', ['Brega']);
-estilos(3, 'funk', ['Favela Funk']);
+estilos(3, 'funk-brasileiro', ['Favela Funk']);
 estilos(3, 'gospel', ['Gospel']);
 estilos(2, 'samba', ['Samba', 'Samba-Canção', 'Samba-Enredo', 'Samba Enredo', 'Partido Alto', 'Batucada', 'Marcha Carnavalesca']);
 estilos(2, 'bossa-nova', ['Bossa Nova', 'Bossanova']);
@@ -136,7 +157,7 @@ const POR_GENERO = [
   ["Children's", () => 'infantil'],
   ['Stage & Screen', () => 'trilhas'],
   ['Reggae', () => 'reggae'],
-  ['Hip Hop', () => 'rap'],
+  ['Hip Hop', (nacional) => (nacional ? 'rap-nacional' : 'rap')],
   ['Blues', () => 'blues'],
   ['Jazz', () => 'jazz'],
   ['Funk / Soul', () => 'soul'],
@@ -147,43 +168,59 @@ const POR_GENERO = [
   ['Brass & Military', () => 'outros'],
 ];
 
+// Estilos que não viram gênero extra: aparecem em discos de outros gêneros sem dizer muito deles.
+const SEM_EXTRA = new Set(['Rhythm & Blues', 'Doo Wop', 'Marches', 'Schlager', 'Polka']);
+
 /**
- * Traduz o que o Discogs diz de um lançamento para um gênero da loja (lista com 0 ou 1 item).
+ * O que o Discogs diz de um lançamento, nos gêneros da loja: `principal` (o estilo mais específico,
+ * senão o gênero amplo) e `fortes` (os gêneros de todos os estilos claros, peso 2 ou 3).
  * `nacional`: true quando o disco é brasileiro (ver ehNacional).
  */
-export function traduzirGeneros({ genres = [], styles = [] } = {}, { nacional = false } = {}) {
+export function analisarGeneros({ genres = [], styles = [] } = {}, { nacional = false } = {}) {
   // Religioso afro-brasileiro antes de tudo: senão "Religious" ou "Batucada" levariam para Gospel ou Samba.
   if (styles.includes('Religious') && styles.some((e) => ESTILOS_AFRO.has(e)) && !styles.includes('Gospel')) {
-    return ['afro-brasileira'];
+    return { principal: 'afro-brasileira', fortes: [] };
   }
 
   let melhor = null;
+  const fortes = [];
   for (const estilo of styles) {
     let regra = ESTILOS[estilo];
     if (!regra && ROMANTICOS.has(estilo) && nacional) regra = { genero: 'romantica', peso: 1 };
     if (!regra && estilo === 'Easy Listening' && !nacional) regra = { genero: 'orquestras', peso: 1 };
     if (!regra && ESTILOS_FOLK.has(estilo)) regra = nacional ? { genero: 'regional', peso: 1 } : { genero: 'folk', peso: 2 };
     if (!regra) continue;
-    let genero = regra.genero;
-    // Rock feito no Brasil; bolero e cumbia brasileiros.
-    if (genero === 'rock' && nacional) genero = 'rock-nacional';
+    // Rock, funk e rap feitos no Brasil; bolero e cumbia brasileiros.
+    let genero = generoNaOrigem(regra.genero, nacional) || regra.genero;
     if (nacional && estilo === 'Bolero') genero = 'romantica';
     if (nacional && estilo === 'Cumbia') genero = 'lambada';
     // "Country" em disco brasileiro é o sertanejo.
     if (nacional && genero === 'country') genero = 'sertanejo';
     if (!melhor || regra.peso > melhor.peso) melhor = { genero, peso: regra.peso };
+    if (regra.peso >= 2 && !SEM_EXTRA.has(estilo) && genero !== 'outros' && !fortes.includes(genero)) fortes.push(genero);
   }
-  if (melhor) return [melhor.genero];
+  if (melhor) return { principal: melhor.genero, fortes };
 
   // Música cristã sem estilo de gênero musical.
-  if (styles.includes('Religious')) return ['gospel'];
+  if (styles.includes('Religious')) return { principal: 'gospel', fortes };
 
   for (const [genero, traduzir] of POR_GENERO) {
-    if (genres.includes(genero)) return [traduzir(nacional)];
+    if (genres.includes(genero)) return { principal: traduzir(nacional), fortes };
   }
   // "Folk, World, & Country" é o mais amplo: no Brasil é regional, fora é música do mundo.
-  if (genres.includes(FOLK_DISCOGS)) return [nacional ? 'regional' : 'mundo'];
-  return [];
+  if (genres.includes(FOLK_DISCOGS)) return { principal: nacional ? 'regional' : 'mundo', fortes };
+  return { principal: null, fortes };
+}
+
+/** O principal primeiro, depois os extras, sem repetir. */
+export function juntarGeneros(principal, extras = []) {
+  return [...new Set([principal, ...extras].filter(Boolean))];
+}
+
+/** Gêneros da loja de um lançamento do Discogs: o principal primeiro, depois os outros estilos claros. */
+export function traduzirGeneros(discogs = {}, opcoes = {}) {
+  const { principal, fortes } = analisarGeneros(discogs, opcoes);
+  return principal ? juntarGeneros(principal, fortes) : [];
 }
 
 // Palavras e terminações comuns em português e raras em inglês.
@@ -209,7 +246,7 @@ export function ehNacional({ genres = [], styles = [] } = {}, titulos = []) {
 }
 
 /**
- * Gênero da loja de um disco (lista com 0 ou 1 item), a partir do que o Discogs disse
+ * Gêneros da loja de um disco (o principal primeiro), a partir do que o Discogs disse
  * (discos.genero_discogs) e dos títulos das faixas. `nacionalPeloArtista` decide quando nem
  * as faixas nem "Latin" decidem.
  */
@@ -219,4 +256,20 @@ export function generosDoDisco(generoDiscogs, titulos = [], nacionalPeloArtista 
   if (!genres.length && !styles.length) return [];
   const nacional = ehNacional({ genres, styles }, titulos) ?? nacionalPeloArtista ?? false;
   return traduzirGeneros({ genres, styles }, { nacional });
+}
+
+/** Como generosDoDisco, mas separado: `principal`, `fortes` (estilos claros) e se o disco é `nacional`. */
+export function analisarDisco(generoDiscogs, titulos = [], nacionalPeloArtista = null) {
+  const genres = generoDiscogs?.genres || [];
+  const styles = generoDiscogs?.styles || [];
+  const nacional = ehNacional({ genres, styles }, titulos) ?? nacionalPeloArtista ?? false;
+  if (!genres.length && !styles.length) return { principal: null, fortes: [], nacional };
+  return { ...analisarGeneros({ genres, styles }, { nacional }), nacional };
+}
+
+/** Disco brasileiro pelo gênero principal, quando ele só existe de um lado; senão vale `nacional`. */
+export function nacionalPeloGenero(principal, nacional) {
+  if (SO_BRASILEIROS.has(principal)) return true;
+  if (SO_DE_FORA.has(principal)) return false;
+  return nacional;
 }
