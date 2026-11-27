@@ -6,6 +6,7 @@ import AlbumCover from '@/components/AlbumCover';
 import Localizacao from '@/components/Localizacao';
 import { getCartItemKey } from '@/utils/cartUtils';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
+import { seloDoItem } from '@/utils/condicoes';
 import { hrefDaCaixa } from '@/utils/lojas';
 import { chaveCaixa } from '@/utils/caixaUtils';
 import { FiCheck, FiChevronRight, FiPlus } from 'react-icons/fi';
@@ -84,7 +85,7 @@ function CabecalhoCaixa({ loja, caixa, itens }) {
 function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }) {
   const selo = extractRecordLabel(item.observacao);
   const ano = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
-  const importado = Boolean(item.observacao && /importado/i.test(item.observacao));
+  const seloCapa = seloDoItem(item);
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
 
   const router = useRouter();
@@ -117,7 +118,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         fluid
         tipo={categoria}
       />
-      {importado && <span className="edSeloCapa" aria-hidden="true">Importado</span>}
+      {seloCapa && <span className="edSeloCapa" aria-hidden="true">{seloCapa}</span>}
 
       <div className="edTexto">
         {item.artista && <span className="edArtista">{item.artista}</span>}
@@ -139,7 +140,7 @@ function Linha({ item, categoria, mostrarCaixa, naSacola, onAdicionar, onAbrir }
         <span className="edMeta tabularNums">
           {selo && <span>{selo}</span>}
           {ano && (!selo || !selo.includes(ano)) && <span>{ano}</span>}
-          {importado && <span className="edMetaImportado">Importado</span>}
+          {seloCapa && <span className="edMetaSelo">{seloCapa}</span>}
         </span>
       </div>
 

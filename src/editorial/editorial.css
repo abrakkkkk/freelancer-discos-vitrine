@@ -2028,8 +2028,8 @@ a.vlFaixaItem:focus-visible {
     display: inline;
   }
 
-  /* O selo sobre a capa já diz que é importado. */
-  .edMetaImportado {
+  /* O selo sobre a capa já diz a condição ou que é importado. */
+  .edMetaSelo {
     display: none;
   }
 }
@@ -2328,8 +2328,8 @@ a.vlFaixaItem:focus-visible {
     pointer-events: none;
   }
 
-  .edInicioMobile .edMetaImportado,
-  .edPrateleiraPagina .edMetaImportado {
+  .edInicioMobile .edMetaSelo,
+  .edPrateleiraPagina .edMetaSelo {
     display: none;
   }
 

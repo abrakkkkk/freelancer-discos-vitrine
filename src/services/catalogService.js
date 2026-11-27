@@ -221,7 +221,7 @@ export const catalogService = {
     }
 
     const isVideo = category === 'dvds' || category === 'vhs';
-    let colunas = 'id, titulo, preco, loja, caixa, ano, capa_url, observacao';
+    let colunas = 'id, titulo, preco, loja, caixa, ano, capa_url, observacao, condicoes';
     if (!isVideo) {
       colunas += ', artista';
     }

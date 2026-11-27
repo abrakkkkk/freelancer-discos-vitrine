@@ -1,7 +1,7 @@
 import 'server-only';
 import { supabaseServer } from '@/lib/supabaseServer';
 
-const COLUNAS = 'id, artista, titulo, preco, loja, caixa, ano, capa_url, observacao';
+const COLUNAS = 'id, artista, titulo, preco, loja, caixa, ano, capa_url, observacao, condicoes';
 const POR_PRATELEIRA = 6;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 let cache = null;
