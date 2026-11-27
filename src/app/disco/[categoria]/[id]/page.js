@@ -20,7 +20,7 @@ const buscarDisco = cache(async (categoria, idParam) => {
   if (!Number.isInteger(id) || id <= 0) return null;
 
   const temArtista = categoria === 'discos' || categoria === 'cds';
-  const colunas = `id, titulo, preco, loja, caixa, ano, capa_url, observacao${temArtista ? ', artista' : ''}`;
+  const colunas = `id, titulo, preco, loja, caixa, ano, capa_url, observacao, condicoes${temArtista ? ', artista' : ''}`;
   const { data, error } = await supabaseServer
     .from(categoria)
     // Só o disco aberto traz as faixas e os gêneros; os vizinhos não precisam deles.

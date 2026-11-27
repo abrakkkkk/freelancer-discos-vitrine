@@ -61,6 +61,8 @@ export default async function CaixaDetalhePage({ params }) {
       tabelas.map(async (tab) => {
         let cols = 'id, titulo, preco, loja, caixa, ano, capa_url, observacao, condicoes';
         if (tab.temArtista) cols += ', artista';
+        // Gêneros só nos LPs: a ficha do disco aberto aqui mostra igual à do catálogo.
+        if (tab.id === 'discos') cols += ', generos';
 
         let query = supabaseServer
           .from(tab.id)

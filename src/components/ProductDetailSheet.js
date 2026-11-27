@@ -8,6 +8,7 @@ import AlbumCover from './AlbumCover';
 import Localizacao from './Localizacao';
 import { LinhaFichaGenero } from './SobreGenero';
 import { generosDoItem } from '@/utils/generos';
+import { condicoesDoItem } from '@/utils/condicoes';
 import { useModalDialog } from '@/hooks/useModalDialog';
 import { formatCaixa, extractRecordLabel } from '@/utils/stringUtils';
 import { hrefDaCaixa } from '@/utils/lojas';
@@ -60,6 +61,7 @@ export default function ProductDetailSheet({
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
   const generos = tipo === 'discos' ? generosDoItem(item) : [];
+  const condicoes = condicoesDoItem(item);
   const recordLabel = extractRecordLabel(item.observacao);
   const cleanAno = item.ano && String(item.ano) !== 'null' ? String(item.ano).trim() : '';
   const showAno = Boolean(cleanAno) && (!recordLabel || !recordLabel.includes(cleanAno));
@@ -168,6 +170,12 @@ export default function ProductDetailSheet({
             <dd>{FORMAT_NAMES[tipo] || 'Disco'}</dd>
           </div>
           <LinhaFichaGenero generos={generos} onGenero={onGenero} />
+          {condicoes.length > 0 && (
+            <div className="specRow">
+              <dt>Condição</dt>
+              <dd>{condicoes.join(', ')}</dd>
+            </div>
+          )}
           {recordLabel && (
             <div className="specRow">
               <dt>Selo</dt>

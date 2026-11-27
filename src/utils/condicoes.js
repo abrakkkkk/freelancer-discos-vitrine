@@ -22,3 +22,9 @@ export function seloDoItem(item) {
   if (condicao) return condicao.nome;
   return ehImportado(item) ? 'Importado' : null;
 }
+
+/** Todas as condições marcadas, por nome, na ordem do estoque (para a ficha do disco). */
+export function condicoesDoItem(item) {
+  const marcadas = Array.isArray(item?.condicoes) ? item.condicoes : [];
+  return CONDICOES.filter((c) => marcadas.includes(c.id)).map((c) => c.nome);
+}

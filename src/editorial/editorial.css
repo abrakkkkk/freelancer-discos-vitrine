@@ -2305,12 +2305,14 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edInicioMobile .edLinha,
-  .edPrateleiraPagina .edLinha {
+  .edPrateleiraPagina .edLinha,
+  .edCaixaPagina .edLinha {
     position: relative;
   }
 
   .edInicioMobile .edSeloCapa,
-  .edPrateleiraPagina .edSeloCapa {
+  .edPrateleiraPagina .edSeloCapa,
+  .edCaixaPagina .edSeloCapa {
     display: block;
     position: absolute;
     top: 16px;
@@ -2329,7 +2331,8 @@ a.vlFaixaItem:focus-visible {
   }
 
   .edInicioMobile .edMetaSelo,
-  .edPrateleiraPagina .edMetaSelo {
+  .edPrateleiraPagina .edMetaSelo,
+  .edCaixaPagina .edMetaSelo {
     display: none;
   }
 

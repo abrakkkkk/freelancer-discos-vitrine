@@ -13,6 +13,7 @@ import ListaEditorial from './ListaEditorial';
 import ListaFaixas from '@/components/ListaFaixas';
 import { LinhaFichaGenero } from '@/components/SobreGenero';
 import { generosDoItem } from '@/utils/generos';
+import { condicoesDoItem } from '@/utils/condicoes';
 
 const FORMATO = { discos: 'Vinil (LP)', cds: 'CD', dvds: 'DVD', vhs: 'VHS' };
 
@@ -31,6 +32,7 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
 
   const rotuloCaixa = formatCaixa(item.caixa, item.loja);
   const generos = generosDoItem(item);
+  const condicoes = condicoesDoItem(item);
   const temCaixa = rotuloCaixa !== '—';
   const caixaHref = temCaixa ? hrefDaCaixa(item.loja, item.caixa) : null;
   const selo = extractRecordLabel(item.observacao);
@@ -113,6 +115,12 @@ export default function DiscoEditorialClient({ item, vizinhos = [], faixas = nul
               <dd>{FORMATO[item.categoria] || 'Disco'}</dd>
             </div>
             <LinhaFichaGenero generos={generos} />
+            {condicoes.length > 0 && (
+              <div className="specRow">
+                <dt>Condição</dt>
+                <dd>{condicoes.join(', ')}</dd>
+              </div>
+            )}
             {selo && (
               <div className="specRow">
                 <dt>Selo</dt>
