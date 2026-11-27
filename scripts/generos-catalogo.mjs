@@ -21,10 +21,7 @@ import {
   generosDoDisco,
   ehGeneroValido,
   analisarDisco,
-  nacionalPeloGenero,
-  generoNaOrigem,
-  juntarGeneros,
-  SO_DE_FORA,
+  montarGeneros,
 } from '../src/utils/generos.js';
 import { isVariousArtist, normalizeText } from '../src/utils/coverMatch.js';
 
@@ -164,7 +161,7 @@ function generoDoArtista(artista) {
 
 const iguais = (a, b) => JSON.stringify(a || []) === JSON.stringify(b || []);
 const relatorio = fs.createWriteStream(RELATORIO);
-const resumo = { discogs: 0, artista: 0, manual: 0, semGenero: 0, mudou: 0 };
+const resumo = { discogs: 0, artista: 0, manual: 0, reserva: 0, semGenero: 0, mudou: 0 };
 const contagem = {};
 const gravacoes = [];
 const MUDANCAS = path.join(PASTA, GRAVAR ? 'generos-mudancas.jsonl' : 'generos-mudancas-teste.jsonl');
@@ -184,21 +181,17 @@ for (const d of discos) {
       generos = [doArtista, ...generos.slice(1)];
       origem = 'artista';
     }
+    // Nada identificou o disco: vai para "Outros" (montarGeneros sem principal).
+    if (!generos.length) origem = 'reserva';
     // Extras do Discogs (um disco de sertanejo com forró fica nos dois), na versão brasileira ou de
-    // fora conforme o gênero principal ou a origem do artista. Regional só em disco brasileiro.
-    const origemManual = origemPorArtista.get(chaveArtista(d.artista));
-    const nacional = origemManual ? origemManual === 'br' : nacionalPeloGenero(generos[0], calculado.nacional);
-    // Regional de artista de fora vira Música do Mundo.
-    const principal = generos[0] && (generoNaOrigem(generos[0], nacional) || 'mundo');
-    // Coletânea leva no máximo um gênero extra: as trilhas de novela juntam de tudo.
-    // Em disco brasileiro, gênero só de fora não entra como extra (a não ser Latina: tango, bolero).
-    const extras = calculado.fortes
-      .map((g) => generoNaOrigem(g, nacional))
-      .filter((g) => g && !(nacional && SO_DE_FORA.has(g) && g !== 'latina'));
-    generos = juntarGeneros(principal, [...generos.slice(1), ...extras]);
-    // "Outros" é o resto: sai quando o disco tem gênero melhor.
-    if (generos.length > 1) generos = generos.filter((g) => g !== 'outros');
-    if (isVariousArtist(d.artista) || !d.artista?.trim()) generos = generos.slice(0, 2);
+    // fora conforme o gênero principal ou a origem do artista. Regras em montarGeneros.
+    generos = montarGeneros({
+      principal: generos[0],
+      extras: [...generos.slice(1), ...calculado.fortes],
+      nacional: calculado.nacional,
+      origem: origemPorArtista.get(chaveArtista(d.artista)) || null,
+      coletanea: isVariousArtist(d.artista) || !d.artista?.trim(),
+    });
   }
 
   if (generos.length) resumo[origem]++;

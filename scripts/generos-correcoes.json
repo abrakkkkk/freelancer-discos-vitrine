@@ -297,6 +297,9 @@
     "10662": [
       "forro"
     ],
+    "10663": [
+      "lambada"
+    ],
     "10666": [
       "forro"
     ],
@@ -5094,6 +5097,9 @@
     "29166": [
       "outros"
     ],
+    "29171": [
+      "jovem-guarda"
+    ],
     "29175": [
       "outros"
     ],
@@ -5939,6 +5945,33 @@
     ],
     "32722": [
       "regional"
+    ],
+    "32774": [
+      "brega"
+    ],
+    "32795": [
+      "mpb"
+    ],
+    "32799": [
+      "gospel"
+    ],
+    "32805": [
+      "samba"
+    ],
+    "32812": [
+      "samba"
+    ],
+    "32824": [
+      "romantica"
+    ],
+    "32837": [
+      "sertanejo"
+    ],
+    "32865": [
+      "infantil"
+    ],
+    "32873": [
+      "axe"
     ]
   },
   "artistas": {
@@ -8740,6 +8773,12 @@
     ],
     "Teixeirinha": [
       "regional"
+    ],
+    "José Roberto": [
+      "romantica"
+    ],
+    "Jose Roberto": [
+      "romantica"
     ]
   },
   "fixos": {
@@ -8766,6 +8805,7 @@
     "Trini Lopez": "fora",
     "Chick Corea": "fora",
     "Ana Belen": "fora",
-    "Teixeirinha": "br"
+    "Teixeirinha": "br",
+    "Willie Nelson": "fora"
   }
 }

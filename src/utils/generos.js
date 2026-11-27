@@ -58,7 +58,7 @@ export const SO_BRASILEIROS = new Set([
 ]);
 export const SO_DE_FORA = new Set(['rock', 'rock-and-roll', 'funk', 'rap', 'country', 'folk', 'latina', 'mundo']);
 // O mesmo gênero em versão de fora e brasileira.
-const PARES = [['rock', 'rock-nacional'], ['funk', 'funk-brasileiro'], ['rap', 'rap-nacional']];
+const PARES = [['rock', 'rock-nacional'], ['funk', 'funk-brasileiro'], ['rap', 'rap-nacional'], ['country', 'sertanejo']];
 const PARA_BRASIL = new Map(PARES);
 const PARA_FORA = new Map(PARES.map(([a, b]) => [b, a]));
 
@@ -190,8 +190,9 @@ export function analisarGeneros({ genres = [], styles = [] } = {}, { nacional = 
     if (!regra && estilo === 'Easy Listening' && !nacional) regra = { genero: 'orquestras', peso: 1 };
     if (!regra && ESTILOS_FOLK.has(estilo)) regra = nacional ? { genero: 'regional', peso: 1 } : { genero: 'folk', peso: 2 };
     if (!regra) continue;
-    // Rock, funk e rap feitos no Brasil; bolero e cumbia brasileiros.
-    let genero = generoNaOrigem(regra.genero, nacional) || regra.genero;
+    // Rock, funk e rap feitos no Brasil; bolero e cumbia brasileiros. Estilo brasileiro por natureza
+    // (Sertanejo, Favela Funk) nunca vira a versão de fora.
+    let genero = nacional ? generoNaOrigem(regra.genero, true) : regra.genero;
     if (nacional && estilo === 'Bolero') genero = 'romantica';
     if (nacional && estilo === 'Cumbia') genero = 'lambada';
     // "Country" em disco brasileiro é o sertanejo.
@@ -272,4 +273,42 @@ export function nacionalPeloGenero(principal, nacional) {
   if (SO_BRASILEIROS.has(principal)) return true;
   if (SO_DE_FORA.has(principal)) return false;
   return nacional;
+}
+
+/** Gênero de reserva: disco que nada identificou vai para "Outros". */
+export const GENERO_RESERVA = 'outros';
+
+/**
+ * Gêneros finais de um disco, a mesma regra no script e no cadastro pelo estoque.
+ * `principal`: o gênero principal já escolhido (correção, artista ou Discogs). `extras`: gêneros
+ * a mais (correções e estilos claros do Discogs). `nacional`: o que o Discogs e as faixas disseram;
+ * `origem` ("br" ou "fora") vence quando o artista foi corrigido à mão. Coletânea fica com dois.
+ * Sem principal, "Outros".
+ */
+export function montarGeneros({ principal, extras = [], nacional = false, origem = null, coletanea = false } = {}) {
+  if (!principal) return [GENERO_RESERVA];
+  const brasileiro = origem ? origem === 'br' : nacionalPeloGenero(principal, nacional);
+  // Regional de artista de fora vira Música do Mundo.
+  const primeiro = generoNaOrigem(principal, brasileiro) || 'mundo';
+  // Na versão brasileira ou de fora conforme o disco; em disco brasileiro, gênero só de fora não
+  // entra como extra (a não ser Latina: tango, bolero).
+  const resto = extras
+    .map((g) => generoNaOrigem(g, brasileiro))
+    .filter((g) => g && !(brasileiro && SO_DE_FORA.has(g) && g !== 'latina'));
+  let generos = juntarGeneros(primeiro, resto);
+  // "Outros" é o resto: sai quando o disco tem gênero melhor.
+  if (generos.length > 1) generos = generos.filter((g) => g !== GENERO_RESERVA);
+  return coletanea ? generos.slice(0, 2) : generos;
+}
+
+/** Gênero principal mais comum entre os discos já classificados de um artista (null se empatar). */
+export function generoMaisComum(listasDeGeneros = []) {
+  const votos = new Map();
+  for (const lista of listasDeGeneros) {
+    const g = Array.isArray(lista) ? lista[0] : null;
+    if (g && g !== GENERO_RESERVA) votos.set(g, (votos.get(g) || 0) + 1);
+  }
+  const ordem = [...votos.entries()].sort((a, b) => b[1] - a[1]);
+  if (!ordem.length || (ordem[1] && ordem[1][1] === ordem[0][1])) return null;
+  return ordem[0][0];
 }

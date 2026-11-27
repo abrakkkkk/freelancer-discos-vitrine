@@ -5,7 +5,9 @@ import {
   SO_DE_FORA,
   ehNacional,
   fracaoPortugues,
+  generoMaisComum,
   generoNaOrigem,
+  montarGeneros,
   generosDoDisco,
   generosDoItem,
   nacionalPeloGenero,
@@ -194,5 +196,32 @@ describe('gêneros brasileiros e de fora', () => {
     expect(nacionalPeloGenero('samba', false)).toBe(true);
     expect(nacionalPeloGenero('rock', true)).toBe(false);
     expect(nacionalPeloGenero('soul', true)).toBe(true);
+  });
+});
+
+describe('montarGeneros: a regra do script e do cadastro pelo estoque', () => {
+  it('sem gênero identificado, vai para Outros', () => {
+    expect(montarGeneros({ principal: null })).toEqual(['outros']);
+  });
+
+  it('principal primeiro e extras sem repetir; Outros sai quando há gênero melhor', () => {
+    expect(montarGeneros({ principal: 'sertanejo', extras: ['forro', 'sertanejo'], nacional: true })).toEqual(['sertanejo', 'forro']);
+    expect(montarGeneros({ principal: 'outros', extras: ['forro'], nacional: true })).toEqual(['forro']);
+  });
+
+  it('disco de fora não fica em gênero brasileiro de par, nem em Regional', () => {
+    expect(montarGeneros({ principal: 'country', extras: ['sertanejo'], origem: 'fora' })).toEqual(['country']);
+    expect(montarGeneros({ principal: 'regional', origem: 'fora' })).toEqual(['mundo']);
+    expect(montarGeneros({ principal: 'funk', origem: 'br' })).toEqual(['funk-brasileiro']);
+  });
+
+  it('coletânea fica com dois gêneros', () => {
+    expect(montarGeneros({ principal: 'trilhas', extras: ['disco', 'funk', 'soul'], coletanea: true })).toEqual(['trilhas', 'disco']);
+  });
+
+  it('generoMaisComum: o principal mais frequente do artista, sem Outros nem empate', () => {
+    expect(generoMaisComum([['brega'], ['brega', 'samba'], ['mpb']])).toBe('brega');
+    expect(generoMaisComum([['brega'], ['mpb']])).toBe(null);
+    expect(generoMaisComum([['outros'], ['outros']])).toBe(null);
   });
 });
